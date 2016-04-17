@@ -138,11 +138,7 @@ public class SQLop {
 				sql = "SELECT year(savetime),COUNT(*) FROM tmp GROUP BY year(savetime) ORDER BY year(savetime)";
 				results = statemt.executeQuery(sql);
 				while (results.next()) {
-<<<<<<< HEAD
-					if(results.getString(1) == null) continue; 
-=======
 					if(results.getString(1) == null) continue;
->>>>>>> origin/master
 					resultMap.put(results.getString(1),
 							new Integer(results.getInt(2)));
 				}
