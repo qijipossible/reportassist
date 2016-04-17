@@ -114,8 +114,8 @@ public class GUI extends JFrame implements ActionListener {
 				if (index == 0) {
 					spider = Spider.create(new Most());
 					spider.addUrl(
-							"http://www.baidu.com/s?wd=%22" + field1.getText()
-									+ "%22%20site:" + departments[index])
+							"http://cn.bing.com/search?q=site%3A"+departments[index]+"+%22" + field1.getText()
+							+ "%22+filetype%3Ahtml")
 							// "http://www.baidu.com/ns?word=机床"http://www.baidu.com/s?wd=机床
 							// site:www.most.gov.cn
 
@@ -125,8 +125,8 @@ public class GUI extends JFrame implements ActionListener {
 				} else if (index == 1) {
 					spider = Spider.create(new Miit());
 					spider.addUrl(
-							"http://www.baidu.com/s?wd=%22" + field1.getText()
-									+ "%22%20site:" + departments[index])
+							"http://cn.bing.com/search?q=site%3A"+departments[index]+"+%22" + field1.getText()
+									+ "%22+filetype%3Ahtml")
 							// "http://www.baidu.com/ns?word=机床"http://www.baidu.com/s?wd=机床
 							// site:www.most.gov.cn
 
@@ -136,18 +136,17 @@ public class GUI extends JFrame implements ActionListener {
 				} else if (index == 2) {
 					spider = Spider.create(new sdpc());
 					spider.addUrl(
-							"http://www.baidu.com/s?wd=%22" + field1.getText()
-									+ "%22%20site:" + departments[index])
+							"http://cn.bing.com/search?q=site%3A"+departments[index]+"+%22" + field1.getText()
+							+ "%22+filetype%3Ahtml")
 							// "http://www.baidu.com/ns?word=机床"http://www.baidu.com/s?wd=机床
 							// site:www.most.gov.cn
 
 							.addPipeline(new ConsolePipeline())
 							.addPipeline(new MysqlPipeline()).start();
 				} else {
-					spider = Spider.create(new News());
+					spider = Spider.create(new chinanews());
 					spider.addUrl(
-							"http://www.baidu.com/s?wd=%22" + field1.getText()
-									+ "%22")
+							"http://sou.chinanews.com.cn/search.do?q=" + field1.getText())
 							// http://news.baidu.com/ns?word=机床
 
 							.addPipeline(new ConsolePipeline())

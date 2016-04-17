@@ -31,29 +31,34 @@ public class MysqlPipeline implements Pipeline {
 		for (Map.Entry<String, Object> entry : resultItems.getAll().entrySet()) {
 			System.out.println("!!!!!!!!!!!!!!" + entry.getKey() + ":\t"
 					+ entry.getValue());
-			if (entry.getKey().equals("title"))
-				title = entry.getValue().toString();
+			String temp = entry.getValue().toString();
+			if(temp==null)
+				continue;
+			if (entry.getKey().equals("title")){
+				title = temp;
+			}
 			else if (entry.getKey().equals("content")){
-				content = entry.getValue().toString().replaceAll("　", "\n").replaceAll(" ", "\n").replaceAll(" ", "\n");
+				content = temp.replaceAll("　", "\n").replaceAll(" ", "\n").replaceAll(" ", "\n");
 			}
 			else if (entry.getKey().equals("time")) {
-				String temp = entry.getValue().toString();
-				author = temp.substring(temp.indexOf(" ") + 1, temp.length());
-				author.trim();
+//				author = temp.substring(temp.indexOf(" ") + 1, temp.length());
+//				author.trim();
 				temp = temp.replace("年", "-");
 				temp = temp.replace("月", "-");
 				temp = temp.replace("：", "");
 				temp = temp.replaceAll("[\u4e00-\u9fa5]+", "");
+				temp = temp.replaceAll("【", "");
+				temp = temp.replaceAll("】", "");
 				temp = temp.substring(0, 10);
 				time = java.sql.Date.valueOf(temp);
-			} else if (entry.getKey().equals("baseURL"))
+			} else if (entry.getKey().equals("baseURL")){
 				url = entry.getValue().toString();
-			/*
-			 * else if (entry.getKey().equals("author")){ author =
-			 * entry.getValue().toString().substring(, endIndex)u;
-			 */
+			}
+			 else if (entry.getKey().equals("author")){ 
+				 author = temp;
+			 }
 			else if (entry.getKey().equals("type"))
-				type = entry.getValue().toString();
+				type = temp;
 
 		}
 		if (content != null && !content.replaceAll("\n", "").equals(""))
