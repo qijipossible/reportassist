@@ -9,7 +9,7 @@ import us.codecraft.webmagic.pipeline.*;
 /**
  * @author code4crafter@gmail.com <br>
  */
-public class Most implements PageProcessor {
+public class souhunews implements PageProcessor {
 
 	public static final String URL_LIST = "http://cn\\.bing\\.com/search\\?q。*";
 	// public static final String
@@ -32,28 +32,36 @@ public class Most implements PageProcessor {
 		if (page.getUrl().regex(URL_LIST).match()) {
 			page.addTargetRequests(page.getHtml()
 					.xpath("//li[@class='b_algo']").links()
-					.regex("http://www\\.most\\.gov\\.cn/.*").all());
+					.regex("http://www\\.miit\\.gov\\.cn/n.*").all());
 			page.addTargetRequests(page.getHtml().xpath("//li[@class='b_pag']")
 					.links().all());
 			page.setSkip(true);
 			// 文章页
 		} else {
-			String temp = page.getHtml()
-					.xpath("div[@class='gray12 lh22']/allText()").toString();
-			if (temp == null) {
+			String temp = page.getHtml().xpath("body/tidyText()").toString();
+			if (temp.indexOf("发布时间") != -1) {
+				temp = temp.substring(temp.indexOf("发布时间") + 5,
+						temp.indexOf("发布时间") + 15);
+				page.putField("time", temp);
+			} else {
 				page.setSkip(true);
 				return;
 			}
-			page.putField("time", temp.substring(3, 13));
 			page.putField("title", page.getHtml().xpath("title/text()"));
 
-			page.putField("content",
-					page.getHtml().smartContent());
+			page.putField("content", page.getHtml().smartContent());
 
-			page.putField("author",
-					temp.substring(temp.indexOf("日 ") + 2, temp.length()).toString().replaceAll(" ", "").replaceAll("　", ""));
+			temp = page.getHtml().xpath("body/tidyText()").toString();
+			if (temp.indexOf("来源") != -1
+					&& (temp.indexOf("】", temp.indexOf("来源") + 3) - (temp
+							.indexOf("来源") + 3)) < 10) {
+				temp = temp.substring(temp.indexOf("来源") + 3,
+						temp.indexOf("】", temp.indexOf("来源") + 3));
+				page.putField("author", temp);
+			}
+
 			page.putField("baseURL", page.getUrl());
-			page.putField("type", "科技部");
+			page.putField("type", "工信部");
 		}
 
 	}
@@ -64,11 +72,11 @@ public class Most implements PageProcessor {
 	}
 
 	public static void main(String[] args) {
-		Spider.create(new Most())
-				.addUrl("http://www.most.gov.cn/tztg/201104/t20110427_86299.htm")//http://cn.bing.com/search?q=site%3awww.most.gov.cn+%2204%E4%B8%93%E9%A1%B9%22+filetype%3ahtml
+		Spider.create(new souhunews())
+				.addUrl("http://sou.chinanews.com.cn/search.do?q=%E6%95%B0%E6%8E%A7%E6%9C%BA%E5%BA%8A")
 				// "http://www.baidu.com/ns?word=机床"http://www.baidu.com/s?wd=机床
 				// site:www.most.gov.cn
 				.addPipeline(new ConsolePipeline())
-				.addPipeline(new FilePipeline()).run();
+				.run();
 	}
 }

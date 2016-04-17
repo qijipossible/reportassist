@@ -167,7 +167,6 @@ public class SQLop {
 		try {
 			statemt = conn.createStatement();
 
-			// 建立一个检索所有包含关键词的记录的视图
 			String sql = "select title from webpage where title='" + title
 					+ "'";
 			results=statemt.executeQuery(sql);
