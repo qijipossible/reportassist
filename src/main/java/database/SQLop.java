@@ -155,7 +155,7 @@ public class SQLop {
 		if (!isRepeat(title)) {
 			try {
 				preStatement = conn.prepareStatement("INSERT INTO " + tableName
-						+ " (baseUrl, content, savetime, title, author,type)"
+						+ " (baseUrl, content, savetime, title, author, type)"
 						+ " VALUES(?,?,?,?,?,?)");
 				if (url != null)
 					preStatement.setString(1, url);
@@ -211,8 +211,7 @@ public class SQLop {
 
 			switch (countType) {
 			case SITE:
-				sql = "SELECT baseUrl,COUNT(*) FROM tmp GROUP BY baseUrl";// TODO
-																			// 增加来源列后更改
+				sql = "SELECT type,COUNT(*) FROM tmp GROUP BY type";
 				results = statemt.executeQuery(sql);
 				while (results.next()) {
 					resultMap.put(results.getString(1),
@@ -291,7 +290,7 @@ public class SQLop {
 			// 包含关键词的统计总数
 			sql = "SELECT COUNT(*) FROM tmp";
 			results = statemt.executeQuery(sql);
-			results.first();// TODO correct?
+			results.first();
 			countresult += "共检索到包含\'" + keyword + "\'关键词的记录"
 					+ results.getString(1) + "条";
 
@@ -299,7 +298,7 @@ public class SQLop {
 			countresult += "按年份统计包含\'" + keyword + "\'关键词的记录数如下";
 			sql = "SELECT year(savetime),COUNT(*) FROM tmp GROUP BY year(savetime) ORDER BY year(savetime)";
 			results = statemt.executeQuery(sql);
-			results.first();// TODO correct?
+			results.first();
 			while (results.next()) {
 				countresult += results.getString(1) + "年：  "
 						+ results.getString(2) + "\n";
@@ -309,7 +308,7 @@ public class SQLop {
 			countresult += "按网站统计包含\'" + keyword + "\'关键词的记录数如下";
 			sql = "SELECT baseUrl,COUNT(*) FROM tmp GROUP BY baseUrl";
 			results = statemt.executeQuery(sql);
-			results.first();// TODO correct?
+			results.first();
 			while (results.next()) {
 				countresult += results.getString(1) + "：  "
 						+ results.getString(2) + "\n";
