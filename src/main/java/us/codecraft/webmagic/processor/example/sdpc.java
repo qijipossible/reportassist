@@ -11,7 +11,7 @@ import us.codecraft.webmagic.pipeline.*;
  */
 public class sdpc implements PageProcessor {
 
-	public static final String URL_LIST = "http://www\\.baidu\\.com/s\\.*";
+	public static final String URL_LIST = "http://cn\\.bing\\.com/search\\?q。*";
 	// public static final String
 	// KEJI_WEB_SITE="http://www\\.most\\.gov\\.cn/\\.*";
 	// public static final String KEJI_WEB_SITE="www.most.gov.cn";
@@ -31,30 +31,34 @@ public class sdpc implements PageProcessor {
 		// 列表页
 		if (page.getUrl().regex(URL_LIST).match()) {
 			page.addTargetRequests(page.getHtml()
-					.xpath("//div[@id='content_left']").links()
-					.regex("http://www\\.baidu\\.com/link\\?url=.*").all());
-			page.addTargetRequests(page.getHtml().xpath("//div[@id='page']")
+					.xpath("//li[@class='b_algo']").links()
+					.regex("http://www\\.sdpc\\.gov\\.cn/.*").all());
+			page.addTargetRequests(page.getHtml().xpath("//li[@class='b_pag']")
 					.links().all());
+			page.setSkip(true);
 			// 文章页
 		} else {
-
-			if (page.getHtml().xpath("title/text()").toString() != null) {
-				page.putField("title",
-						page.getHtml().xpath("title/text()"));
-
-				page.putField("content", page.getHtml()
-						.xpath("body/tidyText()"));
-
-//				page.putField("time",
-//						page.getHtml()
-//								.xpath("div[@class='gray12 lh22']/text()"));
-
-//				page.putField("author",
-//						page.getHtml()
-//								.xpath("div[@class='gray12 lh22']/text()"));
-				page.putField("baseURL", page.getUrl());
-				page.putField("type", "发改委");
+			String temp = page.getUrl().toString();
+			try {
+				temp = temp
+						.substring(temp.indexOf("/t") + 2, temp.indexOf("_"));
+			} catch (Exception e) {
+				page.setSkip(true);
+				return;
 			}
+
+			page.putField("title", page.getHtml().xpath("title/text()"));
+
+			page.putField("content", page.getHtml().smartContent());
+
+			page.putField("time",
+					temp.substring(0, 4) + '-' + temp.substring(4, 6) + '-'
+							+ temp.substring(6, 8));
+
+			page.putField("author",
+					page.getHtml().xpath("span[@id='dSourceText']/a/text()"));
+			page.putField("baseURL", page.getUrl());
+			page.putField("type", "发改委");
 
 		}
 	}
@@ -66,10 +70,9 @@ public class sdpc implements PageProcessor {
 
 	public static void main(String[] args) {
 		Spider.create(new sdpc())
-				.addUrl("http://www.baidu.com/s?wd=机床%20site:www.most.gov.cn")
+				.addUrl("http://cn.bing.com/search?q=site%3awww.sdpc.gov.cn+%22数控机床%22+filetype%3ahtml")
 				// "http://www.baidu.com/ns?word=机床"http://www.baidu.com/s?wd=机床
 				// site:www.most.gov.cn
-				.addPipeline(new ConsolePipeline())
-				.addPipeline(new FilePipeline()).run();
+				.addPipeline(new ConsolePipeline()).run();
 	}
 }
