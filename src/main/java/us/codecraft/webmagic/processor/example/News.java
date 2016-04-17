@@ -30,6 +30,7 @@ public class News implements PageProcessor {
 					.xpath("//div[@id='content_left']").links().all());
 			page.addTargetRequests(page.getHtml().xpath("//div[@id='page']")
 					.links().all());
+			page.setSkip(true);
 			// 文章页
 		} else {
 			page.putField("title", page.getHtml().xpath("title/text()"));

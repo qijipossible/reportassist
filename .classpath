@@ -33,8 +33,6 @@
 	<classpathentry kind="lib" path="lib/fastjson-1.1.37.jar"/>
 	<classpathentry kind="lib" path="lib/guava-15.0.jar"/>
 	<classpathentry kind="lib" path="lib/hamcrest-core-1.3.jar"/>
-	<classpathentry kind="lib" path="lib/hanlp-1.2.8-sources.jar"/>
-	<classpathentry kind="lib" path="lib/hanlp-1.2.8.jar"/>
 	<classpathentry kind="lib" path="lib/httpclient-4.3.3.jar"/>
 	<classpathentry kind="lib" path="lib/httpcore-4.3.2.jar"/>
 	<classpathentry kind="lib" path="lib/jcommon-1.0.23.jar"/>
@@ -51,5 +49,6 @@
 	<classpathentry kind="lib" path="lib/webmagic-core-0.5.2.jar"/>
 	<classpathentry kind="lib" path="lib/webmagic-extension-0.5.2.jar"/>
 	<classpathentry kind="lib" path="lib/xsoup-0.2.4.jar"/>
+	<classpathentry kind="lib" path="lib/hanlp-portable-1.2.9.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
