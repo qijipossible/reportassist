@@ -50,5 +50,6 @@
 	<classpathentry kind="lib" path="lib/webmagic-extension-0.5.2.jar"/>
 	<classpathentry kind="lib" path="lib/xsoup-0.2.4.jar"/>
 	<classpathentry kind="lib" path="lib/hanlp-portable-1.2.9.jar"/>
+	<classpathentry kind="lib" path="lib/beautyeye_lnf.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

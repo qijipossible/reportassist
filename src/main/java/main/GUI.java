@@ -1,3 +1,4 @@
+package main;
 import javax.swing.*;
 
 import chart.*;
@@ -25,17 +26,17 @@ public class GUI extends JFrame implements ActionListener {
 	JButton button = new JButton("抓取网页");
 	JButton button_stop = new JButton("停止抓取");
 	JButton button_next = new JButton("生成文摘");
-	JTextArea area_text = new JTextArea();
-	JTextPane text = new JTextPane();
 
 	JScrollPane scrollPane = null;
 
 	String option[] = { "科技部", "工信部", "发改委", "新闻" };
-	String departments[] = { "www.most.gov.cn", "www.miit.gov.cn",
-			"www.sdpc.gov.cn" };
+	String departments[] = { "www.most.gov.cn", "www.miit.gov.cn","www.sdpc.gov.cn" };
 
 	JComboBox add = new JComboBox(option);
 
+	JDialog frame1=new JDialog();
+	JLabel label_wrong=new JLabel();
+	
 	Spider spider = null;
 
 	GUI() {
@@ -43,12 +44,6 @@ public class GUI extends JFrame implements ActionListener {
 		JPanel north = new JPanel();// 大容器
 		north.setLayout(new GridLayout(4, 2));
 		
-		JPanel sourth = new JPanel();// 大容器
-		sourth.setLayout(new GridLayout(2, 1));
-
-		scrollPane = new JScrollPane(text);
-		scrollPane.setPreferredSize(new Dimension(400, 300));
-
 		add.setMaximumRowCount(3);
 
 		north.add(label1);
@@ -58,20 +53,21 @@ public class GUI extends JFrame implements ActionListener {
 		north.add(button);
 		north.add(button_stop);
 		north.add(button_next);
-
-		text.setEditable(false);
-
-		sourth.add(new JScrollPane(text));
-		sourth.add(new JScrollPane(area_text));
 		
-		add(north, BorderLayout.NORTH);
-		add(sourth, BorderLayout.CENTER);
+		add(north, BorderLayout.CENTER);
 
-		setBounds(100, 100, 500, 500);
+		setBounds(100, 100, 500, 150);
 		setVisible(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		validate();
 
+		label_wrong.setHorizontalAlignment(SwingConstants.CENTER);
+		frame1.add(label_wrong);
+		frame1.setTitle("出错"); 
+		frame1.setLocation(500,300);  
+		frame1.setSize(150,80);  
+		frame1.setModal(true); 
+		
 		// 设置事件
 		button.addActionListener(this);
 		button_stop.addActionListener(this);
@@ -92,26 +88,20 @@ public class GUI extends JFrame implements ActionListener {
 		}
 		if (object == button_next) {
 			// System.out.println("@@@@@@");
-			new Chart(field1.getText());
-			// text.setBounds(0, 0, 442, 291);
-			ImageIcon img = new ImageIcon("D:\\barchartTEST.jpg");
-			text.insertIcon(img);
-			ImageIcon img2 = new ImageIcon("D:\\linechartTEST.jpg");
-			text.insertIcon(img2);
-			List<String> result = new NLP().summary(field1.getText());
-			for (int i = 0; i < result.size(); i++) {
-				System.out.println(result.get(i));
-				area_text.append(result.get(i));
-			}
+			String key=field1.getText();
+			if(key.replaceAll(" ", "").length()==0){
+				label_wrong.setText("关键词不能为空");
+				frame1.setVisible(true);
+			}else
+				new Result_face(key);
 
 		}
 		if (object == button) {
-			String department;
 			int index = add.getSelectedIndex();
 
 			// System.out.println("http://www.baidu.com/s?wd="+field1.getText().trim()+"%20site:"+departments[index]);
 			try {
-				if (index == 0) {
+				if (index == 0||index == 1||index == 2) {
 					spider = Spider.create(new Most());
 					spider.addUrl(
 							"http://cn.bing.com/search?q=site%3A"+departments[index]+"+%22" + field1.getText()
@@ -122,27 +112,6 @@ public class GUI extends JFrame implements ActionListener {
 							.addPipeline(new ConsolePipeline())
 							.addPipeline(new MysqlPipeline()).start();
 					System.out.println("@@@@@@");
-				} else if (index == 1) {
-					spider = Spider.create(new Miit());
-					spider.addUrl(
-							"http://cn.bing.com/search?q=site%3A"+departments[index]+"+%22" + field1.getText()
-									+ "%22+filetype%3Ahtml")
-							// "http://www.baidu.com/ns?word=机床"http://www.baidu.com/s?wd=机床
-							// site:www.most.gov.cn
-
-							.addPipeline(new ConsolePipeline())
-							.addPipeline(new MysqlPipeline()).start();
-
-				} else if (index == 2) {
-					spider = Spider.create(new sdpc());
-					spider.addUrl(
-							"http://cn.bing.com/search?q=site%3A"+departments[index]+"+%22" + field1.getText()
-							+ "%22+filetype%3Ahtml")
-							// "http://www.baidu.com/ns?word=机床"http://www.baidu.com/s?wd=机床
-							// site:www.most.gov.cn
-
-							.addPipeline(new ConsolePipeline())
-							.addPipeline(new MysqlPipeline()).start();
 				} else {
 					spider = Spider.create(new chinanews());
 					spider.addUrl(

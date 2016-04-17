@@ -16,6 +16,7 @@ public class NLP
 		String[] input = inputstr.split("\n");
 		for(int i = 0; i < input.length; ++i) {
 			int length = input[i].length();
+			input[i].replaceAll(" ", "").replaceAll("　", "").replaceAll("\t","").replaceAll("\n","");
 			if(length==0)
 				continue;
 			if(length < 30)
@@ -29,9 +30,9 @@ public class NLP
 		return summary;
 	}
 	//输入关键字从数据库中查找相关记录，输出每条记录的基本信息和正文文摘，以数组的形式返回
-	public List<String> summary(String searchword) 
+	public List<Map> summary(String searchword) 
 	{
-		List<String> result = new ArrayList<String>();
+		List<Map> result = new ArrayList<Map>();
 		final String DB_URL = "jdbc:mysql://localhost:3306/webmagic";
 		final String USER = "root";
 		final String PASS = "123456";
@@ -52,13 +53,15 @@ public class NLP
 		     ResultSet rs = stmt.executeQuery(sql);
 		     while(rs.next()){
 		    	 String text = rs.getString("content"), time = rs.getString("savetime"), title = rs.getString("title");
-		    	 String author = rs.getString("author"), from = rs.getString("baseUrl");
-		    	 String tmp = new String();
-		    	 tmp += "题目：" + "\n" + title + "\n";
-		    	 tmp += "作者：" + "\n" + author + "\n";
-		    	 tmp += "时间：" + "\n" + time + "\n";
-		    	 tmp += "来源: " + "\n" + from + "\n";
-		    	 tmp += "摘要：" + "\n" + stringsummary(text) + "\n";
+		    	 String author = rs.getString("author"), url = rs.getString("baseUrl"),type = rs.getString("type");
+		    	 Map tmp = new HashMap();
+		    	 tmp.put("title", title);
+		    	 tmp.put("author", author);
+		    	 tmp.put("time", time);
+		    	 tmp.put("url", url);
+		    	 tmp.put("abstract", stringsummary(text));
+		    	 tmp.put("type", type);
+		
 		    	 result.add(tmp);
 		     }
 		     rs.close();
