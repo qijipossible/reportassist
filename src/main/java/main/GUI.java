@@ -147,7 +147,13 @@ public class GUI extends JFrame implements ActionListener {
 
 							.addPipeline(new ConsolePipeline())
 							.addPipeline(new MysqlPipeline()).start();
+				} else if (index2 == 3) {
+					spider = Spider.create(new Patent());
+					spider.addUrl("http://www.soopat.com/Home/Result?SearchWord="+field1.getText()+"&PatentIndex=0&Sort=1&Valid=2")
+							.addPipeline(new ConsolePipeline())
+							.addPipeline(new MysqlPipeline()).start();
 				}
+				
 
 			} catch (Exception e1) {
 			}
