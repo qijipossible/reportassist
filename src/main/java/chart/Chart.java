@@ -31,8 +31,8 @@ import org.jfree.chart.title.TextTitle;
 import database.SQLop;;
 
 public class Chart {
-	static final int PIC_LENGTH = 300;
-	static final int PIC_WIDTH = 400;
+	static final int PIC_LENGTH = 400;
+	static final int PIC_WIDTH = 500;
 	
 	static final int SITE = 1;
 	static final int YEAR = 2;
@@ -195,7 +195,7 @@ public class Chart {
 	private static class Fonts{
 		static final Font title = new Font("微软雅黑",Font.BOLD,20);
 		static final Font axis_lable = new Font("微软雅黑",Font.BOLD,15);
-		static final Font axis = new Font("微软雅黑",Font.PLAIN,12);
+		static final Font axis = new Font("微软雅黑",Font.PLAIN,10);
 	}
 	
 	private static class Colors{
