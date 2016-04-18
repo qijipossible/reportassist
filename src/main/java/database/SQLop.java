@@ -7,7 +7,9 @@ import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.sql.ResultSet;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class SQLop {
 	String tableName = "webpage";
@@ -63,6 +65,88 @@ public class SQLop {
 	}
 
 	/*
+	 * getRecordL
+	 */
+	private static final String GET_ALLrecord_SQL = "SELECT baseUrl,content,savetime,title,author,type FROM webpage";
+	public List<Record> getRecordL() {
+		PreparedStatement pstm = null;
+		ResultSet rs = null;
+		List<Record> records = new ArrayList<Record>();
+			try {
+				
+				pstm = conn.prepareStatement( GET_ALLrecord_SQL);
+				rs=pstm.executeQuery();
+				
+			    while(rs.next()){
+			    	Record record = new Record();
+			    	record.setAuthor(rs.getString("author"));
+			    	record.setBaseUrl(rs.getString("baseUrl"));
+			    	record.setContent(rs.getString("content"));
+			    	record.setSavetime(rs.getDate("savetime"));
+			    	record.setTitle(rs.getString("title"));
+			    	record.setType(rs.getString("type"));
+			    	
+			    	records.add(record);	
+			    } 	
+			} catch (Exception e) {
+				System.out.println(e);
+			
+			} finally {
+				try {
+					rs.close();
+					if (pstm != null)
+						pstm.close();
+				} catch (SQLException e) {
+					System.out.println("SQLException: " + e.getMessage());
+					System.out.println("SQLState: " + e.getSQLState());
+					System.out.println("VendorError: " + e.getErrorCode());
+				}
+			}
+		
+
+			return records;
+	}
+	
+	/*
+	 * getRecord_Bytitle
+	 */
+	private static final String GET_ARecord_SQL = "SELECT baseUrl,content,savetime,title,author,type FROM webpage WHERE title=?";
+	public Record getRecordByTitle(String key) {
+		PreparedStatement pstm = null;
+		Record record=new Record();
+		ResultSet rs=null;
+			try {
+				pstm = conn.prepareStatement(GET_ARecord_SQL);
+				pstm.setString(1,key);
+				rs=pstm.executeQuery();
+				
+				while(rs.next())
+				{
+					record.setAuthor(rs.getString("author"));
+					record.setBaseUrl(rs.getString("baseUrl"));
+					record.setContent(rs.getString("content"));
+					record.setSavetime(rs.getDate("savetime"));
+					record.setTitle(rs.getString("title"));
+					record.setType(rs.getString("type"));
+				}
+				rs.close();
+			} catch (Exception e) {
+				System.out.println(e);
+			
+			} finally {
+				try {
+					if (pstm != null)
+						pstm.close();
+				} catch (SQLException e) {
+					System.out.println("SQLException: " + e.getMessage());
+					System.out.println("SQLState: " + e.getSQLState());
+					System.out.println("VendorError: " + e.getErrorCode());
+				}
+			}
+			return record;
+	}
+
+	/*
 	 * insert
 	 */
 	public void insert(String url, String content, Date savetime, String title,
@@ -77,8 +161,8 @@ public class SQLop {
 					preStatement.setString(1, url);
 				if (content != null)
 					preStatement.setString(2, content);
-//				if (savetime != null)
-					preStatement.setDate(3, savetime);
+				// if (savetime != null)
+				preStatement.setDate(3, savetime);
 				if (title != null)
 					preStatement.setString(4, title);
 				if (author != null)
@@ -138,7 +222,8 @@ public class SQLop {
 				sql = "SELECT year(savetime),COUNT(*) FROM tmp GROUP BY year(savetime) ORDER BY year(savetime)";
 				results = statemt.executeQuery(sql);
 				while (results.next()) {
-					if(results.getString(1) == null) continue;
+					if (results.getString(1) == null)
+						continue;
 					resultMap.put(results.getString(1),
 							new Integer(results.getInt(2)));
 				}
@@ -168,10 +253,9 @@ public class SQLop {
 
 			String sql = "select title from webpage where title='" + title
 					+ "'";
-			results=statemt.executeQuery(sql);
-			if(results.next()==false)
+			results = statemt.executeQuery(sql);
+			if (results.next() == false)
 				return false;
-			
 
 		} catch (SQLException se) {
 			se.printStackTrace();
