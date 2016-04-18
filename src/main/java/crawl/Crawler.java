@@ -13,7 +13,12 @@ import us.codecraft.webmagic.processor.example.sdpc;
 public class Crawler {
 	String key;
 	boolean[] option;
-	Spider spider = null;
+	Spider spider1 = null;
+	Spider spider2 = null;
+	Spider spider3 = null;
+	Spider spider4 = null;
+	Spider spider5 = null;
+	Spider spider6 = null;
 	// 0科技部，1工信部，2发改委，3论文，4专利，5新闻
 
 	String[] website = { "www.most.gov.cn", "www.miit.gov.cn",
@@ -24,70 +29,74 @@ public class Crawler {
 		this.option = option;
 	}
 
-	public boolean start() {
-		boolean flag = false;
-		for (int i = 0; i < website.length; i++) {
-			 thread(i);
-		}
-		flag = true;
-		return flag;
-	}
+	public void start() {
 
-	public void thread(int index) {
-		if (option[index] == true) {
-			spider = Spider.create(new Most());
-			spider.addUrl(
+		if (option[0] == true) {
+			spider1 = Spider.create(new Most());
+			spider1.addUrl(
 					"http://cn.bing.com/search?q=site%3A" + website[0] + "+%22"
 							+ key + "%22+filetype%3Ahtml")
 					.addPipeline(new ConsolePipeline())
-					.addPipeline(new MysqlPipeline()).thread(5).run();
-			return ;
+					.addPipeline(new MysqlPipeline()).thread(5).start();
+
 		}
 		if (option[1] == true) {
-			spider = Spider.create(new Miit());
-			spider.addUrl(
+			spider2 = Spider.create(new Miit());
+			spider2.addUrl(
 					"http://cn.bing.com/search?q=site%3A" + website[1] + "+%22"
 							+ key + "%22+filetype%3Ahtml")
 					.addPipeline(new ConsolePipeline())
-					.addPipeline(new MysqlPipeline()).thread(5).run();
-			return ;
+					.addPipeline(new MysqlPipeline()).thread(5).start();
+
 		}
 		if (option[2] == true) {
-			spider = Spider.create(new sdpc());
-			spider.addUrl(
+			spider3 = Spider.create(new sdpc());
+			spider3.addUrl(
 					"http://cn.bing.com/search?q=site%3A" + website[2] + "+%22"
 							+ key + "%22+filetype%3Ahtml")
 					.addPipeline(new ConsolePipeline())
-					.addPipeline(new MysqlPipeline()).thread(5).run();
-			return ;
-		}
-		if (option[5] == true) {
-			spider = Spider.create(new chinanews());
-			spider.addUrl(
-					"http://sou.chinanews.com.cn/search.do?q=" + key
-							+ "&ps=100").addPipeline(new ConsolePipeline())
-					.addPipeline(new MysqlPipeline()).thread(5).run();
-			return ;
+					.addPipeline(new MysqlPipeline()).thread(5).start();
+			return;
 		}
 		if (option[3] == true) {
-			spider = Spider.create(new Wanfang());
-			spider.addUrl("http://s.wanfangdata.com.cn/Paper.aspx?q=" + key)
-					.addPipeline(new ConsolePipeline())
-					.addPipeline(new MysqlPipeline()).thread(5).run();
-			return ;
+			spider4 = Spider.create(new chinanews());
+			spider4.addUrl(
+					"http://sou.chinanews.com.cn/search.do?q=" + key
+							+ "&ps=100").addPipeline(new ConsolePipeline())
+					.addPipeline(new MysqlPipeline()).thread(5).start();
+
 		}
 		if (option[4] == true) {
-			spider = Spider.create(new Patent());
-			spider.addUrl(
+			spider5 = Spider.create(new Wanfang());
+			spider5.addUrl("http://s.wanfangdata.com.cn/Paper.aspx?q=" + key)
+					.addPipeline(new ConsolePipeline())
+					.addPipeline(new MysqlPipeline()).thread(5).start();
+
+		}
+		if (option[5] == true) {
+			spider6 = Spider.create(new Patent());
+			spider6.addUrl(
 					"http://www.soopat.com/Home/Result?SearchWord=" + key
 							+ "&PatentIndex=0&Sort=1&Valid=2")
 					.addPipeline(new ConsolePipeline())
-					.addPipeline(new MysqlPipeline()).thread(5).run();
-			return ;
+					.addPipeline(new MysqlPipeline()).thread(5).start();
+
 		}
-		return ;
+
 	}
-	public void stop(){
-		spider.close();
+
+	public void stop() {
+		if (spider1 != null)
+			spider1.close();
+		if (spider2 != null)
+			spider2.close();
+		if (spider3 != null)
+			spider3.close();
+		if (spider4 != null)
+			spider4.close();
+		if (spider5 != null)
+			spider5.close();
+		if (spider6 != null)
+			spider6.close();
 	}
 }

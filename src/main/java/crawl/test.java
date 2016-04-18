@@ -7,7 +7,8 @@ import javax.swing.*;
 
 public class test extends JFrame implements ActionListener {
 	JButton button1 = new JButton("stop");
-	String key = "04专项";
+	JButton button0 = new JButton("start");
+	String key = "数控机床";
 	boolean[] option = { true, true, false, false, false, false };
 	Crawler crawler = new Crawler(key, option);
 
@@ -16,10 +17,11 @@ public class test extends JFrame implements ActionListener {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		FlowLayout flowLayout = new FlowLayout();
 		setLayout(flowLayout);
+		add(button0);
 		add(button1);
 		setVisible(true);
 		button1.addActionListener(this);
-		crawler.start();
+		button0.addActionListener(this);
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -27,6 +29,9 @@ public class test extends JFrame implements ActionListener {
 		if (object == button1) {
 			crawler.stop();
 			System.out.println("stop now!");
+		}
+		if (object == button0) {
+			crawler.start();
 		}
 	}
 

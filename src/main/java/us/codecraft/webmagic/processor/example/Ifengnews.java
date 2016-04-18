@@ -9,16 +9,9 @@ import us.codecraft.webmagic.pipeline.*;
 /**
  * @author code4crafter@gmail.com <br>
  */
-public class Tencentnews implements PageProcessor {
+public class Ifengnews implements PageProcessor {
 
-	public static final String URL_LIST = "https://www\\.sogou\\.com/web\\?num=100&site=news\\.qq\\.com&query=。*";
-	// public static final String
-	// KEJI_WEB_SITE="http://www\\.most\\.gov\\.cn/\\.*";
-	// public static final String KEJI_WEB_SITE="www.most.gov.cn";
-	// public static final String KEJI_WEB_SITE="www.most.gov.cn";
-
-	// public static final String URL_POST =
-	// "http://blog\\.sina\\.com\\.cn/s/blog_\\w+\\.html";
+	public static final String URL_LIST = "http://zhannei\\.baidu\\.com/cse/search\\?q=。*";
 
 	private Site site = Site.me()
 			// .setDomain("blog.sina.com.cn")
@@ -31,21 +24,21 @@ public class Tencentnews implements PageProcessor {
 		// 列表页
 		if (page.getUrl().regex(URL_LIST).match()) {
 			page.addTargetRequests(page.getHtml()
-					.xpath("//div[@class='results']").links()
-					.regex("http://www\\.sogou\\.com/link?url=.*").all());
-			page.addTargetRequests(page.getHtml().xpath("//div[@id='pagebar_container']")
-					.links().all());
+					.xpath("//div[@id='results']//div[class='content-main']").links()
+					.regex("http://news\\.ifeng\\.com/.*").all());
+			page.addTargetRequests(page.getHtml().xpath("//div[@id='pageFooter']")
+					.links().regex("http://zhannei\\.baidu\\.com/cse/search\\?q=。*").all());
 			page.setSkip(true);
 			// 文章页
 		} else {
-			String temp = page.getHtml().xpath("//div[@class='left-t']/text()")
+			String temp = page.getHtml().xpath("//div[@id='artical']/h1/text()")
 					.toString();
 			if (temp == null) {
 				page.setSkip(true);
 				return;
 			}
 			page.putField("time", temp.substring(1, 11));
-			page.putField("title", page.getHtml().xpath("title/text()"));
+			page.putField("title", temp);
 
 			page.putField("content",
 					page.getHtml().xpath("//div[@class='left_zw']/tidyText()")
@@ -65,10 +58,8 @@ public class Tencentnews implements PageProcessor {
 	}
 
 	public static void main(String[] args) {
-		Spider.create(new Tencentnews())
-				.addUrl("https://www.sogou.com/web?num=100&site=news.qq.com&query=%22数控机床%22&num=100")
-				// "http://www.baidu.com/ns?word=机床"http://www.baidu.com/s?wd=机床
-				// site:www.most.gov.cn
+		Spider.create(new Ifengnews())
+				.addUrl("http://zhannei.baidu.com/cse/search?q=数控机床&s=16378496155419916178")
 				.addPipeline(new ConsolePipeline()).run();
 	}
 }
