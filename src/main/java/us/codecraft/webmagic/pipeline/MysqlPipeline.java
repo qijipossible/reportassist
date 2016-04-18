@@ -32,32 +32,38 @@ public class MysqlPipeline implements Pipeline {
 			System.out.println("!!!!!!!!!!!!!!" + entry.getKey() + ":\t"
 					+ entry.getValue());
 			String temp = entry.getValue().toString();
-			if(temp==null)
+			if (temp == null)
 				continue;
-			if (entry.getKey().equals("title")){
+			if (entry.getKey().equals("title")) {
 				title = temp;
-			}
-			else if (entry.getKey().equals("content")){
-				content = temp.replaceAll("　", "\n").replaceAll(" ", "\n").replaceAll(" ", "\n");
-			}
-			else if (entry.getKey().equals("time")) {
-//				author = temp.substring(temp.indexOf(" ") + 1, temp.length());
-//				author.trim();
+			} else if (entry.getKey().equals("content")) {
+				content = temp.replaceAll("　", "\n").replaceAll(" ", "\n")
+						.replaceAll(" ", "\n");
+			} else if (entry.getKey().equals("time")) {
+				// author = temp.substring(temp.indexOf(" ") + 1,
+				// temp.length());
+				// author.trim();
 				temp = temp.replace("年", "-");
 				temp = temp.replace("月", "-");
 				temp = temp.replace("：", "");
 				temp = temp.replaceAll("[\u4e00-\u9fa5]+", "");
 				temp = temp.replaceAll("【", "");
 				temp = temp.replaceAll("】", "");
-				temp = temp.substring(0, 10);
+				if (temp.length() > 10)
+					temp = temp.substring(0, 10);
+				if (temp.length() - temp.indexOf("-", temp.indexOf("-") + 1) < 4)
+					temp = temp.substring(0,
+							temp.indexOf("-", temp.indexOf("-") + 1) + 1)
+							+ "0"
+							+ temp.substring(
+									temp.indexOf("-", temp.indexOf("-") + 1) + 1,
+									temp.length()-1);
 				time = java.sql.Date.valueOf(temp);
-			} else if (entry.getKey().equals("baseURL")){
+			} else if (entry.getKey().equals("baseURL")) {
 				url = entry.getValue().toString();
-			}
-			 else if (entry.getKey().equals("author")){ 
-				 author = temp;
-			 }
-			else if (entry.getKey().equals("type"))
+			} else if (entry.getKey().equals("author")) {
+				author = temp;
+			} else if (entry.getKey().equals("type"))
 				type = temp;
 
 		}

@@ -29,7 +29,7 @@ public class GUI extends JFrame implements ActionListener {
 
 	JScrollPane scrollPane = null;
 
-	String option[] = { "科技部", "工信部", "发改委", "新闻" };
+	String option[] = { "科技部", "工信部", "发改委", "新闻","论文" };
 	String departments[] = { "www.most.gov.cn", "www.miit.gov.cn","www.sdpc.gov.cn" };
 
 	JComboBox add = new JComboBox(option);
@@ -112,10 +112,18 @@ public class GUI extends JFrame implements ActionListener {
 							.addPipeline(new ConsolePipeline())
 							.addPipeline(new MysqlPipeline()).start();
 					System.out.println("@@@@@@");
-				} else {
+				} else if(index==3){
 					spider = Spider.create(new chinanews());
 					spider.addUrl(
 							"http://sou.chinanews.com.cn/search.do?q=" + field1.getText())
+							// http://news.baidu.com/ns?word=机床
+
+							.addPipeline(new ConsolePipeline())
+							.addPipeline(new MysqlPipeline()).start();
+				}else if(index==4){
+					spider = Spider.create(new Wanfang());
+					spider.addUrl(
+							"http://s.wanfangdata.com.cn/Paper.aspx?q=" + field1.getText())
 							// http://news.baidu.com/ns?word=机床
 
 							.addPipeline(new ConsolePipeline())

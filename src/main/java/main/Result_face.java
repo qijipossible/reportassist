@@ -1,6 +1,12 @@
 package main;
 
 import javax.swing.*;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultStyledDocument;
+import javax.swing.text.Style;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyleContext;
+import javax.swing.text.StyledDocument;
 
 import chart.Chart;
 import NLP.NLP;
@@ -22,7 +28,9 @@ public class Result_face extends JFrame implements ItemListener, ActionListener 
 	JLabel label1_1 = new JLabel("题目：");
 	JLabel label2_1 = new JLabel("题目：");
 	JTextArea label1 = new JTextArea("");
-	JTextArea label2 = new JTextArea("");
+	//JTextArea label2 = new JTextArea("");
+	StyledDocument styledDoc = new DefaultStyledDocument();
+	JTextPane label2 = new JTextPane(styledDoc);
 	JTextPane label3 = new JTextPane();
 	JTextArea label_content = new JTextArea("");
 	JTextField tx1_1 = new JTextField(20);
@@ -73,7 +81,6 @@ public class Result_face extends JFrame implements ItemListener, ActionListener 
 		panel2_1.add(tx2_1);
 		panel2_1.add(bt2_1);
 		
-
 		mng_src.setLayout(new BorderLayout());
 		mng_src.add(new JScrollPane(label2), BorderLayout.CENTER);
 		mng_src.add(panel2_1, BorderLayout.SOUTH);
@@ -114,11 +121,11 @@ public class Result_face extends JFrame implements ItemListener, ActionListener 
 	public void show_record() {
 		database.initialize();
 		List<Record> records = database.getRecordL();
-		label1.setText("发布日期" + "\t\t\t" + "来源" + "\t\t\t" + "题目"
-				+ "\t\t\t\t\t\t" + "地址");
+		label1.setText("发布日期" + "\t\t" + "来源" + "\t\t\t" + "题目"
+				+ "\t\t\t\t\t\t\t\t\t" + "地址");
 		for (int i = 0; i < records.size(); i++) {
 			Record record = records.get(i);
-			label1.append("\n" + record.getSavetime() + "\t\t\t"
+			label1.append("\n" + record.getSavetime() + "\t\t"
 					+ record.getType() + "." + record.getAuthor() + "\t\t\t"
 					+ record.getTitle().trim() + "\t\t\t\t\t\t"
 					+ record.getBaseUrl());
@@ -128,14 +135,17 @@ public class Result_face extends JFrame implements ItemListener, ActionListener 
 
 	public void show_abstract() {
 		List<Map> result = new NLP().summary(keyword);
+		createStyle("Style01", styledDoc, 16, 0, 1, 1, Color.GRAY, "Times New Roman");
+		createStyle("Style02", styledDoc, 20, 1, 0, 0, Color.BLACK, "黑体");
+		createStyle("Style03", styledDoc, 16, 0, 0, 0, Color.BLACK, "宋体");
+		createStyle("Style04", styledDoc, 16, 0, 0, 0, Color.BLACK, "楷体");
 		for (int i = 0; i < result.size(); i++) {
 			System.out.println(result.get(i));
-			label2.append(result.get(i).get("url").toString() + "\n"
-					+ result.get(i).get("title").toString() + "\n"
-					+ result.get(i).get("time").toString() + "\t"
-					+ result.get(i).get("type").toString() + "."
-					+ result.get(i).get("author").toString() + "\n"
-					+ result.get(i).get("abstract").toString() + "\n\n\n");
+			insertDoc(styledDoc, result.get(i).get("url").toString()+"\n", "Style01");
+			insertDoc(styledDoc, result.get(i).get("title").toString() + "\n", "Style02");
+			insertDoc(styledDoc,  "\t"+result.get(i).get("type").toString() + "."
+					+ result.get(i).get("author").toString() + "\n","Style04");
+			insertDoc(styledDoc, "摘要：\t"+result.get(i).get("abstract").toString().replaceAll("\n", "") + "\n\n\n", "Style03");
 		}
 		database.close();
 	}
@@ -162,5 +172,32 @@ public class Result_face extends JFrame implements ItemListener, ActionListener 
 	public void itemStateChanged(ItemEvent e) {
 		// TODO Auto-generated method stub
 
+	}
+	public void insertDoc(StyledDocument styledDoc, String content,
+			String currentStyle) {
+		try {
+			styledDoc.insertString(styledDoc.getLength(), content,
+					styledDoc.getStyle(currentStyle));
+		} catch (BadLocationException e) {
+			System.err.println("BadLocationException: " + e);
+		}
+	}
+
+	public void createStyle(String style, StyledDocument doc, int size,
+			int bold, int italic, int underline, Color color, String fontName) {
+		Style sys = StyleContext.getDefaultStyleContext().getStyle(
+				StyleContext.DEFAULT_STYLE);
+		try {
+			doc.removeStyle(style);
+		} catch (Exception e) {
+		} // 先删除这种Style,假使他存在
+
+		Style s = doc.addStyle(style, sys); // 加入
+		StyleConstants.setFontSize(s, size); // 大小
+		StyleConstants.setBold(s, (bold == 1) ? true : false); // 粗体
+		StyleConstants.setItalic(s, (italic == 1) ? true : false); // 斜体
+		StyleConstants.setUnderline(s, (underline == 1) ? true : false); // 下划线
+		StyleConstants.setForeground(s, color); // 颜色
+		StyleConstants.setFontFamily(s, fontName); // 字体
 	}
 }

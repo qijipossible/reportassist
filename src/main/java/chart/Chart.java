@@ -97,13 +97,9 @@ public class Chart {
 		
 		FileOutputStream pic_out = null; 
         try { 
-<<<<<<< HEAD
-            fos_jpg = new FileOutputStream(".\\barchartTEST.jpg"); 
-            ChartUtilities.writeChartAsJPEG(fos_jpg,(float)1.0,chart,400,300,null); 
-=======
-            pic_out = new FileOutputStream("D:\\barchartTEST.jpg"); 
+            pic_out = new FileOutputStream(".\\barchartTEST.jpg"); 
             ChartUtilities.writeChartAsJPEG(pic_out,1.0f,chart,PIC_WIDTH,PIC_LENGTH,null); 
->>>>>>> origin/master
+
         } catch (Exception e) {
 			e.printStackTrace();
 		} finally { 
@@ -166,13 +162,8 @@ public class Chart {
 	    
 		FileOutputStream pic_out = null; 
         try { 
-<<<<<<< HEAD
-            fos_jpg = new FileOutputStream(".\\linechartTEST.jpg"); 
-            ChartUtilities.writeChartAsJPEG(fos_jpg,(float)1.0,chart,400,300,null); 
-=======
-            pic_out = new FileOutputStream("D:\\linechartTEST.jpg"); 
+            pic_out = new FileOutputStream(".\\linechartTEST.jpg"); 
             ChartUtilities.writeChartAsJPEG(pic_out,1.0f,chart,PIC_WIDTH,PIC_LENGTH,null); 
->>>>>>> origin/master
         } catch (Exception e) {
 			e.printStackTrace();
 		} finally { 
