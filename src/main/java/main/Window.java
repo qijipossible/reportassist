@@ -32,34 +32,49 @@ import java.awt.GridBagConstraints;
 
 import javax.swing.JCheckBox;
 
+import crawl.Crawler;
+
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import javax.swing.JProgressBar;
 
-public class Window {
+public class Window{
 
 	private JFrame frame;
 	private JTextField textField;
 	private JButton button;
+	private JPanel panel = new JPanel();
 	private Component verticalGlue;
 	private Component verticalGlue_1;
 	private JPanel panel_1;
 	private JPanel panel_2;
-	private JCheckBox chckbxNewCheckBox;
-	private JCheckBox chckbxNewCheckBox_1;
-	private JCheckBox chckbxNewCheckBox_2;
+	private JCheckBox ck1;
+	private JCheckBox ck2;
+	private JCheckBox ck3;
 	private Component verticalStrut;
 	private Component verticalStrut_1;
 	private JPanel panel_3;
 	private JPanel panel_4;
-	private JCheckBox chckbxNewCheckBox_3;
-	private JCheckBox chckbxNewCheckBox_4;
-	private JCheckBox chckbxNewCheckBox_5;
+	private JCheckBox ck4;
+	private JCheckBox ck5;
+	private JCheckBox ck6;
 	private JPanel panel_5;
 	private Component verticalGlue_2;
 	private Component verticalGlue_3;
 	private Component verticalGlue_4;
 	private Component verticalGlue_5;
+	private JProgressBar progressBar;
+	
+	private ResultFrame resultFrame;
+	
+	private boolean isRunning = false;
+	public String keyword = null;
+	private JButton button_1;
+	private JPanel panel_7;
+
 
 	/**
 	 * Launch the application.
@@ -80,14 +95,16 @@ public class Window {
 	/**
 	 * Create the application.
 	 */
-	public Window() {
-		initialize();
+	public Window(){
+		initialize1();
+		actionListner();
 	}
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	private void initialize() {
+	private void initialize1() {
+
 		Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
 		int screenHeight = dimension.height;
 		int glueHeight = screenHeight/2-100;
@@ -99,19 +116,17 @@ public class Window {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS));
 		
-		JPanel panel = new JPanel();
-		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-
-		verticalGlue = Box.createVerticalGlue();
-		verticalGlue_1 = Box.createVerticalGlue();
+		panel_7 = new JPanel();
+		frame.getContentPane().add(panel_7);
+		panel_7.setLayout(new BoxLayout(panel_7, BoxLayout.Y_AXIS));
 		verticalStrut = Box.createVerticalStrut(glueHeight);
-		verticalStrut_1 = Box.createVerticalStrut(glueHeight);
+		panel_7.add(verticalStrut);
 		
-		frame.getContentPane().add(verticalStrut);
-		frame.getContentPane().add(verticalGlue);
-		frame.getContentPane().add(panel);
-		frame.getContentPane().add(verticalGlue_1);
-		frame.getContentPane().add(verticalStrut_1);
+		verticalGlue = Box.createVerticalGlue();
+		panel_7.add(verticalGlue);
+		panel_7.add(panel);
+		
+		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		
 		panel_1 = new JPanel();
 		panel.add(panel_1);
@@ -129,11 +144,21 @@ public class Window {
 		textField.setToolTipText("请键入您想要搜索的关键词");
 		textField.setColumns(30);
 		
+		progressBar = new JProgressBar();
+		panel_5.add(progressBar);
+		progressBar.setStringPainted(true);
+		progressBar.setString("正在搜索...");
+		progressBar.setFont(new Font("宋体", Font.PLAIN, 15));
+		progressBar.setVisible(false);
+		progressBar.setIndeterminate(true);
+		
 		button = new JButton("搜索");
 		button.setFont(new Font("微软雅黑", Font.PLAIN, 15));
-		button.addActionListener((ActionListener) this);
 		panel_5.add(button);
-		button.setAlignmentX(Component.CENTER_ALIGNMENT);
+		
+		button_1 = new JButton("显示结果");
+		button_1.setFont(new Font("微软雅黑", Font.PLAIN, 15));
+		panel_5.add(button_1);
 		
 		verticalGlue_3 = Box.createVerticalGlue();
 		panel_1.add(verticalGlue_3);
@@ -148,39 +173,88 @@ public class Window {
 		panel_3 = new JPanel();
 		panel_2.add(panel_3);
 		
-		chckbxNewCheckBox = new JCheckBox();
-		chckbxNewCheckBox.setText("科技部");
-		panel_3.add(chckbxNewCheckBox);
+		ck1 = new JCheckBox();
+		ck1.setText("科技部");
+		panel_3.add(ck1);
 		
-		chckbxNewCheckBox_1 = new JCheckBox("工信部");
-		panel_3.add(chckbxNewCheckBox_1);
+		ck2 = new JCheckBox("工信部");
+		panel_3.add(ck2);
 		
-		chckbxNewCheckBox_2 = new JCheckBox("发改委");
-		panel_3.add(chckbxNewCheckBox_2);
+		ck3 = new JCheckBox("发改委");
+		panel_3.add(ck3);
 		
 		panel_4 = new JPanel();
 		panel_2.add(panel_4);
 		
-		chckbxNewCheckBox_3 = new JCheckBox("论文");
-		panel_4.add(chckbxNewCheckBox_3);
+		ck4 = new JCheckBox("论文");
+		panel_4.add(ck4);
 		
-		chckbxNewCheckBox_4 = new JCheckBox("专利");
-		panel_4.add(chckbxNewCheckBox_4);
+		ck5 = new JCheckBox("专利");
+		panel_4.add(ck5);
 		
-		chckbxNewCheckBox_5 = new JCheckBox("新闻");
-		panel_4.add(chckbxNewCheckBox_5);
+		ck6 = new JCheckBox("新闻");
+		panel_4.add(ck6);
 		
 		verticalGlue_5 = Box.createVerticalGlue();
 		panel_2.add(verticalGlue_5);
-		
+		verticalGlue_1 = Box.createVerticalGlue();
+		panel_7.add(verticalGlue_1);
+		verticalStrut_1 = Box.createVerticalStrut(glueHeight);
+		panel_7.add(verticalStrut_1);
 	}
 	
-	public void actionPerformed(ActionEvent e){
-		Object object = e.getSource();
-		if(object == button){
-			//TODO textField
+	private void actionListner(){
+
+		button.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				keyword = textField.getText();
+				boolean[] options = new boolean[6];
+				options[0] = ck1.isSelected();
+				options[1] = ck2.isSelected();
+				options[2] = ck3.isSelected();
+				options[3] = ck4.isSelected();
+				options[4] = ck5.isSelected();
+				options[5] = ck6.isSelected();
+				if(isRunning){
+					//TODO stop
+				}else{
+					new Crawler(keyword, options);
+				}
+				stateChange();
+			}
+		});
+		
+		button_1.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				resultFrame = new ResultFrame(keyword);
+				resultFrame.setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
+				frame.setVisible(false);
+			}
+		});
+	}
+	
+
+	private void stateChange(){
+		isRunning = !isRunning;
+		if(isRunning){
+			button.setText("停止");
+			textField.setVisible(false);
+			progressBar.setString("正在搜索: " + keyword);
+			progressBar.setVisible(true);
+			
+		}else{
+			button.setText("搜索");
+			progressBar.setVisible(false);
+			textField.setVisible(true);
 			
 		}
 	}
+	
+	private void initialize2(){
+		
+	}
+	
 
 }

@@ -22,6 +22,7 @@ public class Crawler {
 	public Crawler(String key, boolean[] option) {
 		this.key = key;
 		this.option = option;
+		start();
 	}
 
 	public void start() {
