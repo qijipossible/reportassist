@@ -130,10 +130,10 @@ public class GUI extends JFrame implements ActionListener {
 							.addPipeline(new MysqlPipeline()).start();
 					System.out.println("@@@@@@");
 				} else if (index2 == 1) {
-					spider = Spider.create(new chinanews());
+					spider = Spider.create(new Ifengnews());
 					spider.addUrl(
-							"http://sou.chinanews.com.cn/search.do?q="
-									+ field1.getText())
+							"http://zhannei.baidu.com/cse/search?q="
+									+ field1.getText()+"&s=16378496155419916178")
 							// http://news.baidu.com/ns?word=机床
 
 							.addPipeline(new ConsolePipeline())
