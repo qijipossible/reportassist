@@ -24,27 +24,27 @@ public class Ifengnews implements PageProcessor {
 		// 列表页
 		if (page.getUrl().regex(URL_LIST).match()) {
 			page.addTargetRequests(page.getHtml()
-					.xpath("//div[@id='results']//div[class='content-main']").links()
+					.xpath("//div[@id='results']").links()
 					.regex("http://news\\.ifeng\\.com/.*").all());
 			page.addTargetRequests(page.getHtml().xpath("//div[@id='pageFooter']")
 					.links().regex("http://zhannei\\.baidu\\.com/cse/search\\?q=。*").all());
 			page.setSkip(true);
 			// 文章页
 		} else {
-			String temp = page.getHtml().xpath("//div[@id='artical']/h1/text()")
+			String temp = page.getHtml().xpath("//div[@id='artical_sth']/allText()")
 					.toString();
 			if (temp == null) {
 				page.setSkip(true);
 				return;
 			}
-			page.putField("time", temp.substring(1, 11));
-			page.putField("title", temp);
+			page.putField("time", temp.substring(0,temp.indexOf("日")).trim());
+			page.putField("title", page.getHtml().xpath("//div[@id='artical']/h1/text()"));
 
 			page.putField("content",
-					page.getHtml().xpath("//div[@class='left_zw']/tidyText()")
+					page.getHtml().xpath("//div[@id='artical_real']/tidyText()")
 							);
 
-			page.putField("author", "中国新闻网");
+			page.putField("author", temp.substring(temp.indexOf("来源")+3, temp.indexOf(" ",temp.indexOf("来源")+1)));
 
 			page.putField("baseURL", page.getUrl());
 			page.putField("type", "新闻");

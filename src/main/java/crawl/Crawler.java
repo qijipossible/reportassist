@@ -3,6 +3,7 @@ package crawl;
 import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.pipeline.ConsolePipeline;
 import us.codecraft.webmagic.pipeline.MysqlPipeline;
+import us.codecraft.webmagic.processor.example.Ifengnews;
 import us.codecraft.webmagic.processor.example.Miit;
 import us.codecraft.webmagic.processor.example.Most;
 import us.codecraft.webmagic.processor.example.Patent;
@@ -60,10 +61,10 @@ public class Crawler {
 			return;
 		}
 		if (option[3] == true) {
-			spider4 = Spider.create(new chinanews());
+			spider4 = Spider.create(new Ifengnews());
 			spider4.addUrl(
-					"http://sou.chinanews.com.cn/search.do?q=" + key
-							+ "&ps=100").addPipeline(new ConsolePipeline())
+					"http://zhannei.baidu.com/cse/search?q=" + key
+							+ "&s=16378496155419916178").addPipeline(new ConsolePipeline())
 					.addPipeline(new MysqlPipeline()).thread(5).start();
 
 		}
