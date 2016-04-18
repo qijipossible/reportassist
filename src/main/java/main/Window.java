@@ -73,14 +73,15 @@ public class Window{
 	private Component verticalGlue_4;
 	private Component verticalGlue_5;
 	private JProgressBar progressBar;
+	private JButton button_1;
+	private JPanel panel_7;
+	private JPanel resultPanel;
 	
 	private ResultFrame resultFrame;
 	private Crawler crawler;
 	
 	private boolean isRunning = false;
 	public String keyword = null;
-	private JButton button_1;
-	private JPanel panel_7;
 
 
 	/**
@@ -234,9 +235,14 @@ public class Window{
 		button_1.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				resultFrame = new ResultFrame(keyword);
-				resultFrame.setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
-				frame.setVisible(false);
+				//resultFrame = new ResultFrame(keyword);
+				//resultFrame.setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
+				//frame.setVisible(false);
+				panel_7.setVisible(false);
+				resultPanel = new ResultPanel(keyword);
+				frame.getContentPane().add(resultPanel);
+				resultFrame.setVisible(true);
+				
 			}
 		});
 	}
