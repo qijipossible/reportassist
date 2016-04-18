@@ -32,6 +32,7 @@ import java.awt.GridBagConstraints;
 
 import javax.swing.JCheckBox;
 
+import NLP.NLP;
 import crawl.Crawler;
 
 import java.awt.Font;
@@ -39,7 +40,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.List;
+import java.util.Map;
+
 import javax.swing.JProgressBar;
+import javax.swing.text.DefaultStyledDocument;
+import javax.swing.text.StyledDocument;
 
 public class Window{
 
@@ -69,6 +75,7 @@ public class Window{
 	private JProgressBar progressBar;
 	
 	private ResultFrame resultFrame;
+	private Crawler crawler;
 	
 	private boolean isRunning = false;
 	public String keyword = null;
@@ -173,26 +180,25 @@ public class Window{
 		panel_3 = new JPanel();
 		panel_2.add(panel_3);
 		
-		ck1 = new JCheckBox();
-		ck1.setText("科技部");
+		ck1 = new JCheckBox("科技部",true);
 		panel_3.add(ck1);
 		
-		ck2 = new JCheckBox("工信部");
+		ck2 = new JCheckBox("工信部",true);
 		panel_3.add(ck2);
 		
-		ck3 = new JCheckBox("发改委");
+		ck3 = new JCheckBox("发改委",true);
 		panel_3.add(ck3);
 		
 		panel_4 = new JPanel();
 		panel_2.add(panel_4);
 		
-		ck4 = new JCheckBox("论文");
+		ck4 = new JCheckBox("论文",true);
 		panel_4.add(ck4);
 		
-		ck5 = new JCheckBox("专利");
+		ck5 = new JCheckBox("专利",true);
 		panel_4.add(ck5);
 		
-		ck6 = new JCheckBox("新闻");
+		ck6 = new JCheckBox("新闻",true);
 		panel_4.add(ck6);
 		
 		verticalGlue_5 = Box.createVerticalGlue();
@@ -217,9 +223,9 @@ public class Window{
 				options[4] = ck5.isSelected();
 				options[5] = ck6.isSelected();
 				if(isRunning){
-					//TODO stop
+					crawler.stop();
 				}else{
-					new Crawler(keyword, options);
+					crawler = new Crawler(keyword, options);
 				}
 				stateChange();
 			}
@@ -235,8 +241,11 @@ public class Window{
 		});
 	}
 	
+	
 
 	private void stateChange(){
+		
+
 		isRunning = !isRunning;
 		if(isRunning){
 			button.setText("停止");
@@ -252,9 +261,6 @@ public class Window{
 		}
 	}
 	
-	private void initialize2(){
-		
-	}
 	
 
 }
