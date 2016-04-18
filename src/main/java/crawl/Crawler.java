@@ -25,14 +25,24 @@ public class Crawler {
 		start();
 	}
 
-	public void start() {
-		if (option[0] == true) {
+	public boolean start() {
+		boolean flag = false;
+		for (int i = 0; i < website.length; i++) {
+			 thread(i);
+		}
+		flag = true;
+		return flag;
+	}
+
+	public void thread(int index) {
+		if (option[index] == true) {
 			spider = Spider.create(new Most());
 			spider.addUrl(
 					"http://cn.bing.com/search?q=site%3A" + website[0] + "+%22"
 							+ key + "%22+filetype%3Ahtml")
 					.addPipeline(new ConsolePipeline())
-					.addPipeline(new MysqlPipeline()).start();
+					.addPipeline(new MysqlPipeline()).thread(5).run();
+			return ;
 		}
 		if (option[1] == true) {
 			spider = Spider.create(new Miit());
@@ -40,7 +50,8 @@ public class Crawler {
 					"http://cn.bing.com/search?q=site%3A" + website[1] + "+%22"
 							+ key + "%22+filetype%3Ahtml")
 					.addPipeline(new ConsolePipeline())
-					.addPipeline(new MysqlPipeline()).start();
+					.addPipeline(new MysqlPipeline()).thread(5).run();
+			return ;
 		}
 		if (option[2] == true) {
 			spider = Spider.create(new sdpc());
@@ -48,26 +59,36 @@ public class Crawler {
 					"http://cn.bing.com/search?q=site%3A" + website[2] + "+%22"
 							+ key + "%22+filetype%3Ahtml")
 					.addPipeline(new ConsolePipeline())
-					.addPipeline(new MysqlPipeline()).start();
+					.addPipeline(new MysqlPipeline()).thread(5).run();
+			return ;
 		}
 		if (option[5] == true) {
 			spider = Spider.create(new chinanews());
-			spider.addUrl("http://sou.chinanews.com.cn/search.do?q=" + key)
-					.addPipeline(new ConsolePipeline())
-					.addPipeline(new MysqlPipeline()).start();
+			spider.addUrl(
+					"http://sou.chinanews.com.cn/search.do?q=" + key
+							+ "&ps=100").addPipeline(new ConsolePipeline())
+					.addPipeline(new MysqlPipeline()).thread(5).run();
+			return ;
 		}
 		if (option[3] == true) {
 			spider = Spider.create(new Wanfang());
 			spider.addUrl("http://s.wanfangdata.com.cn/Paper.aspx?q=" + key)
 					.addPipeline(new ConsolePipeline())
-					.addPipeline(new MysqlPipeline()).start();
+					.addPipeline(new MysqlPipeline()).thread(5).run();
+			return ;
 		}
 		if (option[4] == true) {
 			spider = Spider.create(new Patent());
-			spider.addUrl("http://www.soopat.com/Home/Result?SearchWord="+key+"&PatentIndex=0&Sort=1&Valid=2")
+			spider.addUrl(
+					"http://www.soopat.com/Home/Result?SearchWord=" + key
+							+ "&PatentIndex=0&Sort=1&Valid=2")
 					.addPipeline(new ConsolePipeline())
-					.addPipeline(new MysqlPipeline()).start();
+					.addPipeline(new MysqlPipeline()).thread(5).run();
+			return ;
 		}
-
+		return ;
+	}
+	public void stop(){
+		spider.close();
 	}
 }
