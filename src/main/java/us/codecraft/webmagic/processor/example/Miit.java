@@ -73,10 +73,11 @@ public class Miit implements PageProcessor {
 
 	public static void main(String[] args) {
 		Spider.create(new Miit())
-				.addUrl("http://cn.bing.com/search?q=site%3Awww.miit.gov.cn+%22机床%22+filetype%3Ahtml")
+				.addUrl("http://cn.bing.com/search?q=site%3Awww.miit.gov.cn+%22数控机床%22+filetype%3Ahtml")
 				// "http://www.baidu.com/ns?word=机床"http://www.baidu.com/s?wd=机床
 				// site:www.most.gov.cn
-				.addPipeline(new ConsolePipeline())
-				.addPipeline(new MysqlPipeline()).run();
+				.addPipeline(new ConsolePipeline()).thread(5)
+				.run();
+		System.out.println("finish!");
 	}
 }
