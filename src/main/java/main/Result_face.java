@@ -103,7 +103,7 @@ public class Result_face extends JFrame implements ItemListener, ActionListener 
 		bt2_1.addActionListener(this);
 	
 
-		setBounds(100, 100, 1000, 800);
+		setBounds(100,20, 800, 600);
 		setVisible(true);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 

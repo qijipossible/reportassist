@@ -51,13 +51,16 @@ public class MysqlPipeline implements Pipeline {
 				temp = temp.replaceAll("】", "");
 				if (temp.length() > 10)
 					temp = temp.substring(0, 10);
-				if (temp.length() - temp.indexOf("-", temp.indexOf("-") + 1) < 4)
-					temp = temp.substring(0,
-							temp.indexOf("-", temp.indexOf("-") + 1) + 1)
-							+ "0"
-							+ temp.substring(
-									temp.indexOf("-", temp.indexOf("-") + 1) + 1,
-									temp.length()-1);
+				if (temp.length() < 10) {
+					if (temp.length()
+							- temp.indexOf("-", temp.indexOf("-") + 1) < 4)
+						temp = temp.substring(0,
+								temp.indexOf("-", temp.indexOf("-") + 1) + 1)
+								+ "0"
+								+ temp.substring(temp.indexOf("-",
+										temp.indexOf("-") + 1) + 1, temp
+										.length() - 1);
+				}
 				time = java.sql.Date.valueOf(temp);
 			} else if (entry.getKey().equals("baseURL")) {
 				url = entry.getValue().toString();
