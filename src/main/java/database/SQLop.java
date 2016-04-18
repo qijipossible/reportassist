@@ -211,7 +211,7 @@ public class SQLop {
 
 			switch (countType) {
 			case SITE:
-				sql = "SELECT type,COUNT(*) FROM tmp GROUP BY type";
+				sql = "SELECT type,COUNT(*) FROM tmp WHERE type = '科技部' OR  type = '发改委' OR  type = '工信部' GROUP BY type";
 				results = statemt.executeQuery(sql);
 				while (results.next()) {
 					resultMap.put(results.getString(1),
