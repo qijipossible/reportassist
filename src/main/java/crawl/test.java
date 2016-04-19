@@ -9,7 +9,7 @@ public class test extends JFrame implements ActionListener {
 	JButton button1 = new JButton("stop");
 	JButton button0 = new JButton("start");
 	String key = "数控机床";
-	boolean[] option = { true, true, false, false, false, false };
+	boolean[] option = { true, false, false, false, false, false };
 	Crawler crawler = new Crawler(key, option);
 
 	public test() throws HeadlessException {

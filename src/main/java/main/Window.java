@@ -234,6 +234,7 @@ public class Window{
 		button_1.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
+				keyword = textField.getText();
 				resultFrame = new ResultFrame(keyword);
 				resultFrame.setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
 				frame.setVisible(false);
