@@ -127,9 +127,9 @@ public class ResultFrame extends JFrame implements ItemListener, ActionListener 
 	public void show_statistics() {
 		new Chart(keyword);
 		// text.setBounds(0, 0, 442, 291);
-		ImageIcon img = new ImageIcon(".\\barchartTEST.jpg");
+		ImageIcon img = new ImageIcon(".\\output\\barchartTEST.jpg");
 		label3.insertIcon(img);
-		ImageIcon img2 = new ImageIcon(".\\linechartTEST.jpg");
+		ImageIcon img2 = new ImageIcon(".\\output\\linechartTEST.jpg");
 		label3.insertIcon(img2);
 	}
 
@@ -149,6 +149,7 @@ public class ResultFrame extends JFrame implements ItemListener, ActionListener 
 	}
 
 	public void show_abstract() {
+		database.initialize();
 		List<Map> result = new NLP().summary(keyword);
 		createStyle("Style01", styledDoc, 16, 0, 1, 1, Color.GRAY, "Times New Roman");
 		createStyle("Style02", styledDoc, 20, 1, 0, 0, Color.BLACK, "黑体");

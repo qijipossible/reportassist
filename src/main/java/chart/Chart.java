@@ -97,7 +97,7 @@ public class Chart {
 		
 		FileOutputStream pic_out = null; 
         try { 
-            pic_out = new FileOutputStream(".\\barchartTEST.jpg"); 
+            pic_out = new FileOutputStream(".\\output\\barchartTEST.jpg"); 
             ChartUtilities.writeChartAsJPEG(pic_out,1.0f,chart,PIC_WIDTH,PIC_LENGTH,null); 
 
         } catch (Exception e) {
@@ -162,7 +162,7 @@ public class Chart {
 	    
 		FileOutputStream pic_out = null; 
         try { 
-            pic_out = new FileOutputStream(".\\linechartTEST.jpg"); 
+            pic_out = new FileOutputStream(".\\output\\linechartTEST.jpg"); 
             ChartUtilities.writeChartAsJPEG(pic_out,1.0f,chart,PIC_WIDTH,PIC_LENGTH,null); 
         } catch (Exception e) {
 			e.printStackTrace();
