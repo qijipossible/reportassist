@@ -9,18 +9,21 @@ import java.util.Map;
 public class HtmlFile {
 	FileWriter out;
 	BufferedWriter writer;
-
+	String keyword;
 	/**
 	 * 
 	 * @param file_path 文件路径+文件名
+	 * @param key 关键词
 	 */
-	public HtmlFile(String file_path) {
+	public HtmlFile(String file_path,String key) {
+		this.keyword=key;
 		File file = new File(file_path);
 		try {
 			out = new FileWriter(file);
 			writer = new BufferedWriter(out);
 
-			writer.write("<!DOCTYPE html><html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" > <title>报告</title></head><body>"
+			writer.write("<!DOCTYPE html><html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" > <title>有关“"+keyword+"”的调查结果</title></head><body>"
+					+"<h1 align=\"center\">有关“"+keyword+"”的统计结果报告</h1>"
 					+ "<h1><font face=\"微软雅黑\"size=\"5\">统计信息：</font></h1>");
 		} catch (Exception e) {
 			System.out.println(e);

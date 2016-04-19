@@ -14,7 +14,7 @@ public class test {
 		database.initialize();
 		List<Map> result = new NLP().summary("04专项");
 		
-		HtmlFile file=new HtmlFile(".\\output\\1.html");
+		HtmlFile file=new HtmlFile(".\\output\\1.html","04专项");
 		file.writeStatistics("D:\\barchartTEST.jpg");
 		file.writeStatistics("D:\\linechartTEST.jpg");
 		file.writeGov(result,4);
