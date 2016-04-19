@@ -12,3 +12,9 @@
 hs_err_pid*
 
 /target
+src/main/java/chart/Test.java
+*.jpg
+*.jpg
+barchartTEST.jpg
+linechartTEST.jpg
+*.jpg
