@@ -6,11 +6,15 @@ import javax.swing.JFrame;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.Window.Type;
 import java.awt.BorderLayout;
 import java.awt.GridBagLayout;
 
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JLabel;
@@ -48,6 +52,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.swing.JProgressBar;
+import javax.swing.plaf.IconUIResource;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.text.BadLocationException;
@@ -57,6 +62,7 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 import javax.swing.text.StyledDocument;
 
+import chart.Chart;
 import main.ResultPanel.TableFiller;
 import database.SQLop;
 
@@ -73,8 +79,6 @@ public class Window{
 	private JCheckBox ck1;
 	private JCheckBox ck2;
 	private JCheckBox ck3;
-	private Component verticalStrut;
-	private Component verticalStrut_1;
 	private JPanel panel_3;
 	private JPanel panel_4;
 	private JCheckBox ck4;
@@ -95,6 +99,11 @@ public class Window{
 	private boolean isRunning = false;
 	public String keyword = null;
 	private JLabel lblNewLabel;
+	private JPanel panel_logo;
+	private JLabel lable_logo;
+	private Component verticalStrut;
+	private JLabel label_1;
+	private JPanel panel_6;
 
 
 	/**
@@ -131,7 +140,7 @@ public class Window{
 		int glueHeight = screenHeight/2-100;
 		
 		frame = new JFrame();
-		frame.setTitle("智能信息管理系统");
+		frame.setTitle("智能信息搜索管理系统");
 		frame.setBackground(Color.WHITE);
 		frame.setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);//最大化窗口
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -141,11 +150,29 @@ public class Window{
 		frame.getContentPane().add(searchPanel);
 		searchPanel.setVisible(true);
 		searchPanel.setLayout(new BoxLayout(searchPanel, BoxLayout.Y_AXIS));
-		verticalStrut = Box.createVerticalStrut(glueHeight);
-		searchPanel.add(verticalStrut);
 		
 		verticalGlue = Box.createVerticalGlue();
 		searchPanel.add(verticalGlue);
+		
+		panel_logo = new JPanel();
+		searchPanel.add(panel_logo);
+		ImageIcon icon = new ImageIcon(".\\resource\\logo.png");
+		//icon.setImage(icon.getImage().getScaledInstance(icon.getIconWidth(),icon.getIconHeight(), Image.SCALE_DEFAULT));
+		panel_logo.setLayout(new BorderLayout(0, 0));
+		
+		panel_6 = new JPanel();
+		panel_logo.add(panel_6, BorderLayout.SOUTH);
+		panel_6.setLayout(new BorderLayout(0, 0));
+		
+		lable_logo = new JLabel();
+		panel_6.add(lable_logo, BorderLayout.CENTER);
+		lable_logo.setIcon(icon);
+		lable_logo.setBounds(0, 0, icon.getIconWidth(), icon.getIconHeight());
+		lable_logo.setHorizontalAlignment(JLabel.CENTER);
+		
+		label_1 = new JLabel("智能信息搜索管理系统", JLabel.CENTER);
+		label_1.setFont(new Font("微软雅黑", Font.PLAIN, 40));
+		panel_6.add(label_1, BorderLayout.SOUTH);
 		searchPanel.add(panel);
 		
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
@@ -160,7 +187,7 @@ public class Window{
 		panel_5 = new JPanel();
 		panel_1.add(panel_5);
 		
-		textField = new JTextField("数控机床");
+		textField = new JTextField("数控");
 		textField.setFont(new Font("微软雅黑", Font.PLAIN, 15));
 		panel_5.add(textField);
 		textField.setToolTipText("请键入您想要搜索的关键词");
@@ -220,8 +247,9 @@ public class Window{
 		panel_2.add(verticalGlue_5);
 		verticalGlue_1 = Box.createVerticalGlue();
 		searchPanel.add(verticalGlue_1);
-		verticalStrut_1 = Box.createVerticalStrut(glueHeight);
-		searchPanel.add(verticalStrut_1);
+		
+		verticalStrut = Box.createVerticalStrut(20);
+		searchPanel.add(verticalStrut);
 		
 		JPanel panelSign = new JPanel();
 		panelSign.setLayout(new BorderLayout());
@@ -295,120 +323,179 @@ public class Window{
 	}
 	
 	public class ResultPanel extends JPanel {
-		private JTable table;
-		private StyledDocument styleModel;
-		private JTextPane textPane;
-		private SQLop sqlop;
-		private JPanel panel;
+		private JTable tableResult;
+	private StyledDocument styleModel;
+	private JTextPane textPane;
+	private SQLop sqlop;
+	private JPanel panel_resultList;
+	JLabel label_chart11;
+	JLabel label_chart12;
+	JLabel label_chart21;
+	JLabel label_chart22;
+	JLabel label_chart31;
+	JLabel label_chart32;
+	JLabel label_chart41;
 
-		private List<Map<String, String>> result;
-		private int resultSize;
+	private List<Map<String, String>> result;
+	private int resultSize;
 
-		String keyword = null;
-		SQLop database = new SQLop();
+	String keyword = null;
+	SQLop database = new SQLop();
 
-		public ResultPanel() {
-			
-			iniStyleModel();
-			setLayout(new BorderLayout(0, 0));
-			
-			JPanel panel_4 = new JPanel();
-			add(panel_4, BorderLayout.CENTER);
-			panel_4.setLayout(new BorderLayout(0, 0));
-			
-			JPanel panel_2 = new JPanel();
-			panel_4.add(panel_2, BorderLayout.NORTH);
-			panel_2.setLayout(new BorderLayout(0, 0));
-			
-			JButton button_back = new JButton("返回搜索界面");
-			panel_2.add(button_back, BorderLayout.EAST);
-			
-			JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-			panel_4.add(tabbedPane);
-			
-			JPanel panel_3 = new JPanel();
-			tabbedPane.addTab("搜索结果", null, panel_3, null);
-			tabbedPane.addTab("全体数据", null, new JPanel(), null);
-			panel_3.setLayout(new BorderLayout(0, 0));
-			
-			JPanel panel_up = new JPanel();
-			panel_up.setVisible(false);
-			panel_3.add(panel_up, BorderLayout.NORTH);
-			panel_up.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-			
-			JLabel label = new JLabel("筛选：");
-			panel_up.add(label);
-			
-			JCheckBox checkBox = new JCheckBox("科技部");
-			panel_up.add(checkBox);
-			
-			JCheckBox checkBox_1 = new JCheckBox("工信部");
-			panel_up.add(checkBox_1);
-			
-			JCheckBox checkBox_2 = new JCheckBox("发改委");
-			panel_up.add(checkBox_2);
-			
-			JCheckBox checkBox_3 = new JCheckBox("论文");
-			panel_up.add(checkBox_3);
-			
-			JCheckBox checkBox_4 = new JCheckBox("专利");
-			panel_up.add(checkBox_4);
-			
-			JCheckBox checkBox_5 = new JCheckBox("新闻");
-			panel_up.add(checkBox_5);
-			
-			JButton button = new JButton("筛选");
-			panel_up.add(button);
-			button_back.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent arg0){
-					UIswitch_back();
-				}
-			});
-			
-			JPanel panel_main = new JPanel();
-			panel_3.add(panel_main, BorderLayout.CENTER);
-			panel_main.setLayout(new BorderLayout(0, 0));
-			
-			panel = new JPanel();
-			panel_main.add(panel);
-			
-			
-		}
+	public ResultPanel() {
 		
-		public void getResult(String keyword){
-			this.keyword = keyword;
-			sqlop = new SQLop();
-			sqlop.initialize();
-			result = sqlop.search(keyword);
-			sqlop.close();
-			resultSize = result.size();
+		iniStyleModel();
+		setLayout(new BorderLayout(0, 0));
+		
+		JPanel panel_4 = new JPanel();
+		add(panel_4, BorderLayout.CENTER);
+		panel_4.setLayout(new BorderLayout(0, 0));
+		
+		JPanel panel_2 = new JPanel();
+		panel_4.add(panel_2, BorderLayout.NORTH);
+		panel_2.setLayout(new BorderLayout(0, 0));
+		
+		JButton button_back = new JButton("返回搜索界面");
+		panel_2.add(button_back, BorderLayout.EAST);
+		
+		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		panel_4.add(tabbedPane);
+		
+		JPanel panel_3 = new JPanel();
+		tabbedPane.addTab("搜索结果", null, panel_3, null);
+		JPanel panel_1 = new JPanel();
+		tabbedPane.addTab("全体数据", null, panel_1, null);
+		panel_3.setLayout(new BorderLayout(0, 0));
+		
+		JPanel panel_up = new JPanel();
+		panel_up.setVisible(false);
+		panel_3.add(panel_up, BorderLayout.NORTH);
+		panel_up.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		
+		JLabel label = new JLabel("筛选：");
+		panel_up.add(label);
+		
+		JCheckBox checkBox = new JCheckBox("科技部");
+		panel_up.add(checkBox);
+		
+		JCheckBox checkBox_1 = new JCheckBox("工信部");
+		panel_up.add(checkBox_1);
+		
+		JCheckBox checkBox_2 = new JCheckBox("发改委");
+		panel_up.add(checkBox_2);
+		
+		JCheckBox checkBox_3 = new JCheckBox("论文");
+		panel_up.add(checkBox_3);
+		
+		JCheckBox checkBox_4 = new JCheckBox("专利");
+		panel_up.add(checkBox_4);
+		
+		JCheckBox checkBox_5 = new JCheckBox("新闻");
+		panel_up.add(checkBox_5);
+		
+		JButton button = new JButton("筛选");
+		panel_up.add(button);
+		//button_back.addMouseListener(new MouseAdapter() {
+		//	@Override
+		//	public void mouseClicked(MouseEvent arg0){
+		//		UIswitch_back();
+		//	}
+		//});
+		
+		JPanel panel_main = new JPanel();
+		JScrollPane scrollPane = new JScrollPane(panel_main);
+		panel_3.add(scrollPane);
+		//panel_3.add(panel_main, BorderLayout.CENTER);
+		panel_main.setLayout(new BoxLayout(panel_main, BoxLayout.Y_AXIS));
+		
+		JPanel panel_charts = new JPanel();
+		panel_main.add(panel_charts);
+		panel_charts.setLayout(new BoxLayout(panel_charts, BoxLayout.Y_AXIS));
+		
+		JPanel panel_chart1 = new JPanel();
+		panel_charts.add(panel_chart1);
+		
+		label_chart11 = new JLabel();
+		label_chart12 = new JLabel();
+		label_chart21 = new JLabel();
+		label_chart22 = new JLabel();
+		label_chart31 = new JLabel();
+		label_chart32 = new JLabel();
+		label_chart41 = new JLabel();
+		
+		panel_chart1.add(label_chart11);
+		
+		panel_chart1.add(label_chart12);
+		
+		JPanel panel_chart2 = new JPanel();
+		panel_charts.add(panel_chart2);
+		
+		panel_chart2.add(label_chart21);
+		
+		panel_chart2.add(label_chart22);
+		
+		JPanel panel_chart3 = new JPanel();
+		panel_charts.add(panel_chart3);
+		
+		panel_chart3.add(label_chart31);
+		
+		panel_chart3.add(label_chart32);
+		
+		JPanel panel_chart4 = new JPanel();
+		panel_charts.add(panel_chart4);
+		
+		panel_chart4.add(label_chart41);
+		
+		panel_resultList = new JPanel();
+		panel_main.add(panel_resultList);
+		
+		
+	}
+	
+	public void getResult(String keyword){
+		new Chart(keyword);
+		this.keyword = keyword;
+		sqlop = new SQLop();
+		sqlop.initialize();
+		result = sqlop.search(keyword);
+		sqlop.close();
+		resultSize = result.size();
 
-			table = new JTable(new DefaultTableModel(resultSize,1){
-				@Override
-				public boolean isCellEditable(int arg0, int arg1) {
-					return false;
-				}
-			});
-			table.setRowHeight(80);
-			table.getTableHeader().setVisible(false);
-			table.setDefaultRenderer(Object.class, new TableFiller());
-			table.addMouseListener(new java.awt.event.MouseAdapter() {
-			    @Override
-			    public void mouseClicked(java.awt.event.MouseEvent evt) {
-			        int row = table.rowAtPoint(evt.getPoint());
-			        int col = table.columnAtPoint(evt.getPoint());
-			        if (row >= 0 && col >= 0) {
-			        	String article = result.get(row).get("content");
-			        	new DetailFrame(NLP.stringsummary(article), article).setVisible(true);;
-			        }
-			    }
-			});
-			
-			panel.setLayout(new BorderLayout(0, 0));
-			JScrollPane scrollPane = new JScrollPane(table);
-			panel.add(scrollPane, BorderLayout.CENTER);
-		}
+		tableResult = new JTable(new DefaultTableModel(resultSize,1){
+			@Override
+			public boolean isCellEditable(int arg0, int arg1) {
+				return false;
+			}
+		});
+		tableResult.setRowHeight(80);
+		tableResult.setDefaultRenderer(Object.class, new TableFiller());
+		tableResult.addMouseListener(new java.awt.event.MouseAdapter() {
+		    @Override
+		    public void mouseClicked(java.awt.event.MouseEvent evt) {
+		        int row = tableResult.rowAtPoint(evt.getPoint());
+		        int col = tableResult.columnAtPoint(evt.getPoint());
+		        if (row >= 0 && col >= 0) {
+		        	String article = result.get(row).get("content");
+		        	new DetailFrame(NLP.stringsummary(article), article).setVisible(true);;
+		        }
+		    }
+		});
+		
+		panel_resultList.setLayout(new BorderLayout(0, 0));
+		//JScrollPane scrollPane = new JScrollPane(tableResult);
+		//panel_resultList.add(scrollPane, BorderLayout.CENTER);
+		panel_resultList.add(tableResult, BorderLayout.CENTER);
+		
+
+		label_chart11.setIcon(new ImageIcon(".\\output\\barchartTEST.jpg"));
+		label_chart12.setIcon(new ImageIcon(".\\output\\year_gov.jpg"));
+		label_chart21.setIcon(new ImageIcon(".\\output\\journal.jpg"));
+		label_chart22.setIcon(new ImageIcon(".\\output\\year_paper.jpg"));
+		label_chart31.setIcon(new ImageIcon(".\\output\\patent_type.jpg"));
+		label_chart32.setIcon(new ImageIcon(".\\output\\year_patent.jpg"));
+		label_chart41.setIcon(new ImageIcon(".\\output\\year_news.jpg"));
+		
+	}
 		
 		class TableFiller implements TableCellRenderer{
 
