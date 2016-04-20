@@ -50,6 +50,7 @@ import NLP.NLP;
 import javax.swing.Box;
 import javax.swing.JTabbedPane;
 
+import output.MakeReport;
 import main.Window.ResultPanel.ResultTableFiller;
 import chart.Chart;
 
@@ -92,18 +93,29 @@ public class ResultPanel extends JPanel {
 		JPanel panel_2 = new JPanel();
 		panel_4.add(panel_2, BorderLayout.NORTH);
 		panel_2.setLayout(new BorderLayout(0, 0));
-		
+
+		JButton button_report = new JButton("生成报告");
+		panel_2.add(button_report, BorderLayout.EAST);
+		button_report.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0){
+				new MakeReport(keyword, result, ".\\output\\report.html");
+			}
+		});
 		JButton button_back = new JButton("返回搜索界面");
-		panel_2.add(button_back, BorderLayout.EAST);
+		button_back.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0){
+				//UIswitch_back();//TODO
+			}
+		});
+		panel_2.add(button_back, BorderLayout.WEST);
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		panel_4.add(tabbedPane);
 		
 		JPanel panel_resultTab = new JPanel();
 		tabbedPane.addTab("搜索结果", null, panel_resultTab, null);
-		panel_allTab = new JPanel();
-		panel_allTab.setLayout(new BorderLayout(0, 0));
-		tabbedPane.addTab("全体数据", null, panel_allTab, null);
 		panel_resultTab.setLayout(new BorderLayout(0, 0));
 		
 		JPanel panel_up = new JPanel();
@@ -134,29 +146,17 @@ public class ResultPanel extends JPanel {
 		
 		JButton button = new JButton("筛选");
 		panel_up.add(button);
-		button_back.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent arg0){
-				//UIswitch_back();
-			}
-		});
 		
-		JPanel panel_main = new JPanel();
-		JScrollPane scrollPane = new JScrollPane(panel_main);
-		panel_resultTab.add(scrollPane);
-		//panel_3.add(panel_main, BorderLayout.CENTER);
-		panel_main.setLayout(new BoxLayout(panel_main, BoxLayout.Y_AXIS));
+		
+		
 		
 		JPanel panel_charts = new JPanel();
 		
-		JPanel panel_subtitle1 = new JPanel();
-		panel_subtitle1.setLayout(new BorderLayout());
-		JLabel label_subtitle1 = new JLabel("搜索结果统计",JLabel.CENTER);
-		label_subtitle1.setFont(new Font("黑体", Font.BOLD, 30));
-		panel_subtitle1.add(label_subtitle1, BorderLayout.CENTER);
-		panel_main.add(panel_subtitle1);
-		
-		panel_main.add(panel_charts);
+		JPanel panel_chartsTab = new JPanel();
+		panel_chartsTab.setLayout(new BorderLayout(0, 0));
+		JScrollPane scroll_charts = new JScrollPane(panel_charts);
+		panel_chartsTab.add(scroll_charts);
+		tabbedPane.addTab("结果统计", null, panel_chartsTab, null);
 		panel_charts.setLayout(new BoxLayout(panel_charts, BoxLayout.Y_AXIS));
 
 		label_chart11 = new JLabel();
@@ -170,47 +170,48 @@ public class ResultPanel extends JPanel {
 		label_chart51 = new JLabel();
 		
 		JPanel panel_chart1 = new JPanel();
+		panel_chart1.setLayout(new BoxLayout(panel_chart1, BoxLayout.X_AXIS));
 		panel_charts.add(panel_chart1);
 		
 		panel_chart1.add(label_chart11);
 		panel_chart1.add(label_chart12);
 		
 		JPanel panel_chart2 = new JPanel();
+		panel_chart2.setLayout(new BoxLayout(panel_chart2, BoxLayout.X_AXIS));
+		panel_charts.add(Box.createVerticalStrut(10));
 		panel_charts.add(panel_chart2);
 		
 		panel_chart2.add(label_chart21);
 		panel_chart2.add(label_chart22);
 		
 		JPanel panel_chart3 = new JPanel();
+		panel_chart3.setLayout(new BoxLayout(panel_chart3, BoxLayout.X_AXIS));
+		panel_charts.add(Box.createVerticalStrut(10));
 		panel_charts.add(panel_chart3);
 		
 		panel_chart3.add(label_chart31);
 		panel_chart3.add(label_chart32);
 		
 		JPanel panel_chart4 = new JPanel();
+		panel_chart4.setLayout(new BoxLayout(panel_chart4, BoxLayout.X_AXIS));
+		panel_charts.add(Box.createVerticalStrut(10));
 		panel_charts.add(panel_chart4);
 		
 		panel_chart4.add(label_chart41);
 		panel_chart4.add(label_chart42);
 
 		JPanel panel_chart5 = new JPanel();
+		panel_chart5.setLayout(new BoxLayout(panel_chart5, BoxLayout.X_AXIS));
 		panel_charts.add(panel_chart5);
 		
 		panel_chart5.add(label_chart51);
-
-		
-		panel_main.add(Box.createVerticalStrut(30));
-
-		JPanel panel_subtitle2 = new JPanel();
-		panel_subtitle2.setLayout(new BorderLayout());
-		JLabel label_subtitle2 = new JLabel("搜索结果",JLabel.CENTER);
-		label_subtitle2.setFont(new Font("黑体", Font.BOLD, 30));
-		panel_subtitle2.add(label_subtitle2, BorderLayout.CENTER);
-		panel_main.add(panel_subtitle2);
 		
 		panel_resultList = new JPanel();
-		panel_main.add(panel_resultList);
+		panel_allTab = new JPanel();
+		panel_allTab.setLayout(new BorderLayout(0, 0));
+		tabbedPane.addTab("全体数据", null, panel_allTab, null);
 		
+		panel_resultTab.add(panel_resultList);
 		
 	}
 	
@@ -248,19 +249,19 @@ public class ResultPanel extends JPanel {
 		});
 		
 		panel_resultList.setLayout(new BorderLayout(0, 0));
-		//JScrollPane scrollPane = new JScrollPane(tableResult);
-		panel_resultList.add(tableResult, BorderLayout.CENTER);
+		JScrollPane scrollPane = new JScrollPane(tableResult);
+		panel_resultList.add(scrollPane, BorderLayout.CENTER);
 		
 		//统计图表
 		label_chart11.setIcon(new ImageIcon(".\\output\\site.jpg"));
 		label_chart12.setIcon(new ImageIcon(".\\output\\year_gov.jpg"));
 		label_chart21.setIcon(new ImageIcon(".\\output\\journal.jpg"));
-		label_chart22.setIcon(new ImageIcon(".\\output\\year_paper"));
+		label_chart22.setIcon(new ImageIcon(".\\output\\year_paper.jpg"));
 		label_chart31.setIcon(new ImageIcon(".\\output\\news_source.jpg"));
-		label_chart32.setIcon(new ImageIcon(".\\output\\year_news"));
+		label_chart32.setIcon(new ImageIcon(".\\output\\year_news.jpg"));
 		label_chart41.setIcon(new ImageIcon(".\\output\\patent_applicant.jpg"));
 		label_chart42.setIcon(new ImageIcon(".\\output\\year_patent.jpg"));
-		label_chart42.setIcon(new ImageIcon(".\\output\\patent_type.jpg"));
+		label_chart51.setIcon(new ImageIcon(".\\output\\patent_type.jpg"));
 		
 		//所有数据
 		TableModel tableModel = new DefaultTableModel(resultAllSize,7){

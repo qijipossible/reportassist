@@ -325,363 +325,346 @@ public class Window{
 	}
 	
 	public class ResultPanel extends JPanel {
-	private JTable tableResult;
-	private JTable tableAll;
-	private StyledDocument styleModel;
-	private JTextPane textPane;
-	private JLabel text;
-	private SQLop sqlop;
-	private JPanel panel_resultList;
-	private	JPanel panel_allTab; 
-	JLabel label_chart11;
-	JLabel label_chart12;
-	JLabel label_chart21;
-	JLabel label_chart22;
-	JLabel label_chart31;
-	JLabel label_chart32;
-	JLabel label_chart41;
-	JLabel label_chart42;
-	JLabel label_chart51;
+		private JTable tableResult;
+		private JTable tableAll;
+		private StyledDocument styleModel;
+		private JTextPane textPane;
+		private JLabel text;
+		private SQLop sqlop;
+		private JPanel panel_resultList;
+		private	JPanel panel_allTab; 
+		JLabel label_chart11;
+		JLabel label_chart12;
+		JLabel label_chart21;
+		JLabel label_chart22;
+		JLabel label_chart31;
+		JLabel label_chart32;
+		JLabel label_chart41;
+		JLabel label_chart42;
+		JLabel label_chart51;
 
-	private List<Map<String, String>> result;
-	private List<Map<String, String>> resultAll;
-	private int resultSize;
-	private int resultAllSize;
+		private List<Map<String, String>> result;
+		private List<Map<String, String>> resultAll;
+		private int resultSize;
+		private int resultAllSize;
 
-	String keyword = null;
-	SQLop database = new SQLop();
+		String keyword = null;
+		SQLop database = new SQLop();
 
-	public ResultPanel() {
+		public ResultPanel() {
+			
+			iniStyleModel();
+			setLayout(new BorderLayout(0, 0));
+			
+			JPanel panel_4 = new JPanel();
+			add(panel_4, BorderLayout.CENTER);
+			panel_4.setLayout(new BorderLayout(0, 0));
+			
+			JPanel panel_2 = new JPanel();
+			panel_4.add(panel_2, BorderLayout.NORTH);
+			panel_2.setLayout(new BorderLayout(0, 0));
+
+			JButton button_report = new JButton("生成报告");
+			panel_2.add(button_report, BorderLayout.EAST);
+			button_report.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent arg0){
+					new MakeReport(keyword, result, ".\\output\\report.html");
+				}
+			});
+			JButton button_back = new JButton("返回搜索界面");
+			button_back.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent arg0){
+					//UIswitch_back();//TODO
+				}
+			});
+			panel_2.add(button_back, BorderLayout.WEST);
+			
+			JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+			panel_4.add(tabbedPane);
+			
+			JPanel panel_resultTab = new JPanel();
+			tabbedPane.addTab("搜索结果", null, panel_resultTab, null);
+			panel_resultTab.setLayout(new BorderLayout(0, 0));
+			
+			JPanel panel_up = new JPanel();
+			panel_up.setVisible(false);
+			panel_resultTab.add(panel_up, BorderLayout.NORTH);
+			panel_up.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+			
+			JLabel label = new JLabel("筛选：");
+			panel_up.add(label);
+			
+			JCheckBox checkBox = new JCheckBox("科技部");
+			panel_up.add(checkBox);
+			
+			JCheckBox checkBox_1 = new JCheckBox("工信部");
+			panel_up.add(checkBox_1);
+			
+			JCheckBox checkBox_2 = new JCheckBox("发改委");
+			panel_up.add(checkBox_2);
+			
+			JCheckBox checkBox_3 = new JCheckBox("论文");
+			panel_up.add(checkBox_3);
+			
+			JCheckBox checkBox_4 = new JCheckBox("专利");
+			panel_up.add(checkBox_4);
+			
+			JCheckBox checkBox_5 = new JCheckBox("新闻");
+			panel_up.add(checkBox_5);
+			
+			JButton button = new JButton("筛选");
+			panel_up.add(button);
+			
+			
+			
+			
+			JPanel panel_charts = new JPanel();
+			
+			JPanel panel_chartsTab = new JPanel();
+			panel_chartsTab.setLayout(new BorderLayout(0, 0));
+			JScrollPane scroll_charts = new JScrollPane(panel_charts);
+			panel_chartsTab.add(scroll_charts);
+			tabbedPane.addTab("结果统计", null, panel_chartsTab, null);
+			panel_charts.setLayout(new BoxLayout(panel_charts, BoxLayout.Y_AXIS));
+
+			label_chart11 = new JLabel();
+			label_chart12 = new JLabel();
+			label_chart21 = new JLabel();
+			label_chart22 = new JLabel();
+			label_chart31 = new JLabel();
+			label_chart32 = new JLabel();
+			label_chart41 = new JLabel();
+			label_chart42 = new JLabel();
+			label_chart51 = new JLabel();
+			
+			JPanel panel_chart1 = new JPanel();
+			panel_chart1.setLayout(new BoxLayout(panel_chart1, BoxLayout.X_AXIS));
+			panel_charts.add(panel_chart1);
+			
+			panel_chart1.add(label_chart11);
+			panel_chart1.add(label_chart12);
+			
+			JPanel panel_chart2 = new JPanel();
+			panel_chart2.setLayout(new BoxLayout(panel_chart2, BoxLayout.X_AXIS));
+			panel_charts.add(Box.createVerticalStrut(10));
+			panel_charts.add(panel_chart2);
+			
+			panel_chart2.add(label_chart21);
+			panel_chart2.add(label_chart22);
+			
+			JPanel panel_chart3 = new JPanel();
+			panel_chart3.setLayout(new BoxLayout(panel_chart3, BoxLayout.X_AXIS));
+			panel_charts.add(Box.createVerticalStrut(10));
+			panel_charts.add(panel_chart3);
+			
+			panel_chart3.add(label_chart31);
+			panel_chart3.add(label_chart32);
+			
+			JPanel panel_chart4 = new JPanel();
+			panel_chart4.setLayout(new BoxLayout(panel_chart4, BoxLayout.X_AXIS));
+			panel_charts.add(Box.createVerticalStrut(10));
+			panel_charts.add(panel_chart4);
+			
+			panel_chart4.add(label_chart41);
+			panel_chart4.add(label_chart42);
+
+			JPanel panel_chart5 = new JPanel();
+			panel_chart5.setLayout(new BoxLayout(panel_chart5, BoxLayout.X_AXIS));
+			panel_charts.add(panel_chart5);
+			
+			panel_chart5.add(label_chart51);
+			
+			panel_resultList = new JPanel();
+			panel_allTab = new JPanel();
+			panel_allTab.setLayout(new BorderLayout(0, 0));
+			tabbedPane.addTab("全体数据", null, panel_allTab, null);
+			
+			panel_resultTab.add(panel_resultList);
+			
+		}
 		
-		iniStyleModel();
-		setLayout(new BorderLayout(0, 0));
-		
-		JPanel panel_4 = new JPanel();
-		add(panel_4, BorderLayout.CENTER);
-		panel_4.setLayout(new BorderLayout(0, 0));
-		
-		JPanel panel_2 = new JPanel();
-		panel_4.add(panel_2, BorderLayout.NORTH);
-		panel_2.setLayout(new BorderLayout(0, 0));
+		public void getResult(String keyword){
+			new Chart(keyword);
+			this.keyword = keyword;
+			sqlop = new SQLop();
+			sqlop.initialize();
+			result = sqlop.search(keyword);
+			resultAll = sqlop.getAll();
+			sqlop.close();
+			resultSize = result.size();
+			resultAllSize = resultAll.size();
 
-		JButton button_report = new JButton("生成报告");
-		panel_2.add(button_report, BorderLayout.EAST);
-		button_report.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent arg0){
-				new MakeReport(keyword, result, ".\\output\\report.html");
+			//搜索结果表格
+			tableResult = new JTable(new DefaultTableModel(resultSize,1){
+				@Override
+				public boolean isCellEditable(int arg0, int arg1) {
+					return false;
+				}
+			});
+			tableResult.setRowHeight(80);
+			tableResult.getTableHeader().setVisible(false);
+			tableResult.setDefaultRenderer(Object.class, new ResultTableFiller());
+			tableResult.addMouseListener(new java.awt.event.MouseAdapter() {
+			    @Override
+			    public void mouseClicked(java.awt.event.MouseEvent evt) {
+			        int row = tableResult.rowAtPoint(evt.getPoint());
+			        int col = tableResult.columnAtPoint(evt.getPoint());
+			        if (row >= 0 && col >= 0) {
+			        	String article = result.get(row).get("content");
+			        	new DetailFrame(NLP.stringsummary(article), article).setVisible(true);;
+			        }
+			    }
+			});
+			
+			panel_resultList.setLayout(new BorderLayout(0, 0));
+			JScrollPane scrollPane = new JScrollPane(tableResult);
+			panel_resultList.add(scrollPane, BorderLayout.CENTER);
+			
+			//统计图表
+			label_chart11.setIcon(new ImageIcon(".\\output\\site.jpg"));
+			label_chart12.setIcon(new ImageIcon(".\\output\\year_gov.jpg"));
+			label_chart21.setIcon(new ImageIcon(".\\output\\journal.jpg"));
+			label_chart22.setIcon(new ImageIcon(".\\output\\year_paper.jpg"));
+			label_chart31.setIcon(new ImageIcon(".\\output\\news_source.jpg"));
+			label_chart32.setIcon(new ImageIcon(".\\output\\year_news.jpg"));
+			label_chart41.setIcon(new ImageIcon(".\\output\\patent_applicant.jpg"));
+			label_chart42.setIcon(new ImageIcon(".\\output\\year_patent.jpg"));
+			label_chart51.setIcon(new ImageIcon(".\\output\\patent_type.jpg"));
+			
+			//所有数据
+			TableModel tableModel = new DefaultTableModel(resultAllSize,7){
+				@Override
+				public boolean isCellEditable(int arg0, int arg1) {
+					return false;
+				}
+				
+				public String getColumnName(int n){
+					String columnNames[] = {
+							"类型",
+							"标题",
+							"时间",
+							"作者",
+							"其他",
+							"正文",
+							"源地址"
+					};
+					return columnNames[n];			
+				}
+			};
+			
+			
+			for(int row = 0; row < resultAllSize; row++){
+				for(int column = 0; column < 7; column++){
+					String string = null;
+					switch (column) {
+					case 0:
+						string = resultAll.get(row).get("type");
+						break;
+					case 1:
+						string = resultAll.get(row).get("title");
+						break;
+					case 2:
+						string = resultAll.get(row).get("time");
+						break;
+					case 3:
+						string = resultAll.get(row).get("author");
+						break;
+					case 4:
+						string = resultAll.get(row).get("other");
+						break;
+					case 5:
+						string = resultAll.get(row).get("content");
+						break;
+					case 6:
+						string = resultAll.get(row).get("url");
+						break;
+					default:
+						break;
+					}
+					tableModel.setValueAt(string, row, column);
+				}
 			}
-		});
-		JButton button_back = new JButton("返回搜索界面");
-		button_back.addMouseListener(new MouseAdapter() {
+			tableAll = new JTable(tableModel);
+			tableAll.getColumnModel().getColumn(0).setPreferredWidth(3);
+			//tableAll.getColumnModel().getColumn(1).setPreferredWidth(30);
+			//tableAll.getColumnModel().getColumn(2).setPreferredWidth(20);
+			//tableAll.getColumnModel().getColumn(3).setPreferredWidth(20);
+			//tableAll.getColumnModel().getColumn(4).setPreferredWidth(20);
+			//tableAll.getColumnModel().getColumn(5).setPreferredWidth(200);
+			//tableAll.getColumnModel().getColumn(6).setPreferredWidth(30);
+			//tableAll.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+			JScrollPane scrollPane_all = new JScrollPane(tableAll);
+			panel_allTab.add(scrollPane_all, BorderLayout.CENTER);
+			
+		}
+		
+		class ResultTableFiller implements TableCellRenderer{
+
 			@Override
-			public void mouseClicked(MouseEvent arg0){
-				UIswitch_back();//TODO
-			}
-		});
-		panel_2.add(button_back, BorderLayout.WEST);
-		
-		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		panel_4.add(tabbedPane);
-		
-		JPanel panel_resultTab = new JPanel();
-		tabbedPane.addTab("搜索结果", null, panel_resultTab, null);
-		panel_allTab = new JPanel();
-		panel_allTab.setLayout(new BorderLayout(0, 0));
-		tabbedPane.addTab("全体数据", null, panel_allTab, null);
-		panel_resultTab.setLayout(new BorderLayout(0, 0));
-		
-		JPanel panel_up = new JPanel();
-		panel_up.setVisible(false);
-		panel_resultTab.add(panel_up, BorderLayout.NORTH);
-		panel_up.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-		
-		JLabel label = new JLabel("筛选：");
-		panel_up.add(label);
-		
-		JCheckBox checkBox = new JCheckBox("科技部");
-		panel_up.add(checkBox);
-		
-		JCheckBox checkBox_1 = new JCheckBox("工信部");
-		panel_up.add(checkBox_1);
-		
-		JCheckBox checkBox_2 = new JCheckBox("发改委");
-		panel_up.add(checkBox_2);
-		
-		JCheckBox checkBox_3 = new JCheckBox("论文");
-		panel_up.add(checkBox_3);
-		
-		JCheckBox checkBox_4 = new JCheckBox("专利");
-		panel_up.add(checkBox_4);
-		
-		JCheckBox checkBox_5 = new JCheckBox("新闻");
-		panel_up.add(checkBox_5);
-		
-		JButton button = new JButton("筛选");
-		panel_up.add(button);
-		
-		
-		JPanel panel_main = new JPanel();
-		JScrollPane scrollPane = new JScrollPane(panel_main);
-		panel_resultTab.add(scrollPane);
-		//panel_3.add(panel_main, BorderLayout.CENTER);
-		panel_main.setLayout(new BoxLayout(panel_main, BoxLayout.Y_AXIS));
-		
-		
-		JPanel panel_charts = new JPanel();
-		
-		JPanel panel_subtitle1 = new JPanel();
-		panel_subtitle1.setLayout(new BorderLayout());
-		JLabel label_subtitle1 = new JLabel("搜索结果统计",JLabel.CENTER);
-		label_subtitle1.setFont(new Font("黑体", Font.BOLD, 30));
-		panel_subtitle1.add(label_subtitle1, BorderLayout.CENTER);
-		panel_main.add(panel_subtitle1);
-		
-		panel_main.add(panel_charts);
-		panel_charts.setLayout(new BoxLayout(panel_charts, BoxLayout.Y_AXIS));
-
-		label_chart11 = new JLabel();
-		label_chart12 = new JLabel();
-		label_chart21 = new JLabel();
-		label_chart22 = new JLabel();
-		label_chart31 = new JLabel();
-		label_chart32 = new JLabel();
-		label_chart41 = new JLabel();
-		label_chart42 = new JLabel();
-		label_chart51 = new JLabel();
-		
-		JPanel panel_chart1 = new JPanel();
-		panel_chart1.setLayout(new BoxLayout(panel_chart1, BoxLayout.X_AXIS));
-		panel_charts.add(panel_chart1);
-		
-		panel_chart1.add(label_chart11);
-		panel_chart1.add(label_chart12);
-		
-		JPanel panel_chart2 = new JPanel();
-		panel_chart2.setLayout(new BoxLayout(panel_chart2, BoxLayout.X_AXIS));
-		panel_charts.add(Box.createVerticalStrut(10));
-		panel_charts.add(panel_chart2);
-		
-		panel_chart2.add(label_chart21);
-		panel_chart2.add(label_chart22);
-		
-		JPanel panel_chart3 = new JPanel();
-		panel_chart3.setLayout(new BoxLayout(panel_chart3, BoxLayout.X_AXIS));
-		panel_charts.add(Box.createVerticalStrut(10));
-		panel_charts.add(panel_chart3);
-		
-		panel_chart3.add(label_chart31);
-		panel_chart3.add(label_chart32);
-		
-		JPanel panel_chart4 = new JPanel();
-		panel_chart4.setLayout(new BoxLayout(panel_chart4, BoxLayout.X_AXIS));
-		panel_charts.add(Box.createVerticalStrut(10));
-		panel_charts.add(panel_chart4);
-		
-		panel_chart4.add(label_chart41);
-		panel_chart4.add(label_chart42);
-
-		JPanel panel_chart5 = new JPanel();
-		panel_chart5.setLayout(new BoxLayout(panel_chart5, BoxLayout.X_AXIS));
-		panel_charts.add(panel_chart5);
-		
-		panel_chart5.add(label_chart51);
-
-		panel_main.add(Box.createVerticalStrut(30));
-
-		JPanel panel_subtitle2 = new JPanel();
-		panel_subtitle2.setLayout(new BorderLayout());
-		JLabel label_subtitle2 = new JLabel("搜索结果",JLabel.CENTER);
-		label_subtitle2.setFont(new Font("黑体", Font.BOLD, 30));
-		panel_subtitle2.add(label_subtitle2, BorderLayout.CENTER);
-		panel_main.add(panel_subtitle2);
-		
-		panel_resultList = new JPanel();
-		panel_main.add(panel_resultList);
-		
-		
-	}
-	
-	public void getResult(String keyword){
-		new Chart(keyword);
-		this.keyword = keyword;
-		sqlop = new SQLop();
-		sqlop.initialize();
-		result = sqlop.search(keyword);
-		resultAll = sqlop.getAll();
-		sqlop.close();
-		resultSize = result.size();
-		resultAllSize = resultAll.size();
-
-		//搜索结果表格
-		tableResult = new JTable(new DefaultTableModel(resultSize,1){
-			@Override
-			public boolean isCellEditable(int arg0, int arg1) {
-				return false;
-			}
-		});
-		tableResult.setRowHeight(80);
-		tableResult.getTableHeader().setVisible(false);
-		tableResult.setDefaultRenderer(Object.class, new ResultTableFiller());
-		tableResult.addMouseListener(new java.awt.event.MouseAdapter() {
-		    @Override
-		    public void mouseClicked(java.awt.event.MouseEvent evt) {
-		        int row = tableResult.rowAtPoint(evt.getPoint());
-		        int col = tableResult.columnAtPoint(evt.getPoint());
-		        if (row >= 0 && col >= 0) {
-		        	String article = result.get(row).get("content");
-		        	new DetailFrame(NLP.stringsummary(article), article).setVisible(true);;
-		        }
-		    }
-		});
-		
-		panel_resultList.setLayout(new BorderLayout(0, 0));
-		//JScrollPane scrollPane = new JScrollPane(tableResult);
-		panel_resultList.add(tableResult, BorderLayout.CENTER);
-		
-		//统计图表
-		label_chart11.setIcon(new ImageIcon(".\\output\\site.jpg"));
-		label_chart12.setIcon(new ImageIcon(".\\output\\year_gov.jpg"));
-		label_chart21.setIcon(new ImageIcon(".\\output\\journal.jpg"));
-		label_chart22.setIcon(new ImageIcon(".\\output\\year_paper.jpg"));
-		label_chart31.setIcon(new ImageIcon(".\\output\\news_source.jpg"));
-		label_chart32.setIcon(new ImageIcon(".\\output\\year_news.jpg"));
-		label_chart41.setIcon(new ImageIcon(".\\output\\patent_applicant.jpg"));
-		label_chart42.setIcon(new ImageIcon(".\\output\\year_patent.jpg"));
-		label_chart51.setIcon(new ImageIcon(".\\output\\patent_type.jpg"));
-		
-		//所有数据
-		TableModel tableModel = new DefaultTableModel(resultAllSize,7){
-			@Override
-			public boolean isCellEditable(int arg0, int arg1) {
-				return false;
+			public Component getTableCellRendererComponent(JTable arg0,
+					Object arg1, boolean arg2, boolean arg3, int row, int column) {
+				textPane = new JTextPane();
+				StyledDocument sd = getNewStyledDocument();
+				insertDoc(sd, result.get(row).get("type"), "STYLE_type");
+				insertDoc(sd, "  " + result.get(row).get("title").toString() + "\n", "STYLE_title");
+				if(result.get(row).get("time") != null)
+					insertDoc(sd, result.get(row).get("time").toString() + "\t", "STYLE_author");
+				insertDoc(sd, result.get(row).get("author").toString() + "\n", "STYLE_author");
+				insertDoc(sd, result.get(row).get("url").toString() + "\n", "STYLE_url");
+				textPane.setStyledDocument(sd);
+				return textPane;
 			}
 			
-			public String getColumnName(int n){
-				String columnNames[] = {
-						"类型",
-						"标题",
-						"时间",
-						"作者",
-						"其他",
-						"正文",
-						"源地址"
-				};
-				return columnNames[n];			
+		}
+		
+		public StyledDocument getNewStyledDocument() {
+			
+			return new DefaultStyledDocument();
+		}
+		
+
+		public StyledDocument insertDoc(StyledDocument styledDoc, String content,
+				String currentStyle) {
+			if(content == null) content = "";
+			try {
+				int length = styledDoc.getLength();
+				styledDoc.insertString(length, content,
+						styleModel.getStyle(currentStyle));
+			} catch (BadLocationException e) {
+				System.err.println("BadLocationException: " + e);
 			}
-		};
-		
-		
-		for(int row = 0; row < resultAllSize; row++){
-			for(int column = 0; column < 7; column++){
-				String string = null;
-				switch (column) {
-				case 0:
-					string = resultAll.get(row).get("type");
-					break;
-				case 1:
-					string = resultAll.get(row).get("title");
-					break;
-				case 2:
-					string = resultAll.get(row).get("time");
-					break;
-				case 3:
-					string = resultAll.get(row).get("author");
-					break;
-				case 4:
-					string = resultAll.get(row).get("other");
-					break;
-				case 5:
-					string = resultAll.get(row).get("content");
-					break;
-				case 6:
-					string = resultAll.get(row).get("url");
-					break;
-				default:
-					break;
-				}
-				tableModel.setValueAt(string, row, column);
-			}
+			return styledDoc;
 		}
-		tableAll = new JTable(tableModel);
-		tableAll.getColumnModel().getColumn(0).setPreferredWidth(3);
-		//tableAll.getColumnModel().getColumn(1).setPreferredWidth(30);
-		//tableAll.getColumnModel().getColumn(2).setPreferredWidth(20);
-		//tableAll.getColumnModel().getColumn(3).setPreferredWidth(20);
-		//tableAll.getColumnModel().getColumn(4).setPreferredWidth(20);
-		//tableAll.getColumnModel().getColumn(5).setPreferredWidth(200);
-		//tableAll.getColumnModel().getColumn(6).setPreferredWidth(30);
-		//tableAll.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-		JScrollPane scrollPane_all = new JScrollPane(tableAll);
-		panel_allTab.add(scrollPane_all, BorderLayout.CENTER);
 		
-	}
-	
-	class ResultTableFiller implements TableCellRenderer{
+		private void iniStyleModel(){
+			styleModel = new DefaultStyledDocument();
+			createStyle("STYLE_url", styleModel, 16, false, false, true, Color.GRAY, Color.WHITE, "Times New Roman");
+			createStyle("STYLE_title", styleModel, 20, true, false, false, Color.BLACK, Color.WHITE, "黑体");
+			createStyle("STYLE_abstract", styleModel, 16, false, false, false, Color.BLACK, Color.WHITE, "宋体");
+			createStyle("STYLE_author", styleModel, 16, false, false, false, Color.BLACK, Color.WHITE, "楷体");
+			createStyle("STYLE_type", styleModel, 20, false, false, false, Color.WHITE, Color.BLACK, "黑体");	
+		}
 
-		@Override
-		public Component getTableCellRendererComponent(JTable arg0,
-				Object arg1, boolean arg2, boolean arg3, int row, int column) {
-			textPane = new JTextPane();
-			StyledDocument sd = getNewStyledDocument();
-			insertDoc(sd, result.get(row).get("type"), "STYLE_type");
-			insertDoc(sd, "  " + result.get(row).get("title").toString() + "\n", "STYLE_title");
-			if(result.get(row).get("time") != null)
-				insertDoc(sd, result.get(row).get("time").toString() + "\t", "STYLE_author");
-			insertDoc(sd, result.get(row).get("author").toString() + "\n", "STYLE_author");
-			insertDoc(sd, result.get(row).get("url").toString() + "\n", "STYLE_url");
-			textPane.setStyledDocument(sd);
-			return textPane;
+		public void createStyle(String style, StyledDocument doc, int size,
+				boolean bold, boolean italic, boolean underline, Color color, Color bcolor, String fontName) {
+			Style sys = StyleContext.getDefaultStyleContext().getStyle(
+					StyleContext.DEFAULT_STYLE);
+			try {
+				doc.removeStyle(style);
+			} catch (Exception e) {
+			} // 先删除这种Style,假使他存在
+
+			Style s = doc.addStyle(style, sys); // 加入
+			StyleConstants.setFontSize(s, size); // 大小
+			StyleConstants.setBold(s, bold); // 粗体
+			StyleConstants.setItalic(s, italic); // 斜体
+			StyleConstants.setUnderline(s, underline); // 下划线
+			StyleConstants.setForeground(s, color); // 颜色
+			StyleConstants.setFontFamily(s, fontName); // 字体
+			StyleConstants.setBackground(s, bcolor);//背景颜色
 		}
 		
 	}
-	
-	public StyledDocument getNewStyledDocument() {
-		
-		return new DefaultStyledDocument();
-	}
-	
-
-	public StyledDocument insertDoc(StyledDocument styledDoc, String content,
-			String currentStyle) {
-		if(content == null) content = "";
-		try {
-			int length = styledDoc.getLength();
-			styledDoc.insertString(length, content,
-					styleModel.getStyle(currentStyle));
-		} catch (BadLocationException e) {
-			System.err.println("BadLocationException: " + e);
-		}
-		return styledDoc;
-	}
-	
-	private void iniStyleModel(){
-		styleModel = new DefaultStyledDocument();
-		createStyle("STYLE_url", styleModel, 16, false, false, true, Color.GRAY, Color.WHITE, "Times New Roman");
-		createStyle("STYLE_title", styleModel, 20, true, false, false, Color.BLACK, Color.WHITE, "黑体");
-		createStyle("STYLE_abstract", styleModel, 16, false, false, false, Color.BLACK, Color.WHITE, "宋体");
-		createStyle("STYLE_author", styleModel, 16, false, false, false, Color.BLACK, Color.WHITE, "楷体");
-		createStyle("STYLE_type", styleModel, 20, false, false, false, Color.WHITE, Color.BLACK, "黑体");	
-	}
-
-	public void createStyle(String style, StyledDocument doc, int size,
-			boolean bold, boolean italic, boolean underline, Color color, Color bcolor, String fontName) {
-		Style sys = StyleContext.getDefaultStyleContext().getStyle(
-				StyleContext.DEFAULT_STYLE);
-		try {
-			doc.removeStyle(style);
-		} catch (Exception e) {
-		} // 先删除这种Style,假使他存在
-
-		Style s = doc.addStyle(style, sys); // 加入
-		StyleConstants.setFontSize(s, size); // 大小
-		StyleConstants.setBold(s, bold); // 粗体
-		StyleConstants.setItalic(s, italic); // 斜体
-		StyleConstants.setUnderline(s, underline); // 下划线
-		StyleConstants.setForeground(s, color); // 颜色
-		StyleConstants.setFontFamily(s, fontName); // 字体
-		StyleConstants.setBackground(s, bcolor);//背景颜色
-	}
-	
-}
 }
