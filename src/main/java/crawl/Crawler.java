@@ -20,6 +20,8 @@ public class Crawler {
 	Spider spider4 = null;
 	Spider spider5 = null;
 	Spider spider6 = null;
+	Spider spider7 = null;
+	Spider spider8 = null;
 	// 0科技部，1工信部，2发改委，3论文，4专利，5新闻
 
 	String[] website = { "www.most.gov.cn", "www.miit.gov.cn",
@@ -60,7 +62,7 @@ public class Crawler {
 					.addPipeline(new MysqlPipeline()).thread(5).start();
 			return;
 		}
-		if (option[3] == true) {
+		if (option[5] == true) {
 			spider4 = Spider.create(new Ifengnews());
 			spider4.addUrl(
 					"http://zhannei.baidu.com/cse/search?q=" + key
@@ -68,18 +70,30 @@ public class Crawler {
 					.addPipeline(new MysqlPipeline()).thread(5).start();
 
 		}
-		if (option[4] == true) {
+		if (option[3] == true) {
 			spider5 = Spider.create(new Wanfang());
 			spider5.addUrl("http://s.wanfangdata.com.cn/Paper.aspx?q=" + key)
 					.addPipeline(new ConsolePipeline())
-					.addPipeline(new MysqlPipeline()).thread(5).start();
+					.addPipeline(new MysqlPipeline()).start();
 
 		}
-		if (option[5] == true) {
-			spider6 = Spider.create(new Patent());
+		if (option[4] == true) {
+			spider6 = Spider.create(new Patent("实用新型"));
 			spider6.addUrl(
 					"http://www.soopat.com/Home/Result?SearchWord=" + key
-							+ "&PatentIndex=0&Sort=1&Valid=2")
+							+ "&PatentIndex=0&Valid=2&SYXX=Y")
+					.addPipeline(new ConsolePipeline())
+					.addPipeline(new MysqlPipeline()).thread(5).start();
+			spider7 = Spider.create(new Patent("外观设计"));
+			spider7.addUrl(
+					"http://www.soopat.com/Home/Result?SearchWord=" + key
+							+ "&PatentIndex=0&Valid=2&WGZL=Y")
+					.addPipeline(new ConsolePipeline())
+					.addPipeline(new MysqlPipeline()).thread(5).start();
+			spider8 = Spider.create(new Patent("发明"));
+			spider8.addUrl(
+					"http://www.soopat.com/Home/Result?SearchWord=" + key
+							+ "&PatentIndex=01&Valid=2&FMZL=Y")
 					.addPipeline(new ConsolePipeline())
 					.addPipeline(new MysqlPipeline()).thread(5).start();
 
@@ -100,5 +114,9 @@ public class Crawler {
 			spider5.close();
 		if (spider6 != null)
 			spider6.close();
+		if (spider7 != null)
+			spider7.close();
+		if (spider8 != null)
+			spider8.close();
 	}
 }

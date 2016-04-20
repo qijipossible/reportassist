@@ -11,17 +11,13 @@ import us.codecraft.webmagic.pipeline.*;
  */
 public class Patent implements PageProcessor {
 
+	String other=null;
+	public Patent(String other){
+		this.other=other;
+	}
+	
 	public static final String URL_LIST = "http://www\\.soopat\\.com/Home/Result\\?SearchWord=。*";
-	// public static final String
-	// KEJI_WEB_SITE="http://www\\.most\\.gov\\.cn/\\.*";
-	// public static final String KEJI_WEB_SITE="www.most.gov.cn";
-	// public static final String KEJI_WEB_SITE="www.most.gov.cn";
-
-	// public static final String URL_POST =
-	// "http://blog\\.sina\\.com\\.cn/s/blog_\\w+\\.html";
-
 	private Site site = Site.me()
-			// .setDomain("blog.sina.com.cn")
 			.setSleepTime(3000)
 			.setUserAgent(
 					"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_2) AppleWebKit/537.31 (KHTML, like Gecko) Chrome/26.0.1410.65 Safari/537.31");
@@ -54,6 +50,7 @@ public class Patent implements PageProcessor {
 
 			page.putField("baseURL", page.getUrl());
 			page.putField("type", "专利");
+			page.putField("other", other);
 		}
 
 	}
@@ -64,10 +61,8 @@ public class Patent implements PageProcessor {
 	}
 
 	public static void main(String[] args) {
-		Spider.create(new Patent())
-				.addUrl("http://www.soopat.com/Home/Result?SearchWord=推荐系统&PatentIndex=0&Sort=1&Valid=2")
-				// "http://www.baidu.com/ns?word=机床"http://www.baidu.com/s?wd=机床
-				// site:www.most.gov.cn
+		Spider.create(new Patent("实用新型"))
+				.addUrl("http://www.soopat.com/Home/Result?SearchWord=推荐系统&PatentIndex=0&Sort=1&Valid=2&SYXX=Y")
 				.addPipeline(new ConsolePipeline()).run();
 	}
 }

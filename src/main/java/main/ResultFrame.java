@@ -127,10 +127,23 @@ public class ResultFrame extends JFrame implements ItemListener, ActionListener 
 	public void show_statistics() {
 		new Chart(keyword);
 		// text.setBounds(0, 0, 442, 291);
-		ImageIcon img = new ImageIcon(".\\barchartTEST.jpg");
+		ImageIcon img = new ImageIcon(".\\output\\barchartTEST.jpg");
 		label3.insertIcon(img);
-		ImageIcon img2 = new ImageIcon(".\\linechartTEST.jpg");
+		ImageIcon img2 = new ImageIcon(".\\output\\year_gov.jpg");
 		label3.insertIcon(img2);
+
+		ImageIcon img5 = new ImageIcon(".\\output\\year_news.jpg");
+		label3.insertIcon(img5);
+		
+		ImageIcon img3 = new ImageIcon(".\\output\\year_paper.jpg");
+		label3.insertIcon(img3);
+		ImageIcon img6 = new ImageIcon(".\\output\\journal.jpg");
+		label3.insertIcon(img6);
+		
+		ImageIcon img4 = new ImageIcon(".\\output\\year_patent.jpg");
+		label3.insertIcon(img4);
+		ImageIcon img7 = new ImageIcon(".\\output\\patent_type.jpg");
+		label3.insertIcon(img7);
 	}
 
 	public void show_record() {
@@ -149,6 +162,7 @@ public class ResultFrame extends JFrame implements ItemListener, ActionListener 
 	}
 
 	public void show_abstract() {
+		database.initialize();
 		List<Map> result = new NLP().summary(keyword);
 		createStyle("Style01", styledDoc, 16, 0, 1, 1, Color.GRAY, "Times New Roman");
 		createStyle("Style02", styledDoc, 20, 1, 0, 0, Color.BLACK, "黑体");

@@ -23,7 +23,7 @@ public class initdatabase {
 			conn = DriverManager.getConnection(newDB_URL, USER, PASS);
 			stmt = conn.createStatement();
 			sql = "create table if not exists webpage(id int(11) NOT NULL AUTO_INCREMENT,baseUrl varchar(255) NOT NULL,"
-					+ "content text,savetime date DEFAULT NULL,title varchar(255) NOT NULL,author varchar(255) DEFAULT NULL,type varchar(20) DEFAULT NULL,"
+					+ "content text,savetime date DEFAULT NULL,title varchar(255) NOT NULL,author varchar(255) DEFAULT NULL,type varchar(20) DEFAULT NULL,other varchar(20) DEFAULT NULL,"
 					+ "PRIMARY KEY (id))";
 			stmt.execute(sql);
 		} catch (SQLException se) {
