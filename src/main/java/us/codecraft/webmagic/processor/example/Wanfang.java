@@ -49,7 +49,7 @@ public class Wanfang implements PageProcessor {
 			page.putField("content",page.getHtml().xpath("//div[@class='row clear zh']//div[@class='text']/tidyText()"));
 
 			page.putField("author", temp.substring(temp.indexOf("作者")+4, temp.indexOf("作者")+7).trim()+"等");
-
+			page.putField("other", temp.substring(temp.indexOf("刊 名")+4, temp.indexOf(" ", temp.indexOf("刊 名")+5)).trim());
 			page.putField("baseURL", page.getUrl());
 			page.putField("type", "论文");
 		}

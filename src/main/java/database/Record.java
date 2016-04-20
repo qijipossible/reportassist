@@ -10,6 +10,13 @@ public class Record
 	private String title;
 	private String author;
 	private String type;
+	private String other;
+	public String getOther() {
+		return other;
+	}
+	public void setOther(String other) {
+		this.other = other;
+	}
 	public String getBaseUrl() {
 		return baseUrl;
 	}

@@ -27,6 +27,7 @@ public class MysqlPipeline implements Pipeline {
 		String title = null;
 		String author = "";
 		String type = null;
+		String other=null;
 		System.out.println("get page: " + resultItems.getRequest().getUrl());
 		for (Map.Entry<String, Object> entry : resultItems.getAll().entrySet()) {
 			System.out.println("!!!!!!!!!!!!!!" + entry.getKey() + ":\t"
@@ -66,12 +67,14 @@ public class MysqlPipeline implements Pipeline {
 				url = entry.getValue().toString();
 			} else if (entry.getKey().equals("author")) {
 				author = temp;
-			} else if (entry.getKey().equals("type"))
+			} else if (entry.getKey().equals("type")){
 				type = temp;
+			}else if (entry.getKey().equals("other"))
+				other = temp;
 
 		}
 		if (content != null && !content.replaceAll("\n", "").equals(""))
-			database.insert(url, content, time, title, author, type);
+			database.insert(url, content, time, title, author, type,other);
 		database.close();
 	}
 }

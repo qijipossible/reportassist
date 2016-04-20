@@ -150,13 +150,13 @@ public class SQLop {
 	 * insert
 	 */
 	public void insert(String url, String content, Date savetime, String title,
-			String author, String type) {
+			String author, String type,String other) {
 		PreparedStatement preStatement = null;
 		if (!isRepeat(title)) {
 			try {
 				preStatement = conn.prepareStatement("INSERT INTO " + tableName
-						+ " (baseUrl, content, savetime, title, author, type)"
-						+ " VALUES(?,?,?,?,?,?)");
+						+ " (baseUrl, content, savetime, title, author, type,other)"
+						+ " VALUES(?,?,?,?,?,?,?)");
 				if (url != null)
 					preStatement.setString(1, url);
 				if (content != null)
@@ -169,6 +169,8 @@ public class SQLop {
 					preStatement.setString(5, author);
 				if (type != null)
 					preStatement.setString(6, type);
+				//if (type == null)
+					preStatement.setString(7, other);
 				preStatement.executeUpdate();
 			} catch (SQLException e) {
 				System.out.println("SQLException: " + e.getMessage());
@@ -190,12 +192,17 @@ public class SQLop {
 	}
 
 	/*
-	 * @param countType: 0 for all, 1 for source site, 2 for year
+	 * @param countType: 0 for all, 1 for source site, 2 for year in special website,3 for year in patent,4 for year in paper,5 for year in news
+	 *                   6 for journal name
 	 */
 	public HashMap<String, Integer> count(int countType, String keyword) {
 		final int SITE = 1;
-		final int YEAR = 2;
-
+		final int YEAR_gov = 2;
+		final int YEAR_patent=3;
+		final int YEAR_paper=4;
+		final int YEAR_news=5;
+		final int JOURNAL=6;
+		final int PATENT_TYPE=7;
 		Statement statemt = null;
 		ResultSet results = null;
 		HashMap<String, Integer> resultMap = new HashMap<String, Integer>();
@@ -218,8 +225,58 @@ public class SQLop {
 							new Integer(results.getInt(2)));
 				}
 				break;
-			case YEAR:
-				sql = "SELECT year(savetime),COUNT(*) FROM tmp GROUP BY year(savetime) ORDER BY year(savetime)";
+			case YEAR_gov:
+				sql = "SELECT year(savetime),COUNT(*) FROM tmp WHERE type = '科技部' OR  type = '发改委' OR  type = '工信部' GROUP BY year(savetime) ORDER BY year(savetime)";
+				results = statemt.executeQuery(sql);
+				while (results.next()) {
+					if (results.getString(1) == null)
+						continue;
+					resultMap.put(results.getString(1),
+							new Integer(results.getInt(2)));
+				}
+				break;
+			case YEAR_patent:
+				sql = "SELECT year(savetime),COUNT(*) FROM tmp WHERE type='专利' GROUP BY year(savetime) ORDER BY year(savetime)";
+				results = statemt.executeQuery(sql);
+				while (results.next()) {
+					if (results.getString(1) == null)
+						continue;
+					resultMap.put(results.getString(1),
+							new Integer(results.getInt(2)));
+				}
+				break;
+			case YEAR_paper:
+				sql = "SELECT year(savetime),COUNT(*) FROM tmp WHERE type='论文' GROUP BY year(savetime) ORDER BY year(savetime)";
+				results = statemt.executeQuery(sql);
+				while (results.next()) {
+					if (results.getString(1) == null)
+						continue;
+					resultMap.put(results.getString(1),
+							new Integer(results.getInt(2)));
+				}
+				break;
+			case YEAR_news:
+				sql = "SELECT year(savetime),COUNT(*) FROM tmp WHERE type='新闻' GROUP BY year(savetime) ORDER BY year(savetime)";
+				results = statemt.executeQuery(sql);
+				while (results.next()) {
+					if (results.getString(1) == null)
+						continue;
+					resultMap.put(results.getString(1),
+							new Integer(results.getInt(2)));
+				}
+				break;
+			case PATENT_TYPE:
+				sql = "SELECT other,COUNT(*) FROM tmp WHERE type='专利' GROUP BY other ORDER BY COUNT(*)";
+				results = statemt.executeQuery(sql);
+				while (results.next()) {
+					if (results.getString(1) == null)
+						continue;
+					resultMap.put(results.getString(1),
+							new Integer(results.getInt(2)));
+				}
+				break;
+			case JOURNAL:
+				sql = "SELECT other,COUNT(*) FROM tmp WHERE type='论文' GROUP BY other ORDER BY COUNT(*)";
 				results = statemt.executeQuery(sql);
 				while (results.next()) {
 					if (results.getString(1) == null)
