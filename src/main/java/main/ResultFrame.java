@@ -127,7 +127,7 @@ public class ResultFrame extends JFrame implements ItemListener, ActionListener 
 	public void show_statistics() {
 		new Chart(keyword);
 		// text.setBounds(0, 0, 442, 291);
-		ImageIcon img = new ImageIcon(".\\output\\barchartTEST.jpg");
+		ImageIcon img = new ImageIcon(".\\output\\site.jpg");
 		label3.insertIcon(img);
 		ImageIcon img2 = new ImageIcon(".\\output\\year_gov.jpg");
 		label3.insertIcon(img2);
@@ -144,6 +144,8 @@ public class ResultFrame extends JFrame implements ItemListener, ActionListener 
 		label3.insertIcon(img4);
 		ImageIcon img7 = new ImageIcon(".\\output\\patent_type.jpg");
 		label3.insertIcon(img7);
+		ImageIcon img8 = new ImageIcon(".\\output\\PATENT_applicant.jpg");
+		label3.insertIcon(img8);
 	}
 
 	public void show_record() {

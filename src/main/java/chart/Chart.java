@@ -49,7 +49,8 @@ public class Chart {
 	static final int YEAR_paper = 4;
 	static final int YEAR_news = 5;
 	static final int JOURNAL = 6;
-	static final int PATENT_TYPE=7;
+	static final int PATENT_type=7;
+	static final int PATENT_applicant=8;
 
 	SQLop sqlop = new SQLop();
 	String keyword = new String();
@@ -58,19 +59,27 @@ public class Chart {
 		keyword = kw;
 		sqlop.initialize();
 		// System.out.println(sqlop.countAllResult(keyword));
-		barChart();
+		barChart(SITE,"site.jpg");
 		lineChart(YEAR_gov, "year_gov.jpg");
 		lineChart(YEAR_paper, "year_paper.jpg");
 		lineChart(YEAR_patent, "year_patent.jpg");
 		lineChart(YEAR_news, "year_news.jpg");
-		pieChart(JOURNAL,"journal.jpg");
-		pieChart(PATENT_TYPE,"patent_type.jpg");
+		barChart(JOURNAL,"journal.jpg");
+		pieChart(PATENT_type,"patent_type.jpg");
+		barChart(PATENT_applicant,"patent_applicant.jpg");
 		sqlop.close();
 	}
 
-	public void barChart() {
-		CategoryDataset dataset = getSiteDataset();
-		JFreeChart chart = ChartFactory.createBarChart3D("来源站点统计", "来源", "数量",
+	public void barChart(int type,String fileName) {
+		CategoryDataset dataset = getSiteDataset(type);
+		String head="统计";
+		if(type==SITE)
+			head="来源站点"+head;
+		if(type==JOURNAL)
+			head="发表期刊"+head;
+		if(type==PATENT_applicant)
+			head="申请单位"+head;
+		JFreeChart chart = ChartFactory.createBarChart3D(head, "来源", "数量",
 				dataset, PlotOrientation.VERTICAL, false, false, false);
 
 		// 以下部分为柱状图的美化
@@ -104,7 +113,7 @@ public class Chart {
 
 		FileOutputStream pic_out = null;
 		try {
-			pic_out = new FileOutputStream(".\\output\\barchartTEST.jpg");
+			pic_out = new FileOutputStream(".\\output\\"+fileName);
 			ChartUtilities.writeChartAsJPEG(pic_out, 1.0f, chart, PIC_WIDTH,
 					PIC_LENGTH, null);
 
@@ -118,9 +127,9 @@ public class Chart {
 		}
 	}
 
-	private CategoryDataset getSiteDataset() {
+	private CategoryDataset getSiteDataset(int type) {
 		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-		HashMap<String, Integer> hashmap = sqlop.count(SITE, keyword);
+		HashMap<String, Integer> hashmap = sqlop.count(type, keyword);
 		List<Map.Entry<String, Integer>> entry = new ArrayList<Map.Entry<String, Integer>>(
 				hashmap.entrySet());
 		for (Map.Entry<String, Integer> i : entry) {
@@ -212,12 +221,13 @@ public class Chart {
 		PieDataset dataset = getJournalDataset(type);
 		JFreeChart chart = ChartFactory.createPieChart("", dataset,
 				true, true, false);
-		String head="期刊";
+		String head="统计";
 		if(type==JOURNAL)
 			head="发表期刊"+head;
-		if(type==PATENT_TYPE)
+		if(type==PATENT_type)
 			head="专利类型"+head;
-		
+		if(type==PATENT_applicant)
+			head="专利申请单位"+head;
 		TextTitle title = new TextTitle(head, Fonts.title);
 		title.setPaint(Colors.a1);
 		chart.setTitle(title);
