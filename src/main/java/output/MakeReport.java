@@ -32,19 +32,19 @@ public class MakeReport {
 
 		HtmlFile file = new HtmlFile(filePath, keyword);
 
-		file.writeStatistics("针对科技部、工信部、发改委网站发布有关“"+keyword+"”文件统计：", WORDS);
+		file.writeStatistics("1、科技部、工信部、发改委网站发布有关“"+keyword+"”文件统计：", WORDS);
 		file.writeStatistics("D:\\reportassist\\output\\year_gov.jpg",ICON);
 		file.writeStatistics("D:\\reportassist\\output\\site.jpg",ICON);
 		
-		file.writeStatistics("针对近几年来有关“"+keyword+"”内容的新闻报道：", WORDS);
+		file.writeStatistics("2、近几年来有关“"+keyword+"”内容的新闻报道：", WORDS);
 		file.writeStatistics("D:\\reportassist\\output\\year_news.jpg",ICON);
 		file.writeStatistics("D:\\reportassist\\output\\news_source.jpg",ICON);
 		
-		file.writeStatistics("针对近几年来有关“"+keyword+"”内容的论文发表情况：", WORDS);
+		file.writeStatistics("3、近几年来有关“"+keyword+"”内容的论文发表情况：", WORDS);
 		file.writeStatistics("D:\\reportassist\\output\\year_paper.jpg",ICON);
 		file.writeStatistics("D:\\reportassist\\output\\journal.jpg",ICON);
 		
-		file.writeStatistics("针对近几年来有关“"+keyword+"”内容的专利申请授权情况：", WORDS);
+		file.writeStatistics("4、近几年来有关“"+keyword+"”内容的专利申请授权情况：", WORDS);
 		file.writeStatistics("D:\\reportassist\\output\\year_patent.jpg",ICON);
 		file.writeStatistics("D:\\reportassist\\output\\patent_applicant.jpg",ICON);
 		file.writeStatistics("D:\\reportassist\\output\\patent_type.jpg",ICON);
@@ -86,7 +86,7 @@ public class MakeReport {
 		List<Map> result = new NLP().summary("数控机床");
 
 		MakeReport report = new MakeReport("数控机床", result,
-				"D:\\reportassist\\output\\01.html");
+				"D:\\reportassist\\output\\03.html");
 
 	}
 
