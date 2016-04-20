@@ -12,14 +12,7 @@ import us.codecraft.webmagic.pipeline.*;
 public class Wanfang implements PageProcessor {
 
 	public static final String URL_LIST = "http://s\\.wanfangdata\\.com\\.cn/Paper\\.aspx\\?q=。*";
-	// public static final String
-	// KEJI_WEB_SITE="http://www\\.most\\.gov\\.cn/\\.*";
-	// public static final String KEJI_WEB_SITE="www.most.gov.cn";
-	// public static final String KEJI_WEB_SITE="www.most.gov.cn";
-
-	// public static final String URL_POST =
-	// "http://blog\\.sina\\.com\\.cn/s/blog_\\w+\\.html";
-
+	
 	private Site site = Site.me()
 			// .setDomain("blog.sina.com.cn")
 			.setSleepTime(3000)
@@ -65,8 +58,6 @@ public class Wanfang implements PageProcessor {
 	public static void main(String[] args) {
 		Spider.create(new Wanfang())
 				.addUrl("http://s.wanfangdata.com.cn/Paper.aspx?q=推荐系统")
-				// "http://www.baidu.com/ns?word=机床"http://www.baidu.com/s?wd=机床
-				// site:www.most.gov.cn
 				.addPipeline(new ConsolePipeline()).run();
 	}
 }

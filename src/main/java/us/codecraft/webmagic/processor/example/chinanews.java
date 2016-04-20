@@ -12,13 +12,6 @@ import us.codecraft.webmagic.pipeline.*;
 public class chinanews implements PageProcessor {
 
 	public static final String URL_LIST = "http://sou\\.chinanews\\.com\\.cn/search.do\\?q=。*";
-	// public static final String
-	// KEJI_WEB_SITE="http://www\\.most\\.gov\\.cn/\\.*";
-	// public static final String KEJI_WEB_SITE="www.most.gov.cn";
-	// public static final String KEJI_WEB_SITE="www.most.gov.cn";
-
-	// public static final String URL_POST =
-	// "http://blog\\.sina\\.com\\.cn/s/blog_\\w+\\.html";
 
 	private Site site = Site.me()
 			// .setDomain("blog.sina.com.cn")
@@ -67,8 +60,6 @@ public class chinanews implements PageProcessor {
 	public static void main(String[] args) {
 		Spider.create(new chinanews())
 				.addUrl("http://www.chinanews.com/gn/2016/04-08/7827816.shtml")
-				// "http://www.baidu.com/ns?word=机床"http://www.baidu.com/s?wd=机床
-				// site:www.most.gov.cn
 				.addPipeline(new ConsolePipeline()).run();
 	}
 }

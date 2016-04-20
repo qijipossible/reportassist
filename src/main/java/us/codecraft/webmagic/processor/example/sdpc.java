@@ -12,13 +12,6 @@ import us.codecraft.webmagic.pipeline.*;
 public class sdpc implements PageProcessor {
 
 	public static final String URL_LIST = "http://cn\\.bing\\.com/search\\?q。*";
-	// public static final String
-	// KEJI_WEB_SITE="http://www\\.most\\.gov\\.cn/\\.*";
-	// public static final String KEJI_WEB_SITE="www.most.gov.cn";
-	// public static final String KEJI_WEB_SITE="www.most.gov.cn";
-
-	// public static final String URL_POST =
-	// "http://blog\\.sina\\.com\\.cn/s/blog_\\w+\\.html";
 
 	private Site site = Site.me()
 			// .setDomain("blog.sina.com.cn")
@@ -71,8 +64,6 @@ public class sdpc implements PageProcessor {
 	public static void main(String[] args) {
 		Spider.create(new sdpc())
 				.addUrl("http://cn.bing.com/search?q=site%3awww.sdpc.gov.cn+%22数控机床%22+filetype%3ahtml")
-				// "http://www.baidu.com/ns?word=机床"http://www.baidu.com/s?wd=机床
-				// site:www.most.gov.cn
 				.addPipeline(new ConsolePipeline()).run();
 	}
 }
