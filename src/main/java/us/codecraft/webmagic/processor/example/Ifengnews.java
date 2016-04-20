@@ -38,7 +38,7 @@ public class Ifengnews implements PageProcessor {
 				return;
 			}
 			page.putField("time", temp.substring(0,temp.indexOf("日")).trim());
-			page.putField("title", page.getHtml().xpath("//div[@id='artical']/h1/text()"));
+			page.putField("title", page.getHtml().xpath("title/text()"));
 
 			page.putField("content",
 					page.getHtml().xpath("//div[@id='artical_real']/tidyText()")
