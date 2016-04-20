@@ -188,7 +188,7 @@ public class Window{
 		panel_5 = new JPanel();
 		panel_1.add(panel_5);
 		
-		textField = new JTextField("数控");
+		textField = new JTextField("数控机床");
 		textField.setFont(new Font("微软雅黑", Font.PLAIN, 15));
 		panel_5.add(textField);
 		textField.setToolTipText("请键入您想要搜索的关键词");
@@ -339,6 +339,8 @@ public class Window{
 	JLabel label_chart31;
 	JLabel label_chart32;
 	JLabel label_chart41;
+	JLabel label_chart42;
+	JLabel label_chart51;
 
 	private List<Map<String, String>> result;
 	private List<Map<String, String>> resultAll;
@@ -405,7 +407,7 @@ public class Window{
 		button_back.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0){
-				//UIswitch_back();
+				UIswitch_back();//TODO
 			}
 		});
 		
@@ -414,6 +416,7 @@ public class Window{
 		panel_resultTab.add(scrollPane);
 		//panel_3.add(panel_main, BorderLayout.CENTER);
 		panel_main.setLayout(new BoxLayout(panel_main, BoxLayout.Y_AXIS));
+		
 		
 		JPanel panel_charts = new JPanel();
 		
@@ -426,10 +429,7 @@ public class Window{
 		
 		panel_main.add(panel_charts);
 		panel_charts.setLayout(new BoxLayout(panel_charts, BoxLayout.Y_AXIS));
-		
-		JPanel panel_chart1 = new JPanel();
-		panel_charts.add(panel_chart1);
-		
+
 		label_chart11 = new JLabel();
 		label_chart12 = new JLabel();
 		label_chart21 = new JLabel();
@@ -437,29 +437,45 @@ public class Window{
 		label_chart31 = new JLabel();
 		label_chart32 = new JLabel();
 		label_chart41 = new JLabel();
+		label_chart42 = new JLabel();
+		label_chart51 = new JLabel();
+		
+		JPanel panel_chart1 = new JPanel();
+		panel_chart1.setLayout(new BoxLayout(panel_chart1, BoxLayout.X_AXIS));
+		panel_charts.add(panel_chart1);
 		
 		panel_chart1.add(label_chart11);
-		
 		panel_chart1.add(label_chart12);
 		
 		JPanel panel_chart2 = new JPanel();
+		panel_chart2.setLayout(new BoxLayout(panel_chart2, BoxLayout.X_AXIS));
+		panel_charts.add(Box.createVerticalStrut(10));
 		panel_charts.add(panel_chart2);
 		
 		panel_chart2.add(label_chart21);
-		
 		panel_chart2.add(label_chart22);
 		
 		JPanel panel_chart3 = new JPanel();
+		panel_chart3.setLayout(new BoxLayout(panel_chart3, BoxLayout.X_AXIS));
+		panel_charts.add(Box.createVerticalStrut(10));
 		panel_charts.add(panel_chart3);
 		
 		panel_chart3.add(label_chart31);
-		
 		panel_chart3.add(label_chart32);
 		
 		JPanel panel_chart4 = new JPanel();
+		panel_chart4.setLayout(new BoxLayout(panel_chart4, BoxLayout.X_AXIS));
+		panel_charts.add(Box.createVerticalStrut(10));
 		panel_charts.add(panel_chart4);
 		
 		panel_chart4.add(label_chart41);
+		panel_chart4.add(label_chart42);
+
+		JPanel panel_chart5 = new JPanel();
+		panel_chart5.setLayout(new BoxLayout(panel_chart5, BoxLayout.X_AXIS));
+		panel_charts.add(panel_chart5);
+		
+		panel_chart5.add(label_chart51);
 
 		panel_main.add(Box.createVerticalStrut(30));
 
@@ -514,13 +530,15 @@ public class Window{
 		panel_resultList.add(tableResult, BorderLayout.CENTER);
 		
 		//统计图表
-		label_chart11.setIcon(new ImageIcon(".\\output\\barchartTEST.jpg"));
+		label_chart11.setIcon(new ImageIcon(".\\output\\site.jpg"));
 		label_chart12.setIcon(new ImageIcon(".\\output\\year_gov.jpg"));
 		label_chart21.setIcon(new ImageIcon(".\\output\\journal.jpg"));
-		label_chart22.setIcon(new ImageIcon(".\\output\\year_paper"));
-		label_chart31.setIcon(new ImageIcon(".\\output\\patent_type.jpg"));
-		label_chart32.setIcon(new ImageIcon(".\\output\\year_patent.jpg"));
-		label_chart41.setIcon(new ImageIcon(".\\output\\year_news.jpg"));
+		label_chart22.setIcon(new ImageIcon(".\\output\\year_paper.jpg"));
+		label_chart31.setIcon(new ImageIcon(".\\output\\news_source.jpg"));
+		label_chart32.setIcon(new ImageIcon(".\\output\\year_news.jpg"));
+		label_chart41.setIcon(new ImageIcon(".\\output\\patent_applicant.jpg"));
+		label_chart42.setIcon(new ImageIcon(".\\output\\year_patent.jpg"));
+		label_chart51.setIcon(new ImageIcon(".\\output\\patent_type.jpg"));
 		
 		//所有数据
 		TableModel tableModel = new DefaultTableModel(resultAllSize,7){

@@ -20,6 +20,7 @@ import javax.swing.UIManager;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Font;
 
 import javax.swing.JScrollPane;
 import javax.swing.JCheckBox;
@@ -68,6 +69,8 @@ public class ResultPanel extends JPanel {
 	JLabel label_chart31;
 	JLabel label_chart32;
 	JLabel label_chart41;
+	JLabel label_chart42;
+	JLabel label_chart51;
 
 	private List<Map<String, String>> result;
 	private List<Map<String, String>> resultAll;
@@ -145,14 +148,17 @@ public class ResultPanel extends JPanel {
 		panel_main.setLayout(new BoxLayout(panel_main, BoxLayout.Y_AXIS));
 		
 		JPanel panel_charts = new JPanel();
-		JLabel label_subtitle1 = new JLabel("搜索结果统计");
-		panel_main.add(label_subtitle1);
+		
+		JPanel panel_subtitle1 = new JPanel();
+		panel_subtitle1.setLayout(new BorderLayout());
+		JLabel label_subtitle1 = new JLabel("搜索结果统计",JLabel.CENTER);
+		label_subtitle1.setFont(new Font("黑体", Font.BOLD, 30));
+		panel_subtitle1.add(label_subtitle1, BorderLayout.CENTER);
+		panel_main.add(panel_subtitle1);
+		
 		panel_main.add(panel_charts);
 		panel_charts.setLayout(new BoxLayout(panel_charts, BoxLayout.Y_AXIS));
-		
-		JPanel panel_chart1 = new JPanel();
-		panel_charts.add(panel_chart1);
-		
+
 		label_chart11 = new JLabel();
 		label_chart12 = new JLabel();
 		label_chart21 = new JLabel();
@@ -160,32 +166,47 @@ public class ResultPanel extends JPanel {
 		label_chart31 = new JLabel();
 		label_chart32 = new JLabel();
 		label_chart41 = new JLabel();
+		label_chart42 = new JLabel();
+		label_chart51 = new JLabel();
+		
+		JPanel panel_chart1 = new JPanel();
+		panel_charts.add(panel_chart1);
 		
 		panel_chart1.add(label_chart11);
-		
 		panel_chart1.add(label_chart12);
 		
 		JPanel panel_chart2 = new JPanel();
 		panel_charts.add(panel_chart2);
 		
 		panel_chart2.add(label_chart21);
-		
 		panel_chart2.add(label_chart22);
 		
 		JPanel panel_chart3 = new JPanel();
 		panel_charts.add(panel_chart3);
 		
 		panel_chart3.add(label_chart31);
-		
 		panel_chart3.add(label_chart32);
 		
 		JPanel panel_chart4 = new JPanel();
 		panel_charts.add(panel_chart4);
 		
 		panel_chart4.add(label_chart41);
+		panel_chart4.add(label_chart42);
 
-		JLabel label_subtitle2 = new JLabel("搜索结果");
-		panel_main.add(label_subtitle2);
+		JPanel panel_chart5 = new JPanel();
+		panel_charts.add(panel_chart5);
+		
+		panel_chart5.add(label_chart51);
+
+		
+		panel_main.add(Box.createVerticalStrut(30));
+
+		JPanel panel_subtitle2 = new JPanel();
+		panel_subtitle2.setLayout(new BorderLayout());
+		JLabel label_subtitle2 = new JLabel("搜索结果",JLabel.CENTER);
+		label_subtitle2.setFont(new Font("黑体", Font.BOLD, 30));
+		panel_subtitle2.add(label_subtitle2, BorderLayout.CENTER);
+		panel_main.add(panel_subtitle2);
 		
 		panel_resultList = new JPanel();
 		panel_main.add(panel_resultList);
@@ -231,13 +252,15 @@ public class ResultPanel extends JPanel {
 		panel_resultList.add(tableResult, BorderLayout.CENTER);
 		
 		//统计图表
-		label_chart11.setIcon(new ImageIcon(".\\output\\barchartTEST.jpg"));
+		label_chart11.setIcon(new ImageIcon(".\\output\\site.jpg"));
 		label_chart12.setIcon(new ImageIcon(".\\output\\year_gov.jpg"));
 		label_chart21.setIcon(new ImageIcon(".\\output\\journal.jpg"));
 		label_chart22.setIcon(new ImageIcon(".\\output\\year_paper"));
-		label_chart31.setIcon(new ImageIcon(".\\output\\patent_type.jpg"));
-		label_chart32.setIcon(new ImageIcon(".\\output\\year_patent.jpg"));
-		label_chart41.setIcon(new ImageIcon(".\\output\\year_news.jpg"));
+		label_chart31.setIcon(new ImageIcon(".\\output\\news_source.jpg"));
+		label_chart32.setIcon(new ImageIcon(".\\output\\year_news"));
+		label_chart41.setIcon(new ImageIcon(".\\output\\patent_applicant.jpg"));
+		label_chart42.setIcon(new ImageIcon(".\\output\\year_patent.jpg"));
+		label_chart42.setIcon(new ImageIcon(".\\output\\patent_type.jpg"));
 		
 		//所有数据
 		TableModel tableModel = new DefaultTableModel(resultAllSize,7){
