@@ -369,14 +369,14 @@ public class Window{
 			button_report.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent arg0){
-					new MakeReport(keyword, result, ".\\output\\report.html");
+					new MakeReport(keyword, new NLP().summary(keyword), ".\\output\\report.html");
 				}
 			});
 			JButton button_back = new JButton("返回搜索界面");
 			button_back.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent arg0){
-					//UIswitch_back();//TODO
+					UIswitch_back();//TODO
 				}
 			});
 			panel_2.add(button_back, BorderLayout.WEST);
