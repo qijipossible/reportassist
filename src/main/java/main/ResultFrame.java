@@ -146,6 +146,8 @@ public class ResultFrame extends JFrame implements ItemListener, ActionListener 
 		label3.insertIcon(img7);
 		ImageIcon img8 = new ImageIcon(".\\output\\PATENT_applicant.jpg");
 		label3.insertIcon(img8);
+		ImageIcon img9 = new ImageIcon(".\\output\\news_source.jpg");
+		label3.insertIcon(img9);
 	}
 
 	public void show_record() {
