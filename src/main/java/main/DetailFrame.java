@@ -55,9 +55,11 @@ public class DetailFrame extends JFrame {
 		articleTextPane.setEditable(false);
 
 		JScrollPane scrollPane_1 = new JScrollPane(articleTextPane);
+		scrollPane_1.getVerticalScrollBar().setValue(1);
 		panel_1.add(scrollPane_1, BorderLayout.CENTER);
 		
 		JScrollPane scrollPane = new JScrollPane(absTextPane);
+		scrollPane.getVerticalScrollBar().setValue(1);
 		panel.add(scrollPane, BorderLayout.CENTER);
 	}
 

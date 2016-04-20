@@ -33,21 +33,21 @@ public class MakeReport {
 		HtmlFile file = new HtmlFile(filePath, keyword);
 
 		file.writeStatistics("1、科技部、工信部、发改委网站发布有关“"+keyword+"”文件统计：", WORDS);
-		file.writeStatistics("D:\\reportassist\\output\\year_gov.jpg",ICON);
-		file.writeStatistics("D:\\reportassist\\output\\site.jpg",ICON);
+		file.writeStatistics(".\\year_gov.jpg",ICON);
+		file.writeStatistics(".\\site.jpg",ICON);
 		
 		file.writeStatistics("2、有关“"+keyword+"”内容的新闻报道：", WORDS);
-		file.writeStatistics("D:\\reportassist\\output\\year_news.jpg",ICON);
-		file.writeStatistics("D:\\reportassist\\output\\news_source.jpg",ICON);
+		file.writeStatistics(".\\year_news.jpg",ICON);
+		file.writeStatistics(".\\news_source.jpg",ICON);
 		
 		file.writeStatistics("3、有关“"+keyword+"”内容的论文发表情况：", WORDS);
-		file.writeStatistics("D:\\reportassist\\output\\year_paper.jpg",ICON);
-		file.writeStatistics("D:\\reportassist\\output\\journal.jpg",ICON);
+		file.writeStatistics(".\\year_paper.jpg",ICON);
+		file.writeStatistics(".\\journal.jpg",ICON);
 		
 		file.writeStatistics("4、有关“"+keyword+"”内容的专利申请授权情况：", WORDS);
-		file.writeStatistics("D:\\reportassist\\output\\year_patent.jpg",ICON);
-		file.writeStatistics("D:\\reportassist\\output\\patent_applicant.jpg",ICON);
-		file.writeStatistics("D:\\reportassist\\output\\patent_type.jpg",ICON);
+		file.writeStatistics(".\\year_patent.jpg",ICON);
+		file.writeStatistics(".\\patent_applicant.jpg",ICON);
+		file.writeStatistics(".\\patent_type.jpg",ICON);
 
 
 		List<Map<String, String>> info = classify(result,SELECT_gov);
@@ -81,12 +81,11 @@ public class MakeReport {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		SQLop database = new SQLop();
-		database.initialize();
-		List<Map<String, String>> result = new NLP().summary("数控机床");
+		//SQLop database = new SQLop();
+		//database.initialize();
+		//List<Map<String, String>> result = new NLP().summary("数控机床");
 
-		MakeReport report = new MakeReport("数控机床", result,
-				"D:\\reportassist\\output\\03.html");
+		//MakeReport report = new MakeReport("数控机床", result,".\\output\\03.html");
 
 	}
 
