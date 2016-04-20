@@ -75,12 +75,12 @@ public class HtmlFile {
 						+"<font size=\"3\">"
 						+infor.get(i).get("type").toString()
 						+ infor.get(i).get("author").toString()
-						+"发布“"
+						+"发布“<B>"
 						+infor.get(i).get("title").toString()
-						+"”。</font>"
+						+"</B>”。</font>"
 						+"<font size=\"3\">&nbsp&nbsp内容摘要："
 						+infor.get(i).get("abstract").toString()
-						+"</font></p><br/><br/>");
+						+"</font></p><br/>");
 
 			}
 		} catch (Exception e) {
@@ -107,12 +107,12 @@ public class HtmlFile {
 						+"<font size=\"3\">"
 						+infor.get(i).get("type").toString()
 						+ infor.get(i).get("author").toString()
-						+"发布“"
+						+"发布“<B>"
 						+infor.get(i).get("title").toString()
-						+"”。</font>"
+						+"</B>”。</font>"
 						+"<font size=\"3\">&nbsp&nbsp内容摘要："
 						+infor.get(i).get("abstract").toString()
-						+"</font></p><br/><br/>");
+						+"</font></p><br/>");
 
 			}
 		} catch (Exception e) {
