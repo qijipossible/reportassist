@@ -62,7 +62,7 @@ public class HtmlFile {
 	 * @param piece
 	 *            放入报告中的文摘篇数
 	 */
-	public void writeGov(List<Map> infor, int piece) {
+	public void writeGov(List<Map<String, String>> infor, int piece) {
 		try {
 			if (piece > infor.size())
 				piece = infor.size();
@@ -75,12 +75,12 @@ public class HtmlFile {
 						+"<font size=\"3\">"
 						+infor.get(i).get("type").toString()
 						+ infor.get(i).get("author").toString()
-						+"发布“"
+						+"发布“<B>"
 						+infor.get(i).get("title").toString()
-						+"”。</font>"
-						+"<font size=\"3\">&nbsp&nbsp内容摘要："
+						+"</B>”。</font>"
+						+"<font size=\"3\"><br/>&nbsp&nbsp内容摘要："
 						+infor.get(i).get("abstract").toString()
-						+"</font></p><br/><br/>");
+						+"</font></p><br/>");
 
 			}
 		} catch (Exception e) {
@@ -94,7 +94,7 @@ public class HtmlFile {
 	 * @param infor
 	 * @param piece放入报告中的文摘数量
 	 */
-	public void writeNew(List<Map> infor, int piece) {
+	public void writeNew(List<Map<String, String>> infor, int piece) {
 		try {
 			if (piece > infor.size())
 				piece = infor.size();
@@ -107,12 +107,12 @@ public class HtmlFile {
 						+"<font size=\"3\">"
 						+infor.get(i).get("type").toString()
 						+ infor.get(i).get("author").toString()
-						+"发布“"
+						+"发布“<B>"
 						+infor.get(i).get("title").toString()
-						+"”。</font>"
-						+"<font size=\"3\">&nbsp&nbsp内容摘要："
+						+"</B>”。</font>"
+						+"<font size=\"3\"><br/>&nbsp&nbsp内容摘要："
 						+infor.get(i).get("abstract").toString()
-						+"</font></p><br/><br/>");
+						+"</font></p><br/>");
 
 			}
 		} catch (Exception e) {

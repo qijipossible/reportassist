@@ -134,7 +134,7 @@ public class Result_face extends JFrame implements ItemListener, ActionListener 
 	}
 
 	public void show_abstract() {
-		List<Map> result = new NLP().summary(keyword);
+		List<Map<String, String>> result = new NLP().summary(keyword);
 		createStyle("Style01", styledDoc, 16, 0, 1, 1, Color.GRAY, "Times New Roman");
 		createStyle("Style02", styledDoc, 20, 1, 0, 0, Color.BLACK, "黑体");
 		createStyle("Style03", styledDoc, 16, 0, 0, 0, Color.BLACK, "宋体");

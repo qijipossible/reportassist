@@ -30,9 +30,9 @@ public class NLP
 		return summary;
 	}
 	//输入关键字从数据库中查找相关记录，输出每条记录的基本信息和正文文摘，以数组的形式返回
-	public List<Map> summary(String searchword) 
+	public List<Map<String, String>> summary(String searchword) 
 	{
-		List<Map> result = new ArrayList<Map>();
+		List<Map<String, String>> result = new ArrayList<Map<String, String>>();
 		final String DB_URL = "jdbc:mysql://localhost:3306/webmagic";
 		final String USER = "root";
 		final String PASS = "123456";
@@ -47,20 +47,19 @@ public class NLP
 //		     sql = "SELECT * FROM webpage WHERE find_in_set(\"" + searchword + "\", content) " 
 //		    		 + "OR find_in_set(\"" + searchword + "\", title)";
 		     
-		     sql = "SELECT * FROM webpage WHERE content LIKE '%"
-					+ searchword + "%' OR title LIKE'%" + searchword + "%'";
+		     sql = "SELECT * FROM webpage WHERE content LIKE '%"+searchword+"%' OR title LIKE'%"+searchword+"%' order by savetime desc";
 		     
 		     ResultSet rs = stmt.executeQuery(sql);
 		     while(rs.next()){
 		    	 String text = rs.getString("content"), time = rs.getString("savetime"), title = rs.getString("title");
 		    	 String author = rs.getString("author"), url = rs.getString("baseUrl"),type = rs.getString("type");
-		    	 Map tmp = new HashMap();
-		    	 tmp.put("title", title);
-		    	 tmp.put("author", author);
-		    	 tmp.put("time", time);
-		    	 tmp.put("url", url);
+		    	 Map<String, String> tmp = new HashMap<String, String>();
+		    	 tmp.put("title", title.toString());
+		    	 tmp.put("author", author.toString());
+		    	 tmp.put("time", time.toString());
+		    	 tmp.put("url", url.toString());
 		    	 tmp.put("abstract", stringsummary(text));
-		    	 tmp.put("type", type);
+		    	 tmp.put("type", type.toString());
 		
 		    	 result.add(tmp);
 		     }
