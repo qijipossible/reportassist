@@ -10,6 +10,9 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import javax.swing.text.AbstractDocument.Content;
 
 public class SQLop {
 	String tableName = "webpage";
@@ -64,6 +67,52 @@ public class SQLop {
 		return;
 	}
 
+	public List<Map<String, String>> search(String keyword){
+		List<Map<String, String>> result = new ArrayList<Map<String,String>>();
+		String sql = "SELECT * FROM webpage WHERE content LIKE '%"
+				+ keyword + "%' OR title LIKE'%" + keyword + "%'";
+
+		try {
+			statemt = conn.createStatement();
+			results = statemt.executeQuery(sql);
+			while(results.next()){	    	
+				String content = results.getString("content"), time = results.getString("savetime"), title = results.getString("title");
+				String author = results.getString("author"), url = results.getString("baseUrl"),type = results.getString("type");
+				Map<String, String> tmp = new HashMap<String, String>();
+				tmp.put("title", title);
+				tmp.put("author", author);
+				tmp.put("time", time);
+				tmp.put("url", url);
+				tmp.put("content", content);
+				tmp.put("type", type);
+	
+				result.add(tmp);
+			}
+		}catch(SQLException se){
+		      se.printStackTrace();
+		}
+		catch(Exception exc){
+		      exc.printStackTrace();
+		}
+		finally{
+			try{
+				if(statemt!=null)
+					statemt.close();
+		    }
+			catch(SQLException se2){
+		    }
+		    try{
+		    	if(conn!=null)
+		            conn.close();
+		    }
+		    catch(SQLException se){
+		         se.printStackTrace();
+		    }
+		}
+	    
+		return result;
+	}
+	
 	/*
 	 * getRecordL
 	 */

@@ -10,7 +10,7 @@ public class NLP
 {
 	//正文文本压缩，输入正文文本，输出压缩后的正文文本
 	//核心算法有待提高
-	private String stringsummary(String inputstr) 
+	public static String stringsummary(String inputstr) 
 	{
 		String summary = new String();
 		String[] input = inputstr.split("\n");
