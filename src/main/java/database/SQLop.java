@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.print.attribute.standard.MediaSize.Other;
 import javax.swing.text.AbstractDocument.Content;
 
 public class SQLop {
@@ -101,12 +102,46 @@ public class SQLop {
 		    }
 			catch(SQLException se2){
 		    }
-		    try{
-		    	if(conn!=null)
-		            conn.close();
+		}
+	    
+		return result;
+	}
+	
+	public List<Map<String, String>> getAll(){
+		List<Map<String, String>> result = new ArrayList<Map<String,String>>();
+		String sql = "SELECT * FROM webpage";
+
+		try {
+			statemt = conn.createStatement();
+			results = statemt.executeQuery(sql);
+			while(results.next()){	    	
+				String content = results.getString("content"), time = results.getString("savetime"),
+						title = results.getString("title"), author = results.getString("author"), 
+						url = results.getString("baseUrl"),type = results.getString("type"),
+						other = results.getString("other");
+				Map<String, String> tmp = new HashMap<String, String>();
+				tmp.put("title", title);
+				tmp.put("author", author);
+				tmp.put("time", time);
+				tmp.put("url", url);
+				tmp.put("content", content);
+				tmp.put("type", type);
+				tmp.put("other", other);
+	
+				result.add(tmp);
+			}
+		}catch(SQLException se){
+		      se.printStackTrace();
+		}
+		catch(Exception exc){
+		      exc.printStackTrace();
+		}
+		finally{
+			try{
+				if(statemt!=null)
+					statemt.close();
 		    }
-		    catch(SQLException se){
-		         se.printStackTrace();
+			catch(SQLException se2){
 		    }
 		}
 	    
