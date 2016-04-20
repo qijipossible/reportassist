@@ -63,6 +63,7 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 import javax.swing.text.StyledDocument;
 
+import output.MakeReport;
 import chart.Chart;
 import main.ResultPanel.ResultTableFiller;
 import database.SQLop;
@@ -362,9 +363,23 @@ public class Window{
 		JPanel panel_2 = new JPanel();
 		panel_4.add(panel_2, BorderLayout.NORTH);
 		panel_2.setLayout(new BorderLayout(0, 0));
-		
+
+		JButton button_report = new JButton("生成报告");
+		panel_2.add(button_report, BorderLayout.EAST);
+		button_report.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0){
+				new MakeReport(keyword, result, ".\\output\\report.html");
+			}
+		});
 		JButton button_back = new JButton("返回搜索界面");
-		panel_2.add(button_back, BorderLayout.EAST);
+		button_back.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0){
+				UIswitch_back();//TODO
+			}
+		});
+		panel_2.add(button_back, BorderLayout.WEST);
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		panel_4.add(tabbedPane);
@@ -404,12 +419,7 @@ public class Window{
 		
 		JButton button = new JButton("筛选");
 		panel_up.add(button);
-		button_back.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent arg0){
-				UIswitch_back();//TODO
-			}
-		});
+		
 		
 		JPanel panel_main = new JPanel();
 		JScrollPane scrollPane = new JScrollPane(panel_main);
