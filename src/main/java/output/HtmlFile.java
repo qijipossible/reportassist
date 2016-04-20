@@ -35,7 +35,7 @@ public class HtmlFile {
 					+ "<h1 align=\"center\">有关“"
 					+ keyword
 					+ "”的统计结果报告</h1>"
-					+ "<h1><font face=\"微软雅黑\"size=\"5\">一、信息统计结果：</font></h1>");
+					+ "<h1><font face=\"微软雅黑\"size=\"5\">一、信息统计结果：</font></h1><div align=\"center\">");
 		} catch (Exception e) {
 			System.out.println(e);
 		}
@@ -50,7 +50,7 @@ public class HtmlFile {
 				writer.write("<img src=\"" + info
 						+ "\" width=\"500\" height=\"400\" />");
 			else if(type==WORDS)
-				writer.write("<br/><br/><font size=\"4\">"+info+"</font><br/><br/>");
+				writer.write("<br/><h3 align=\"left\"><font size=\"4\">"+info+"</font><h3><br/>");
 		} catch (Exception e) {
 			System.out.println();
 		}
@@ -66,21 +66,21 @@ public class HtmlFile {
 		try {
 			if (piece > infor.size())
 				piece = infor.size();
-			writer.write("<h1><font face=\"微软雅黑\"size=\"5\">二、政府公文摘要：</font></h1>");
+			writer.write("</div><h1><font face=\"微软雅黑\"size=\"5\">二、政府公文摘要：</font></h1>");
 			for (int i = 0; i < piece; i++) {
 				writer.write("<p>");
-				writer.write("<h2 align=\"center\">"
-						+ infor.get(i).get("title").toString() + "</h2>");
-				writer.write("<div align=\"center\"><font face=\"楷体\" size=\"3\">"
-						+ infor.get(i).get("time").toString()
-						+"&nbsp&nbsp"
-						+ infor.get(i).get("type").toString()
+				writer.write("<font face=\"楷体\" size=\"3\">"+(i+1)+"、&nbsp&nbsp"
+						+infor.get(i).get("time").toString()
+						+"&nbsp&nbsp</font>"
+						+"<font size=\"3\">"
+						+infor.get(i).get("type").toString()
 						+ infor.get(i).get("author").toString()
-						+ "</font><br /></div>");
-				writer.write("<div  ><font size=\"3\">" + "摘要：&nbsp&nbsp"
-						+ infor.get(i).get("abstract").toString()
-						+ "</font></div>");
-				writer.write("</p><br/><br/>");
+						+"发布“"
+						+infor.get(i).get("title").toString()
+						+"”。</font>"
+						+"<font size=\"3\">&nbsp&nbsp内容摘要："
+						+infor.get(i).get("abstract").toString()
+						+"</font></p><br/><br/>");
 
 			}
 		} catch (Exception e) {
@@ -101,18 +101,18 @@ public class HtmlFile {
 			writer.write("<h1><font face=\"微软雅黑\"size=\"5\">三、相关新闻报道：</font></h1>");
 			for (int i = 0; i < piece; i++) {
 				writer.write("<p>");
-				writer.write("<h2 align=\"center\">"
-						+ infor.get(i).get("title").toString() + "</h2>");
-				writer.write("<div align=\"center\"><font face=\"楷体\" size=\"3\">"
-						+ infor.get(i).get("time").toString()
-						+"&nbsp&nbsp"
-						+ infor.get(i).get("type").toString()
+				writer.write("<font face=\"楷体\" size=\"3\">"+(i+1)+"、&nbsp&nbsp"
+						+infor.get(i).get("time").toString()
+						+"&nbsp&nbsp</font>"
+						+"<font size=\"3\">"
+						+infor.get(i).get("type").toString()
 						+ infor.get(i).get("author").toString()
-						+ "</font><br /></div>");
-				writer.write("<div  ><font size=\"3\">" + "内容：&nbsp&nbsp"
-						+ infor.get(i).get("abstract").toString()
-						+ "</font></div>");
-				writer.write("</p><br/><br/>");
+						+"发布“"
+						+infor.get(i).get("title").toString()
+						+"”。</font>"
+						+"<font size=\"3\">&nbsp&nbsp内容摘要："
+						+infor.get(i).get("abstract").toString()
+						+"</font></p><br/><br/>");
 
 			}
 		} catch (Exception e) {
