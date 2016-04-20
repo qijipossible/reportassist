@@ -202,7 +202,8 @@ public class SQLop {
 		final int YEAR_paper=4;
 		final int YEAR_news=5;
 		final int JOURNAL=6;
-		final int PATENT_TYPE=7;
+		final int PATENT_type=7;
+		final int PATENT_applicant=8;
 		Statement statemt = null;
 		ResultSet results = null;
 		HashMap<String, Integer> resultMap = new HashMap<String, Integer>();
@@ -265,7 +266,7 @@ public class SQLop {
 							new Integer(results.getInt(2)));
 				}
 				break;
-			case PATENT_TYPE:
+			case PATENT_type:
 				sql = "SELECT other,COUNT(*) FROM tmp WHERE type='专利' GROUP BY other ORDER BY COUNT(*)";
 				results = statemt.executeQuery(sql);
 				while (results.next()) {
@@ -277,6 +278,16 @@ public class SQLop {
 				break;
 			case JOURNAL:
 				sql = "SELECT other,COUNT(*) FROM tmp WHERE type='论文' GROUP BY other ORDER BY COUNT(*)";
+				results = statemt.executeQuery(sql);
+				while (results.next()) {
+					if (results.getString(1) == null)
+						continue;
+					resultMap.put(results.getString(1),
+							new Integer(results.getInt(2)));
+				}
+				break;
+			case PATENT_applicant:
+				sql = "SELECT author,COUNT(*) FROM tmp WHERE type='专利' GROUP BY author ORDER BY COUNT(*)";
 				results = statemt.executeQuery(sql);
 				while (results.next()) {
 					if (results.getString(1) == null)

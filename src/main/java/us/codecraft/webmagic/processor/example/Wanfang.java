@@ -43,7 +43,8 @@ public class Wanfang implements PageProcessor {
 				page.setSkip(true);
 				return;
 			}
-			page.putField("time", temp.substring(temp.indexOf("在线出版日期：")+8, temp.indexOf("在线出版日期：")+18));
+			if(temp.indexOf("在线出版日期：")!=-1)
+				page.putField("time", temp.substring(temp.indexOf("在线出版日期：")+8, temp.indexOf("在线出版日期：")+18));
 			page.putField("title", page.getHtml().xpath("//div[@class='section-baseinfo']/h1/text()").toString());
 
 			page.putField("content",page.getHtml().xpath("//div[@class='row clear zh']//div[@class='text']/tidyText()"));
