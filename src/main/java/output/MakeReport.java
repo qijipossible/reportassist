@@ -18,10 +18,10 @@ public class MakeReport {
 	final int WORDS=1;
 	
 	String keyword = null;
-	List<Map> result = null;
+	List<Map<String, String>> result = null;
 	String filePath = null;
 
-	public MakeReport(String keyword, List<Map> result, String filePath) {
+	public MakeReport(String keyword, List<Map<String, String>> result, String filePath) {
 		this.keyword = keyword;
 		this.result = result;
 		this.filePath = filePath;
@@ -36,21 +36,21 @@ public class MakeReport {
 		file.writeStatistics("D:\\reportassist\\output\\year_gov.jpg",ICON);
 		file.writeStatistics("D:\\reportassist\\output\\site.jpg",ICON);
 		
-		file.writeStatistics("2、近几年来有关“"+keyword+"”内容的新闻报道：", WORDS);
+		file.writeStatistics("2、有关“"+keyword+"”内容的新闻报道：", WORDS);
 		file.writeStatistics("D:\\reportassist\\output\\year_news.jpg",ICON);
 		file.writeStatistics("D:\\reportassist\\output\\news_source.jpg",ICON);
 		
-		file.writeStatistics("3、近几年来有关“"+keyword+"”内容的论文发表情况：", WORDS);
+		file.writeStatistics("3、有关“"+keyword+"”内容的论文发表情况：", WORDS);
 		file.writeStatistics("D:\\reportassist\\output\\year_paper.jpg",ICON);
 		file.writeStatistics("D:\\reportassist\\output\\journal.jpg",ICON);
 		
-		file.writeStatistics("4、近几年来有关“"+keyword+"”内容的专利申请授权情况：", WORDS);
+		file.writeStatistics("4、有关“"+keyword+"”内容的专利申请授权情况：", WORDS);
 		file.writeStatistics("D:\\reportassist\\output\\year_patent.jpg",ICON);
 		file.writeStatistics("D:\\reportassist\\output\\patent_applicant.jpg",ICON);
 		file.writeStatistics("D:\\reportassist\\output\\patent_type.jpg",ICON);
 
 
-		List<Map> info = classify(result,SELECT_gov);
+		List<Map<String, String>> info = classify(result,SELECT_gov);
 		file.writeGov(info, NUMBER_gov);
 		info = classify(result,SELECT_news);
 		file.writeNew(info, NUMBER_news);
@@ -63,8 +63,8 @@ public class MakeReport {
 	 * @param info
 	 * @return
 	 */
-	public List<Map> classify(List<Map> info, int type) {
-		List<Map> result=new ArrayList<Map>(); 
+	public List<Map<String, String>> classify(List<Map<String, String>> info, int type) {
+		List<Map<String, String>> result=new ArrayList<Map<String, String>>(); 
 		for (Map map : info) {
 			if (type == SELECT_news) {
 				if (map.get("type").toString().equals("新闻"))
@@ -83,7 +83,7 @@ public class MakeReport {
 		// TODO Auto-generated method stub
 		SQLop database = new SQLop();
 		database.initialize();
-		List<Map> result = new NLP().summary("数控机床");
+		List<Map<String, String>> result = new NLP().summary("数控机床");
 
 		MakeReport report = new MakeReport("数控机床", result,
 				"D:\\reportassist\\output\\03.html");
