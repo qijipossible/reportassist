@@ -204,6 +204,7 @@ public class SQLop {
 		final int JOURNAL=6;
 		final int PATENT_type=7;
 		final int PATENT_applicant=8;
+		final int NEWS_source=9;
 		Statement statemt = null;
 		ResultSet results = null;
 		HashMap<String, Integer> resultMap = new HashMap<String, Integer>();
@@ -288,6 +289,16 @@ public class SQLop {
 				break;
 			case PATENT_applicant:
 				sql = "SELECT author,COUNT(*) FROM tmp WHERE type='专利' GROUP BY author ORDER BY COUNT(*)";
+				results = statemt.executeQuery(sql);
+				while (results.next()) {
+					if (results.getString(1) == null)
+						continue;
+					resultMap.put(results.getString(1),
+							new Integer(results.getInt(2)));
+				}
+				break;
+			case NEWS_source:
+				sql = "SELECT author,COUNT(*) FROM tmp WHERE type='新闻' GROUP BY author ORDER BY COUNT(*)";
 				results = statemt.executeQuery(sql);
 				while (results.next()) {
 					if (results.getString(1) == null)

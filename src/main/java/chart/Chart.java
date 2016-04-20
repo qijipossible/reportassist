@@ -49,8 +49,12 @@ public class Chart {
 	static final int YEAR_paper = 4;
 	static final int YEAR_news = 5;
 	static final int JOURNAL = 6;
-	static final int PATENT_type=7;
-	static final int PATENT_applicant=8;
+	static final int PATENT_type = 7;
+	static final int PATENT_applicant = 8;
+	static final int NEWS_SOURCE = 9;
+
+	static final int VERTICAL = 0;
+	static final int HORIZONTAL = 1;
 
 	SQLop sqlop = new SQLop();
 	String keyword = new String();
@@ -59,18 +63,19 @@ public class Chart {
 		keyword = kw;
 		sqlop.initialize();
 		// System.out.println(sqlop.countAllResult(keyword));
-		barChart(SITE,"site.jpg");
+		barChart(SITE, "site.jpg",VERTICAL);
 		lineChart(YEAR_gov, "year_gov.jpg");
 		lineChart(YEAR_paper, "year_paper.jpg");
 		lineChart(YEAR_patent, "year_patent.jpg");
 		lineChart(YEAR_news, "year_news.jpg");
-		barChart(JOURNAL,"journal.jpg");
-		pieChart(PATENT_type,"patent_type.jpg");
-		barChart(PATENT_applicant,"patent_applicant.jpg");
+		barChart(NEWS_SOURCE, "news_source.jpg",HORIZONTAL);
+		barChart(JOURNAL, "journal.jpg",HORIZONTAL);
+		pieChart(PATENT_type, "patent_type.jpg");
+		barChart(PATENT_applicant, "patent_applicant.jpg",HORIZONTAL);
 		sqlop.close();
 	}
 
-	public void barChart(int type,String fileName) {
+	public void barChart(int type,String fileName,int orient) {
 		CategoryDataset dataset = getSiteDataset(type);
 		String head="统计";
 		if(type==SITE)
@@ -78,10 +83,16 @@ public class Chart {
 		if(type==JOURNAL)
 			head="发表期刊"+head;
 		if(type==PATENT_applicant)
-			head="申请单位"+head;
-		JFreeChart chart = ChartFactory.createBarChart3D(head, "来源", "数量",
-				dataset, PlotOrientation.VERTICAL, false, false, false);
-
+			head="授权单位"+head;
+		if(type==NEWS_SOURCE)
+			head="报道网站"+head;
+		JFreeChart chart=null;
+		if(orient==VERTICAL)
+			chart = ChartFactory.createBarChart3D(head, "来源", "数量",
+				dataset, PlotOrientation.VERTICAL, false, true, false);
+		else
+			chart = ChartFactory.createBarChart3D(head, "来源", "数量",
+					dataset, PlotOrientation.HORIZONTAL, false, true, false);
 		// 以下部分为柱状图的美化
 		TextTitle title = chart.getTitle();
 		title.setFont(Fonts.title);// 标题字体
@@ -170,17 +181,19 @@ public class Chart {
 		rangeAxis.setTickLabelFont(Fonts.axis);
 		rangeAxis.setLabelPaint(Colors.a1);
 		rangeAxis.setTickLabelPaint(Colors.a2);
-		LineAndShapeRenderer renderer = (LineAndShapeRenderer)plot.getRenderer(); //获取折线对象
+		LineAndShapeRenderer renderer = (LineAndShapeRenderer) plot
+				.getRenderer(); // 获取折线对象
 		renderer.setBaseShapesVisible(true);// 设置拐点是否可见/是否显示拐点
 		renderer.setDrawOutlines(true);// 设置拐点不同用不同的形状
 		renderer.setUseFillPaint(true);// 设置线条是否被显示填充颜色
 		renderer.setBaseFillPaint(Colors.a3);// 设置拐点颜色
 		renderer.setSeriesStroke(0, new BasicStroke(3F));// 设置折线加粗
 		renderer.setSeriesPaint(0, Colors.a3);
-		
-//		renderer.setBaseItemLabelGenerator(new StandardCategoryItemLabelGenerator());
-//		renderer.setBaseItemLabelsVisible(true);
-//		renderer.setBaseItemLabelPaint(Colors.a3);
+
+		// renderer.setBaseItemLabelGenerator(new
+		// StandardCategoryItemLabelGenerator());
+		// renderer.setBaseItemLabelsVisible(true);
+		// renderer.setBaseItemLabelPaint(Colors.a3);
 
 		FileOutputStream pic_out = null;
 		try {
@@ -217,22 +230,22 @@ public class Chart {
 		return dataset;
 	}
 
-	public void pieChart(int type,String fileName) {
+	public void pieChart(int type, String fileName) {
 		PieDataset dataset = getJournalDataset(type);
-		JFreeChart chart = ChartFactory.createPieChart("", dataset,
-				true, true, false);
-		String head="统计";
-		if(type==JOURNAL)
-			head="发表期刊"+head;
-		if(type==PATENT_type)
-			head="专利类型"+head;
-		if(type==PATENT_applicant)
-			head="专利申请单位"+head;
+		JFreeChart chart = ChartFactory.createPieChart("", dataset, false, true,
+				false);
+		String head = "统计";
+		if (type == JOURNAL)
+			head = "发表期刊" + head;
+		if (type == PATENT_type)
+			head = "专利类型" + head;
+		if (type == PATENT_applicant)
+			head = "申请单位" + head;
 		TextTitle title = new TextTitle(head, Fonts.title);
 		title.setPaint(Colors.a1);
 		chart.setTitle(title);
 		chart.setBorderVisible(false);
-		chart.getLegend().setItemFont(Fonts.axis_lable);//下方图例说明
+//		chart.getLegend().setItemFont(Fonts.axis_lable);// 下方图例说明
 		PiePlot pieplot = (PiePlot) chart.getPlot();
 		pieplot.setBackgroundPaint(Colors.a5);
 		pieplot.setOutlinePaint(Color.BLACK);
@@ -247,12 +260,12 @@ public class Chart {
 		// 指定显示的饼图上圆形(true)还椭圆形(false)
 		pieplot.setCircular(false);
 		pieplot.setNoDataMessageFont(Fonts.axis_lable);
-		
+
 		// ("{0}: ({1}，{2})")是生成的格式，
 		// {0}表示数据名，{1}表示数据的值，{2}表示百分比。可以自定义。
-		pieplot.setLabelGenerator((PieSectionLabelGenerator) new StandardPieSectionLabelGenerator(   
-			("{0}({1}):{2}"), NumberFormat.getNumberInstance(),   
-			 new DecimalFormat("0.00%")));   
+		pieplot.setLabelGenerator((PieSectionLabelGenerator) new StandardPieSectionLabelGenerator(
+				("{0}({1}):{2}"), NumberFormat.getNumberInstance(),
+				new DecimalFormat("0.00%")));
 
 		FileOutputStream pic_out = null;
 		try {
@@ -300,10 +313,10 @@ public class Chart {
 		static final Color a0 = Color.WHITE;
 		static final Color a1 = new Color(20, 26, 55);
 		static final Color a2 = new Color(40, 71, 92);
-		//static final Color a3 = new Color(74, 108, 116);
+		// static final Color a3 = new Color(74, 108, 116);
 		static final Color a4 = new Color(139, 166, 147);
-		//static final Color a5 = new Color(240, 227, 192);
+		// static final Color a5 = new Color(240, 227, 192);
 		static final Color a5 = Color.WHITE;
-		static final Color a3 = new Color(78,130,190);
+		static final Color a3 = new Color(78, 130, 190);
 	}
 }
