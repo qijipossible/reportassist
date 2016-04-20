@@ -30,8 +30,6 @@ public class MysqlPipeline implements Pipeline {
 		String other=null;
 		System.out.println("get page: " + resultItems.getRequest().getUrl());
 		for (Map.Entry<String, Object> entry : resultItems.getAll().entrySet()) {
-			System.out.println("!!!!!!!!!!!!!!" + entry.getKey() + ":\t"
-					+ entry.getValue());
 			String temp = entry.getValue().toString();
 			if (temp == null)
 				continue;

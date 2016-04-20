@@ -12,13 +12,6 @@ import us.codecraft.webmagic.pipeline.*;
 public class souhunews implements PageProcessor {
 
 	public static final String URL_LIST = "http://cn\\.bing\\.com/search\\?q。*";
-	// public static final String
-	// KEJI_WEB_SITE="http://www\\.most\\.gov\\.cn/\\.*";
-	// public static final String KEJI_WEB_SITE="www.most.gov.cn";
-	// public static final String KEJI_WEB_SITE="www.most.gov.cn";
-
-	// public static final String URL_POST =
-	// "http://blog\\.sina\\.com\\.cn/s/blog_\\w+\\.html";
 
 	private Site site = Site.me()
 			// .setDomain("blog.sina.com.cn")
@@ -74,8 +67,6 @@ public class souhunews implements PageProcessor {
 	public static void main(String[] args) {
 		Spider.create(new souhunews())
 				.addUrl("http://sou.chinanews.com.cn/search.do?q=%E6%95%B0%E6%8E%A7%E6%9C%BA%E5%BA%8A")
-				// "http://www.baidu.com/ns?word=机床"http://www.baidu.com/s?wd=机床
-				// site:www.most.gov.cn
 				.addPipeline(new ConsolePipeline())
 				.run();
 	}
