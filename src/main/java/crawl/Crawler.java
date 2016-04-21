@@ -67,7 +67,7 @@ public class Crawler {
 			spider4.addUrl(
 					"http://zhannei.baidu.com/cse/search?q=" + key
 							+ "&s=16378496155419916178").addPipeline(new ConsolePipeline())
-					.addPipeline(new MysqlPipeline()).thread(2).start();
+					.addPipeline(new MysqlPipeline()).thread(1).start();
 
 		}
 		if (option[3] == true) {
@@ -83,19 +83,19 @@ public class Crawler {
 					"http://www.soopat.com/Home/Result?SearchWord=" + key
 							+ "&PatentIndex=0&Valid=2&SYXX=Y")
 					.addPipeline(new ConsolePipeline())
-					.addPipeline(new MysqlPipeline()).thread(2).start();
+					.addPipeline(new MysqlPipeline()).thread(1).start();
 			spider7 = Spider.create(new Patent("外观设计"));
 			spider7.addUrl(
 					"http://www.soopat.com/Home/Result?SearchWord=" + key
 							+ "&PatentIndex=0&Valid=2&WGZL=Y")
 					.addPipeline(new ConsolePipeline())
-					.addPipeline(new MysqlPipeline()).thread(2).start();
+					.addPipeline(new MysqlPipeline()).thread(1).start();
 			spider8 = Spider.create(new Patent("发明"));
 			spider8.addUrl(
 					"http://www.soopat.com/Home/Result?SearchWord=" + key
 							+ "&PatentIndex=01&Valid=2&FMZL=Y")
 					.addPipeline(new ConsolePipeline())
-					.addPipeline(new MysqlPipeline()).thread(2).start();
+					.addPipeline(new MysqlPipeline()).thread(1).start();
 
 		}
 

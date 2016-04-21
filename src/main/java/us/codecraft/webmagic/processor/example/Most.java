@@ -57,7 +57,7 @@ public class Most implements PageProcessor {
 
 	public static void main(String[] args) {
 		Spider.create(new Most())
-				.addUrl("http://cn.bing.com/search?q=site%3awww.most.gov.cn+%2204专项%22+filetype%3ahtml")
+				.addUrl("http://www.most.gov.cn/kjbgz/200604/t20060417_32873.htm")//http://cn.bing.com/search?q=site%3awww.most.gov.cn+%2204专项%22+filetype%3ahtml
 				.addPipeline(new ConsolePipeline())
 				.run();
 	}

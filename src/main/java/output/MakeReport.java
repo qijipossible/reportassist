@@ -8,8 +8,8 @@ import database.SQLop;
 import NLP.NLP;
 
 public class MakeReport {
-	final int NUMBER_gov = 5;
-	final int NUMBER_news = 3;
+	final int NUMBER_gov = 10;
+	final int NUMBER_news = 10;
 	
 	final int SELECT_gov=0;
 	final int SELECT_news=1;
@@ -20,17 +20,18 @@ public class MakeReport {
 	String keyword = null;
 	List<Map<String, String>> result = null;
 	String filePath = null;
-
-	public MakeReport(String keyword, List<Map<String, String>> result, String filePath) {
+	String summary=null;
+	public MakeReport(String keyword, List<Map<String, String>> result, String filePath,String summary) {
 		this.keyword = keyword;
 		this.result = result;
 		this.filePath = filePath;
+		this.summary = summary;
 		excute();
 	}
 
 	public void excute() {
 
-		HtmlFile file = new HtmlFile(filePath, keyword);
+		HtmlFile file = new HtmlFile(filePath, keyword,summary);
 
 		file.writeStatistics("1、科技部、工信部、发改委网站发布有关“"+keyword+"”文件统计：", WORDS);
 		file.writeStatistics(".\\year_gov.jpg",ICON);
@@ -81,11 +82,11 @@ public class MakeReport {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		//SQLop database = new SQLop();
-		//database.initialize();
-		//List<Map<String, String>> result = new NLP().summary("数控机床");
-
-		//MakeReport report = new MakeReport("数控机床", result,".\\output\\03.html");
+		SQLop database = new SQLop();
+		database.initialize();
+		List<Map<String, String>> result = new NLP().summary("数控机床");
+		String summary=new NLP().report("数控机床");
+		MakeReport report = new MakeReport("数控机床", result,".\\output\\03.html",summary);
 
 	}
 
