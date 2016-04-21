@@ -10,7 +10,7 @@ public class NLP
 {
 	//正文文本压缩，输入正文文本，输出压缩后的正文文本
 	//核心算法有待提高
-	private String stringsummary(String inputstr) 
+	public String stringsummary(String inputstr) 
 	{
 		String summary = new String();
 		String[] input = inputstr.split("\n");
@@ -84,6 +84,67 @@ public class NLP
 		         se.printStackTrace();
 		    }
 		}
+		return result;
+	}
+	//输入关键字从数据库中查找相关记录，将所有报告压缩成一篇文摘
+	public String report(String keyword)
+	{
+		String result = new String();
+		String goverment,news = new String();
+		int govermengnum = 0,newsnum = 0;
+		final String DB_URL = "jdbc:mysql://localhost:3306/webmagic";
+		final String USER = "root";
+		final String PASS = "123456";
+		Connection conn = null;
+		Statement stmt = null;
+		
+		try {
+			 Class.forName("com.mysql.jdbc.Driver");
+		     conn = (Connection) DriverManager.getConnection(DB_URL,USER,PASS);
+		     stmt = conn.createStatement();
+			 String sql;
+		     
+		     sql = "SELECT * FROM webpage WHERE content LIKE '%"
+					+ keyword + "%' OR title LIKE'%" + keyword + "%'";
+		     
+		     ResultSet rs = stmt.executeQuery(sql);
+		     while(rs.next()){
+		    	 String text = rs.getString("content"), from = rs.getString("type");
+		    	 if(from == "科技部" || from == "工信部" || from == "发改委"){
+		    		 goverment += text;
+		    		 govermentnum++;
+		    	 }
+		    	 else if(from == "新闻"){
+		    		 news += text;
+		    		 newsnum ++;
+		    	 }
+		     }
+		     rs.close();
+		}
+		catch(SQLException se){
+		      se.printStackTrace();
+		}
+		catch(Exception exc){
+		      exc.printStackTrace();
+		}
+		finally{
+			try{
+				if(stmt!=null)
+					stmt.close();
+		    }
+			catch(SQLException se2){
+		    }
+		    try{
+		    	if(conn!=null)
+		            conn.close();
+		    }
+		    catch(SQLException se){
+		         se.printStackTrace();
+		    }
+		}
+		result += HanLP.extractSummary(goverment,govermentnum * 5);
+		result += "\n以下是来自新闻的参考：\n";
+		result += HanLP.extractSummary(news,newsnum * 2);
 		return result;
 	}
 }
