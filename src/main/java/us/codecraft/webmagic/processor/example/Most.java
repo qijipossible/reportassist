@@ -12,14 +12,6 @@ import us.codecraft.webmagic.pipeline.*;
 public class Most implements PageProcessor {
 
 	public static final String URL_LIST = "http://cn\\.bing\\.com/search\\?q。*";
-	// public static final String
-	// KEJI_WEB_SITE="http://www\\.most\\.gov\\.cn/\\.*";
-	// public static final String KEJI_WEB_SITE="www.most.gov.cn";
-	// public static final String KEJI_WEB_SITE="www.most.gov.cn";
-
-	// public static final String URL_POST =
-	// "http://blog\\.sina\\.com\\.cn/s/blog_\\w+\\.html";
-
 	private Site site = Site.me()
 			// .setDomain("blog.sina.com.cn")
 			.setSleepTime(3000)
@@ -65,10 +57,8 @@ public class Most implements PageProcessor {
 
 	public static void main(String[] args) {
 		Spider.create(new Most())
-				.addUrl("http://cn.bing.com/search?q=site%3awww.most.gov.cn+%2204专项%22+filetype%3ahtml")//http://cn.bing.com/search?q=site%3awww.most.gov.cn+%2204%E4%B8%93%E9%A1%B9%22+filetype%3ahtml
-				// "http://www.baidu.com/ns?word=机床"http://www.baidu.com/s?wd=机床
-				// site:www.most.gov.cn
+				.addUrl("http://www.most.gov.cn/kjbgz/200604/t20060417_32873.htm")//http://cn.bing.com/search?q=site%3awww.most.gov.cn+%2204专项%22+filetype%3ahtml
 				.addPipeline(new ConsolePipeline())
-				.addPipeline(new FilePipeline()).run();
+				.run();
 	}
 }

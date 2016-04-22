@@ -99,7 +99,7 @@ public class ResultPanel extends JPanel {
 		button_report.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0){
-				new MakeReport(keyword, result, ".\\output\\report.html");
+				new MakeReport(keyword, result, ".\\output\\report.html",new NLP().report(keyword));
 			}
 		});
 		JButton button_back = new JButton("返回搜索界面");

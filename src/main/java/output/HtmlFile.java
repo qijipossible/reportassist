@@ -10,10 +10,13 @@ public class HtmlFile {
 
 	final int ICON = 0;
 	final int WORDS = 1;
+	final int NEWS = 1;
+	final int GOV = 0;
 
 	FileWriter out;
 	BufferedWriter writer;
 	String keyword;
+	String summary;
 
 	/**
 	 * 
@@ -22,8 +25,9 @@ public class HtmlFile {
 	 * @param key
 	 *            关键词
 	 */
-	public HtmlFile(String file_path, String key) {
+	public HtmlFile(String file_path, String key,String summary) {
 		this.keyword = key;
+		this.summary=summary;
 		File file = new File(file_path);
 		try {
 			out = new FileWriter(file);
@@ -42,15 +46,16 @@ public class HtmlFile {
 	}
 
 	/**
-	 * 写统计信息（图）        
+	 * 写统计信息（图）
 	 */
 	public void writeStatistics(String info, int type) {
 		try {
 			if (type == ICON)
 				writer.write("<img src=\"" + info
 						+ "\" width=\"500\" height=\"400\" />");
-			else if(type==WORDS)
-				writer.write("<br/><h3 align=\"left\"><font size=\"4\">"+info+"</font><h3><br/>");
+			else if (type == WORDS)
+				writer.write("<br/><h3 align=\"left\"><font size=\"4\">" + info
+						+ "</font><h3><br/>");
 		} catch (Exception e) {
 			System.out.println();
 		}
@@ -67,20 +72,20 @@ public class HtmlFile {
 			if (piece > infor.size())
 				piece = infor.size();
 			writer.write("</div><h1><font face=\"微软雅黑\"size=\"5\">二、政府公文摘要：</font></h1>");
+			writeSummery(summary, GOV);
+			writer.write("<p><font face=\"微软雅黑\"size=\"3\">以下为近几年相关政策：</font></p>");
 			for (int i = 0; i < piece; i++) {
 				writer.write("<p>");
-				writer.write("<font face=\"楷体\" size=\"3\">"+(i+1)+"、&nbsp&nbsp"
-						+infor.get(i).get("time").toString()
-						+"&nbsp&nbsp</font>"
-						+"<font size=\"3\">"
-						+infor.get(i).get("type").toString()
-						+ infor.get(i).get("author").toString()
-						+"发布“<B>"
-						+infor.get(i).get("title").toString()
-						+"</B>”。</font>"
-						+"<font size=\"3\"><br/>&nbsp&nbsp内容摘要："
-						+infor.get(i).get("abstract").toString()
-						+"</font></p><br/>");
+				writer.write("<font face=\"楷体\" size=\"3\">" + (i + 1)
+						+ "、&nbsp&nbsp" + infor.get(i).get("time").toString()
+						+ "&nbsp&nbsp</font>" + "<font size=\"3\">"
+						+ infor.get(i).get("type").toString()
+						+ "发布“<B>"
+						+ infor.get(i).get("title").toString()
+						+ "</B>”。</font>"
+						+ "<font size=\"3\"><br/>&nbsp&nbsp内容摘要："
+						+ infor.get(i).get("abstract").toString()
+						+ "</font></p><br/>");
 
 			}
 		} catch (Exception e) {
@@ -99,22 +104,44 @@ public class HtmlFile {
 			if (piece > infor.size())
 				piece = infor.size();
 			writer.write("<h1><font face=\"微软雅黑\"size=\"5\">三、相关新闻报道：</font></h1>");
+			writeSummery(summary, NEWS);
+			writer.write("<p><font face=\"微软雅黑\"size=\"3\">以下为近几年有关报道：</font></p>");
 			for (int i = 0; i < piece; i++) {
 				writer.write("<p>");
-				writer.write("<font face=\"楷体\" size=\"3\">"+(i+1)+"、&nbsp&nbsp"
-						+infor.get(i).get("time").toString()
-						+"&nbsp&nbsp</font>"
-						+"<font size=\"3\">"
-						+infor.get(i).get("type").toString()
-						+ infor.get(i).get("author").toString()
-						+"发布“<B>"
-						+infor.get(i).get("title").toString()
-						+"</B>”。</font>"
-						+"<font size=\"3\"><br/>&nbsp&nbsp内容摘要："
-						+infor.get(i).get("abstract").toString()
-						+"</font></p><br/>");
+				writer.write("<font face=\"楷体\" size=\"3\">" + (i + 1)
+						+ "、&nbsp&nbsp" + infor.get(i).get("time").toString()
+						+ "&nbsp&nbsp</font>" + "<font size=\"3\">"
+						+ infor.get(i).get("author").toString() + "发布“<B>"
+						+ infor.get(i).get("title").toString()
+						+ "</B>”。</font>"
+						+ "<font size=\"3\"><br/>&nbsp&nbsp内容摘要："
+						+ infor.get(i).get("abstract").toString()
+						+ "</font></p><br/>");
 
 			}
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+	}
+
+	/**
+	 * All the information summary an article
+	 * 
+	 * @param infor
+	 * @param type
+	 *            0:gov file,1 newS file
+	 */
+	public void writeSummery(String infor, int type) {
+		try {
+			if (type == GOV)
+				writer.write("<p>" + "<font size=\"3\">&nbsp&nbsp<B>总述：</B>"
+						+ infor.substring(1, infor.indexOf("以下是来自新闻的参考：")-2)
+						+ "。</font></p><br/>");
+			else
+				writer.write("<p>"
+						+ "<font size=\"3\">&nbsp&nbsp<B>总述：</B>"
+						+ infor.substring(infor.indexOf("以下是来自新闻的参考：") + 13,
+								infor.length()-1) + "。</font></p><br/>");
 		} catch (Exception e) {
 			System.out.println(e);
 		}

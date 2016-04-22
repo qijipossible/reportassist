@@ -88,5 +88,68 @@ public class NLP
 		}
 		return result;
 	}
+	
+	//输入关键字从数据库中查找相关记录，将所有报告压缩成一篇文摘
+		public String report(String keyword)
+		{
+			String result = new String();
+			String goverment =new String();
+			String news= new String();
+			int govermentnum = 0,newsnum = 0;
+			final String DB_URL = "jdbc:mysql://localhost:3306/webmagic";
+			final String USER = "root";
+			final String PASS = "123456";
+			Connection conn = null;
+			Statement stmt = null;
+			
+			try {
+				 Class.forName("com.mysql.jdbc.Driver");
+			     conn = (Connection) DriverManager.getConnection(DB_URL,USER,PASS);
+			     stmt = conn.createStatement();
+				 String sql;
+			     
+			     sql = "SELECT * FROM webpage WHERE content LIKE '%"
+						+ keyword + "%' OR title LIKE'%" + keyword + "%'";
+			     
+			     ResultSet rs = stmt.executeQuery(sql);
+			     while(rs.next()){
+			    	 String text = rs.getString("content"), from = rs.getString("type");
+			    	 if(from.equals("科技部") || from.equals("工信部") || from.equals("发改委")){
+			    		 goverment += text;
+			    		 govermentnum++;
+			    	 }
+			    	 else if(from.equals("新闻")){
+			    		 news += text;
+			    		 newsnum ++;
+			    	 }
+			     }
+			     rs.close();
+			}
+			catch(SQLException se){
+			      se.printStackTrace();
+			}
+			catch(Exception exc){
+			      exc.printStackTrace();
+			}
+			finally{
+				try{
+					if(stmt!=null)
+						stmt.close();
+			    }
+				catch(SQLException se2){
+			    }
+			    try{
+			    	if(conn!=null)
+			            conn.close();
+			    }
+			    catch(SQLException se){
+			         se.printStackTrace();
+			    }
+			}
+			result += HanLP.extractSummary(goverment,govermentnum * 5);
+			result += "\n以下是来自新闻的参考：\n";
+			result += HanLP.extractSummary(news,newsnum * 2);
+			return result;
+		}
 }
 
