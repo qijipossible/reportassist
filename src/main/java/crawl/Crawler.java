@@ -75,10 +75,10 @@ public class Crawler {
 
 		}
 		if (option[3] == true) {
-			//spider5 = Spider.create(new Wanfang());
-			//spider5.addUrl("http://s.wanfangdata.com.cn/Paper.aspx?q=" + key)
-			spider5 = Spider.create(new tencentComment());
-			spider5.addUrl("https://www.sogou.com/sogou?site=news.qq.com&query="+key+"&pid=sogou-wsse-b58ac8403eb9cf17-0004")
+			spider5 = Spider.create(new Wanfang());
+			spider5.addUrl("http://s.wanfangdata.com.cn/Paper.aspx?q=" + key)
+			//spider5 = Spider.create(new tencentComment());
+			//spider5.addUrl("https://www.sogou.com/sogou?site=news.qq.com&query="+key+"&pid=sogou-wsse-b58ac8403eb9cf17-0004")
 					.addPipeline(new ConsolePipeline())
 					.addPipeline(new MysqlPipeline()).start();
 

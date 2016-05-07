@@ -256,8 +256,8 @@ public class Window {
 		panel_4 = new JPanel();
 		panel_2.add(panel_4);
 
-		//ck4 = new JCheckBox("论文", true);
-		ck4 = new JCheckBox("评论", true);
+		ck4 = new JCheckBox("论文", true);
+		//ck4 = new JCheckBox("评论", true);
 		panel_4.add(ck4);
 
 		ck5 = new JCheckBox("专利", true);
