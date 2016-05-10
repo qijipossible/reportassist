@@ -86,7 +86,7 @@ public class MakeReport {
 		database.initialize();
 		List<Map<String, String>> result = new NLP().summary("数控机床");
 		String summary=new NLP().report("数控机床");
-		MakeReport report = new MakeReport("数控机床", result,".\\output\\03.html",summary);
+		//MakeReport report = new MakeReport("数控机床", result,".\\output\\03.html",summary);
 
 	}
 

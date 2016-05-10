@@ -68,11 +68,19 @@ public class SQLop {
 		return;
 	}
 
-	public List<Map<String, String>> search(String keyword){
+	public List<Map<String, String>> search(String keyword,int searchType){
+		final int GOV=0;
+		final int PA=1;
+		final int NEWS=2;
 		List<Map<String, String>> result = new ArrayList<Map<String,String>>();
-		String sql = "SELECT * FROM webpage WHERE content LIKE '%"
-				+ keyword + "%' OR title LIKE'%" + keyword + "%'";
-
+		String sql = "SELECT * FROM webpage WHERE (content LIKE '%"
+				+ keyword + "%' OR title LIKE'%" + keyword + "%')";
+		if(searchType==GOV)
+			sql=sql+" AND (type = '科技部' OR  type = '发改委' OR  type = '工信部') order by savetime desc";
+		else if(searchType==PA)
+			sql=sql+" AND (type='论文' OR type='专利') order by savetime desc";
+		else if(searchType==NEWS)
+			sql=sql+"AND type='新闻' order by savetime desc";
 		try {
 			statemt = conn.createStatement();
 			results = statemt.executeQuery(sql);
@@ -230,6 +238,33 @@ public class SQLop {
 			return record;
 	}
 
+	/*
+	 * getRecord_Bytitle
+	 */
+	private static final String REMOVE_RECORD = "DELETE FROM webpage WHERE title=?";
+	public Record removeRecord(String title) {
+		PreparedStatement pstm = null;
+		Record record=new Record();
+			try {
+				pstm = conn.prepareStatement(REMOVE_RECORD);
+				pstm.setString(1,title);
+				pstm.executeUpdate();
+			} catch (Exception e) {
+				System.out.println(e);
+			
+			} finally {
+				try {
+					if (pstm != null)
+						pstm.close();
+				} catch (SQLException e) {
+					System.out.println("SQLException: " + e.getMessage());
+					System.out.println("SQLState: " + e.getSQLState());
+					System.out.println("VendorError: " + e.getErrorCode());
+				}
+			}
+			return record;
+	}
+	
 	/*
 	 * insert
 	 */
