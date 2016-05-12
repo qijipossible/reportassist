@@ -15,8 +15,8 @@ public class NLP
 		String summary = new String();
 		String[] input = inputstr.split("\n");
 		for(int i = 0; i < input.length; ++i) {
-			int length = input[i].length();
 			input[i].replaceAll(" ", "").replaceAll("　", "").replaceAll("\t","").replaceAll("\n","");
+			int length = input[i].length();
 			if(length==0)
 				continue;
 			if(length < 30)
@@ -25,12 +25,13 @@ public class NLP
 				summary += (HanLP.getSummary(input[i], length / 2));
 			else 
 				summary += (HanLP.getSummary(input[i], length / 5));
-			summary += "\n";
+			if(!summary.equals(""))
+				summary += "\n";
 		}
 		return summary;
 	}
 	//输入关键字从数据库中查找相关记录，输出每条记录的基本信息和正文文摘，以数组的形式返回
-	public List<Map<String, String>> summary(String searchword) 
+	public static List<Map<String, String>> summary(String searchword) 
 	{
 		List<Map<String, String>> result = new ArrayList<Map<String, String>>();
 		final String DB_URL = "jdbc:mysql://localhost:3306/webmagic";
@@ -60,7 +61,7 @@ public class NLP
 		    	 tmp.put("url", url.toString());
 		    	 tmp.put("abstract", stringsummary(text));
 		    	 tmp.put("type", type.toString());
-		
+		    	 tmp.put("content", text.toString());
 		    	 result.add(tmp);
 		     }
 		     rs.close();

@@ -54,7 +54,7 @@ import output.MakeReport;
 import main.Window.ResultPanel.ResultTableFiller;
 import chart.Chart;
 
-public class ResultPanel extends JPanel {
+public class ResultPanel1 extends JPanel {
 	private JTable tableResult;
 	private JTable tableAll;
 	private StyledDocument styleModel;
@@ -74,6 +74,7 @@ public class ResultPanel extends JPanel {
 	JLabel label_chart51;
 
 	private List<Map<String, String>> result;
+	private List<Map<String, String>> resultByType;
 	private List<Map<String, String>> resultAll;
 	private int resultSize;
 	private int resultAllSize;
@@ -81,7 +82,7 @@ public class ResultPanel extends JPanel {
 	String keyword = null;
 	SQLop database = new SQLop();
 
-	public ResultPanel() {
+	public ResultPanel1() {
 		
 		iniStyleModel();
 		setLayout(new BorderLayout(0, 0));
@@ -99,7 +100,7 @@ public class ResultPanel extends JPanel {
 		button_report.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0){
-				new MakeReport(keyword, result, ".\\output\\report.html",new NLP().report(keyword));
+				new MakeReport(keyword, NLP.summary(keyword), ".\\output\\report.html",new NLP().report(keyword));
 			}
 		});
 		JButton button_back = new JButton("返回搜索界面");
@@ -119,36 +120,21 @@ public class ResultPanel extends JPanel {
 		panel_resultTab.setLayout(new BorderLayout(0, 0));
 		
 		JPanel panel_up = new JPanel();
-		panel_up.setVisible(false);
+		panel_up.setVisible(true);
 		panel_resultTab.add(panel_up, BorderLayout.NORTH);
 		panel_up.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
-		JLabel label = new JLabel("筛选：");
+		JLabel label = new JLabel("显示：");
 		panel_up.add(label);
 		
-		JCheckBox checkBox = new JCheckBox("科技部");
-		panel_up.add(checkBox);
+		JButton button_gov = new JButton("政府公文");
+		panel_up.add(button_gov);
 		
-		JCheckBox checkBox_1 = new JCheckBox("工信部");
-		panel_up.add(checkBox_1);
+		JButton button_paper = new JButton("论文专利");
+		panel_up.add(button_paper);
 		
-		JCheckBox checkBox_2 = new JCheckBox("发改委");
-		panel_up.add(checkBox_2);
-		
-		JCheckBox checkBox_3 = new JCheckBox("论文");
-		panel_up.add(checkBox_3);
-		
-		JCheckBox checkBox_4 = new JCheckBox("专利");
-		panel_up.add(checkBox_4);
-		
-		JCheckBox checkBox_5 = new JCheckBox("新闻");
-		panel_up.add(checkBox_5);
-		
-		JButton button = new JButton("筛选");
-		panel_up.add(button);
-		
-		
-		
+		JButton button_news = new JButton("新闻报道");
+		panel_up.add(button_news);
 		
 		JPanel panel_charts = new JPanel();
 		
@@ -211,7 +197,7 @@ public class ResultPanel extends JPanel {
 		panel_allTab.setLayout(new BorderLayout(0, 0));
 		tabbedPane.addTab("全体数据", null, panel_allTab, null);
 		
-		panel_resultTab.add(panel_resultList);
+		panel_resultTab.add(panel_resultList,BorderLayout.CENTER);
 		
 	}
 	
@@ -220,7 +206,7 @@ public class ResultPanel extends JPanel {
 		this.keyword = keyword;
 		sqlop = new SQLop();
 		sqlop.initialize();
-		result = sqlop.search(keyword);
+		result = sqlop.search(keyword,0);
 		resultAll = sqlop.getAll();
 		sqlop.close();
 		resultSize = result.size();
@@ -338,7 +324,14 @@ public class ResultPanel extends JPanel {
 			textPane = new JTextPane();
 			StyledDocument sd = getNewStyledDocument();
 			insertDoc(sd, result.get(row).get("type"), "STYLE_type");
-			insertDoc(sd, "  " + result.get(row).get("title").toString() + "\n", "STYLE_title");
+			String title=result.get(row).get("title").toString();
+			if(title.indexOf(keyword)!=-1){
+				insertDoc(sd, "  " + title.substring(0, title.indexOf(keyword)) , "STYLE_title");
+				insertDoc(sd, keyword, "STYLE_keyword");
+				insertDoc(sd, title.substring(title.indexOf(keyword)+keyword.length(), title.length()) + "\n", "STYLE_title");
+			}
+			else
+				insertDoc(sd, "  " + title + "\n", "STYLE_title");
 			if(result.get(row).get("time") != null)
 				insertDoc(sd, result.get(row).get("time").toString() + "\t", "STYLE_author");
 			insertDoc(sd, result.get(row).get("author").toString() + "\n", "STYLE_author");
@@ -375,6 +368,7 @@ public class ResultPanel extends JPanel {
 		createStyle("STYLE_abstract", styleModel, 16, false, false, false, Color.BLACK, Color.WHITE, "宋体");
 		createStyle("STYLE_author", styleModel, 16, false, false, false, Color.BLACK, Color.WHITE, "楷体");
 		createStyle("STYLE_type", styleModel, 20, false, false, false, Color.WHITE, Color.BLACK, "黑体");	
+		createStyle("STYLE_keyword", styleModel, 20, true, false, false, Color.RED, Color.WHITE, "黑体");	
 	}
 
 	public void createStyle(String style, StyledDocument doc, int size,
