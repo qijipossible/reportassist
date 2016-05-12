@@ -20,12 +20,17 @@ public class SQLop {
 	String user = "root";
 	String password = "123456";
 	String dataName = "webmagic";
-	String mysql_url = "jdbc:mysql://localhost/" + dataName;
+	String mysql_url = "jdbc:mysql://localhost:3306/webmagic" +"?user="+user+"&password="+password+"&useUnicode=true&characterEncoding=utf-8";
 
 	Connection conn = null;
 	Statement statemt = null;
 	ResultSet results = null;
 
+	public SQLop(){
+		initdatabase ini = new initdatabase();
+		ini.initialize();
+	}
+	
 	/*
 	 * initialize the database link
 	 */
