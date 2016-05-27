@@ -17,3 +17,6 @@ hs_err_pid*
 *.jpg
 *.jpg
 *.jpg
+*.history
+*.jpg
+*.html

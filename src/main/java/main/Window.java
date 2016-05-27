@@ -123,7 +123,7 @@ public class Window {
 
 	/**
 	 * Launch the application.
-	 */
+	 */ 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -256,7 +256,8 @@ public class Window {
 		panel_4 = new JPanel();
 		panel_2.add(panel_4);
 
-		ck4 = new JCheckBox("论文", true);
+		//ck4 = new JCheckBox("论文", true);
+		ck4 = new JCheckBox("评论", true);
 		panel_4.add(ck4);
 
 		ck5 = new JCheckBox("专利", true);
@@ -437,13 +438,12 @@ public class Window {
 			button_report.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent arg0) {
+					new MakeReport(keyword, new NLP().summary(keyword),
+							".\\output\\report.html", new NLP().report(keyword));
 					JOptionPane.showConfirmDialog(frame,
 							"操作完成！\n存储在.\\output\\report.html文件中", "完成",
 							JOptionPane.CLOSED_OPTION,
 							JOptionPane.INFORMATION_MESSAGE);
-					new MakeReport(keyword, new NLP().summary(keyword),
-							".\\output\\report.html", new NLP().report(keyword));
-
 				}
 			});
 
