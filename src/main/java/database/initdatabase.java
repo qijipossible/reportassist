@@ -18,13 +18,13 @@ public class initdatabase {
 			Class.forName("com.mysql.jdbc.Driver");
 			conn = DriverManager.getConnection(DB_URL, USER, PASS);
 			stmt = conn.createStatement();
-			String sql = "create database if not exists webmagic";
+			String sql = "create database if not exists webmagic CHARACTER SET 'utf8' COLLATE 'utf8_general_ci';";
 			stmt.execute(sql);
 			conn = DriverManager.getConnection(newDB_URL, USER, PASS);
 			stmt = conn.createStatement();
 			sql = "create table if not exists webpage(id int(11) NOT NULL AUTO_INCREMENT,baseUrl varchar(255) NOT NULL,"
 					+ "content text,savetime date DEFAULT NULL,title varchar(255) NOT NULL,author varchar(255) DEFAULT NULL,type varchar(20) DEFAULT NULL,other varchar(20) DEFAULT NULL,"
-					+ "PRIMARY KEY (id))";
+					+ "PRIMARY KEY (id))DEFAULT CHARSET=utf8;";
 			stmt.execute(sql);
 		} catch (SQLException se) {
 			se.printStackTrace();

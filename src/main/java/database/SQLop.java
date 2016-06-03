@@ -20,7 +20,8 @@ public class SQLop {
 	String user = "root";
 	String password = "123456";
 	String dataName = "webmagic";
-	String mysql_url = "jdbc:mysql://localhost/" + dataName;
+	//String mysql_url = "jdbc:mysql://localhost/" + dataName;
+	String mysql_url = "jdbc:mysql://localhost:3306/" + dataName+"?useUnicode=true&characterEncoding=utf-8";
 
 	Connection conn = null;
 	Statement statemt = null;
@@ -30,8 +31,9 @@ public class SQLop {
 	 * initialize the database link
 	 */
 	public void initialize() {
-
+		new initdatabase().initialize();
 		try {
+			
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
 		} catch (Exception e) {
 			System.out.println(e);

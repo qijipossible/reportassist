@@ -342,6 +342,7 @@ public class Window {
 
 	public void UIswitch_search() {
 		searchPanel.setVisible(false);
+		resultPanel.validate();
 		resultPanel.setVisible(true);
 	}
 
@@ -454,6 +455,7 @@ public class Window {
 				@Override
 				public void mouseClicked(MouseEvent arg0) {
 					UIswitch_back();// TODO
+					
 				}
 			});
 			JPanel panel_2_2 = new JPanel();
@@ -639,16 +641,17 @@ public class Window {
 			getTableResult(keyword, 0);// 0: gov..data
 
 			// 统计图表
-			label_chart11.setIcon(new ImageIcon(".\\output\\site.jpg"));
-			label_chart12.setIcon(new ImageIcon(".\\output\\year_gov.jpg"));
-			label_chart21.setIcon(new ImageIcon(".\\output\\journal.jpg"));
-			label_chart22.setIcon(new ImageIcon(".\\output\\year_paper.jpg"));
-			label_chart31.setIcon(new ImageIcon(".\\output\\news_source.jpg"));
-			label_chart32.setIcon(new ImageIcon(".\\output\\year_news.jpg"));
+			//Image img = Toolkit.getDefaultToolkit().createImage(".\\output\\patent_type.jpg");
+			label_chart11.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().createImage(".\\output\\site.jpg")));
+			label_chart12.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().createImage(".\\output\\year_gov.jpg")));
+			label_chart21.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().createImage(".\\output\\journal.jpg")));
+			label_chart22.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().createImage(".\\output\\year_paper.jpg")));
+			label_chart31.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().createImage(".\\output\\news_source.jpg")));
+			label_chart32.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().createImage(".\\output\\year_news.jpg")));
 			label_chart41.setIcon(new ImageIcon(
-					".\\output\\patent_applicant.jpg"));
-			label_chart42.setIcon(new ImageIcon(".\\output\\year_patent.jpg"));
-			label_chart51.setIcon(new ImageIcon(".\\output\\patent_type.jpg"));
+					Toolkit.getDefaultToolkit().createImage(".\\output\\patent_applicant.jpg")));
+			label_chart42.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().createImage(".\\output\\year_patent.jpg")));
+			label_chart51.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().createImage(".\\output\\patent_type.jpg")));
 			this.validate();
 			// 所有数据
 			tableModel = new DefaultTableModel(resultAllSize, 7) {
