@@ -1,10 +1,13 @@
 package us.codecraft.webmagic.processor.example;
 
+import java.util.List;
+
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.webmagic.pipeline.*;
+import us.codecraft.webmagic.selector.JsonPathSelector;
 
 /**
  * @author code4crafter@gmail.com <br>
@@ -12,13 +15,16 @@ import us.codecraft.webmagic.pipeline.*;
 public class tencentComment implements PageProcessor {
 
 	public static final String URL_LIST = "https://www\\.sogou\\.com/sogou\\?site=news\\.qq\\.com&query=。*";
-
+	public static final String URL_comment="http://coral\\.qq\\.com.*";
+	public String keyword=null;
 	private Site site = Site.me()
 			// .setDomain("blog.sina.com.cn")
 			.setSleepTime(3000)
 			.setUserAgent(
 					"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_2) AppleWebKit/537.31 (KHTML, like Gecko) Chrome/26.0.1410.65 Safari/537.31");
-
+	public tencentComment(String key){
+		keyword=key;
+	}
 	@Override
 	public void process(Page page) {
 		// 列表页
@@ -30,18 +36,23 @@ public class tencentComment implements PageProcessor {
 					.links().all());
 			page.setSkip(true);
 			// 文章页
-		} else {
+		}else if(page.getUrl().regex(URL_comment).match()){ 
+			String text=page.getRawText();
+        	if(text.charAt(0)!='{')
+        		text=text.substring(text.indexOf("{"),text.length()-1);
+        	try{
+        		List<String> ids=new JsonPathSelector("$.data.commentid[*].content").selectList(text);    	
+        		page.putField("comment", ids);
+        		page.putField("other", keyword);
+        		page.putField("baseURL", page.getUrl());
+        	}catch(Exception e){
+        		System.out.println(e);
+        	}
+		}else {
 			String temp = page.getHtml().xpath("//div[@id='ArticleCnt']/tidyText()").toString();
 			if(temp==null)
 				temp=page.getHtml().xpath("//div[@class='bd']/allText()").toString();
-//			if (temp.indexOf("发布时间") != -1) {
-//				temp = temp.substring(temp.indexOf("发布时间") + 5,
-//						temp.indexOf("发布时间") + 15);
-//				page.putField("time", temp);
-//			} else {
-//				page.setSkip(true);
-//				return;
-//			}
+//			
 			page.putField("title", page.getHtml().xpath("title/text()"));
 
 			page.putField("content", temp);
@@ -57,6 +68,13 @@ public class tencentComment implements PageProcessor {
 
 			page.putField("baseURL", page.getUrl());
 			page.putField("type", "评论");
+			//添加评论的链接
+			String aa=page.getHtml().regex("cmt_id = (.*)").toString();
+			if(aa==null)
+				return;
+			aa=aa.substring(0, aa.indexOf(";"));
+			page.addTargetRequest("http://coral.qq.com/article/"+aa+"/comment?commentid=0&reqnum=50&tag=");
+			
 		}
 
 	}
@@ -67,8 +85,9 @@ public class tencentComment implements PageProcessor {
 	}
 
 	public static void main(String[] args) {
-		Spider.create(new tencentComment())
-				.addUrl("https://www.sogou.com/sogou?site=news.qq.com&query=%B9%AB%B3%B5%B8%C4%B8%EF&pid=sogou-wsse-b58ac8403eb9cf17-0004")
+		Spider.create(new tencentComment("公车改革"))
+				//.addUrl("https://www.sogou.com/sogou?site=news.qq.com&query=%B9%AB%B3%B5%B8%C4%B8%EF&pid=sogou-wsse-b58ac8403eb9cf17-0004")
+				.addUrl("http://news.qq.com/a/20151112/039018.htm")
 				.addPipeline(new MysqlPipeline())
 				.addPipeline(new ConsolePipeline())
 				.run();

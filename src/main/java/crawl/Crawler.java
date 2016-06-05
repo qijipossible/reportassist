@@ -77,9 +77,10 @@ public class Crawler {
 		if (option[3] == true) {
 			//spider5 = Spider.create(new Wanfang());
 			//spider5.addUrl("http://s.wanfangdata.com.cn/Paper.aspx?q=" + key)
-			spider5 = Spider.create(new tencentComment());
-			spider5.addUrl("https://www.sogou.com/sogou?site=news.qq.com&query="+key+"&pid=sogou-wsse-b58ac8403eb9cf17-0004")
-					.addPipeline(new ConsolePipeline())
+			spider5 = Spider.create(new tencentComment(key));
+			//spider5.addUrl("https://www.sogou.com/sogou?site=news.qq.com&query="+key+"&pid=sogou-wsse-b58ac8403eb9cf17-0004")
+			spider5.addUrl("https://www.sogou.com/sogou?site=news.qq.com&query=%E5%85%AC%E8%BD%A6%E6%94%B9%E9%9D%A9&pid=sogou-wsse-b58ac8403eb9cf17-0004&duppid=1&page=3&ie=utf8")
+			.addPipeline(new ConsolePipeline())
 					.addPipeline(new MysqlPipeline()).start();
 
 		}
