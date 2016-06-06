@@ -8,6 +8,7 @@ import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.webmagic.pipeline.*;
 import us.codecraft.webmagic.selector.JsonPathSelector;
+import us.codecraft.webmagic.selector.Selectable;
 
 /**
  * @author code4crafter@gmail.com <br>
@@ -35,7 +36,7 @@ public class tencentComment implements PageProcessor {
 			page.addTargetRequests(page.getHtml().xpath("//div[@id='pagebar_container']")
 					.links().all());
 			page.setSkip(true);
-			// 文章页
+			// js评论页
 		}else if(page.getUrl().regex(URL_comment).match()){ 
 			String text=page.getRawText();
         	if(text.charAt(0)!='{')
@@ -48,14 +49,18 @@ public class tencentComment implements PageProcessor {
         	}catch(Exception e){
         		System.out.println(e);
         	}
+        	// 文章页
 		}else {
-			String temp = page.getHtml().xpath("//div[@id='ArticleCnt']/tidyText()").toString();
-			if(temp==null)
-				temp=page.getHtml().xpath("//div[@class='bd']/allText()").toString();
-//			
+			String content="";
+			List<String> temps = page.getHtml().xpath("//div[@id='ArticleCnt']/p/allText()").all();
+			if(temps.size()==0)
+				temps=page.getHtml().xpath("//div[@id='Cnt-Main-Article-QQ']/p/allText()").all();
+			for(String temp:temps){
+				content=content+temp;
+			}
 			page.putField("title", page.getHtml().xpath("title/text()"));
 
-			page.putField("content", temp);
+			page.putField("content", content);
 
 //			temp = page.getHtml().xpath("body/tidyText()").toString();
 //			if (temp.indexOf("来源") != -1
