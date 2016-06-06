@@ -36,6 +36,7 @@ public class SQLop {
 	 */
 	public void initialize() {
 
+		new initdatabase().initialize();
 		try {
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
 		} catch (Exception e) {

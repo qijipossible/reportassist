@@ -123,7 +123,7 @@ public class Window {
 
 	/**
 	 * Launch the application.
-	 */
+	 */ 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -256,7 +256,8 @@ public class Window {
 		panel_4 = new JPanel();
 		panel_2.add(panel_4);
 
-		ck4 = new JCheckBox("论文", true);
+		//ck4 = new JCheckBox("论文", true);
+		ck4 = new JCheckBox("评论", true);
 		panel_4.add(ck4);
 
 		ck5 = new JCheckBox("专利", true);
@@ -341,6 +342,7 @@ public class Window {
 
 	public void UIswitch_search() {
 		searchPanel.setVisible(false);
+		resultPanel.validate();
 		resultPanel.setVisible(true);
 	}
 
@@ -437,13 +439,12 @@ public class Window {
 			button_report.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent arg0) {
+					new MakeReport(keyword, new NLP().summary(keyword),
+							".\\output\\report.html", new NLP().report(keyword));
 					JOptionPane.showConfirmDialog(frame,
 							"操作完成！\n存储在.\\output\\report.html文件中", "完成",
 							JOptionPane.CLOSED_OPTION,
 							JOptionPane.INFORMATION_MESSAGE);
-					new MakeReport(keyword, new NLP().summary(keyword),
-							".\\output\\report.html", new NLP().report(keyword));
-
 				}
 			});
 
@@ -454,6 +455,7 @@ public class Window {
 				@Override
 				public void mouseClicked(MouseEvent arg0) {
 					UIswitch_back();// TODO
+					
 				}
 			});
 			JPanel panel_2_2 = new JPanel();
@@ -519,7 +521,7 @@ public class Window {
 			panel_charts.add(panel_chart2);
 
 			panel_chart2.add(label_chart21);
-			panel_chart2.add(label_chart22);
+			//panel_chart2.add(label_chart22);
 
 			JPanel panel_chart3 = new JPanel();
 			panel_chart3
@@ -530,21 +532,21 @@ public class Window {
 			panel_chart3.add(label_chart31);
 			panel_chart3.add(label_chart32);
 
-			JPanel panel_chart4 = new JPanel();
-			panel_chart4
-					.setLayout(new BoxLayout(panel_chart4, BoxLayout.X_AXIS));
-			panel_charts.add(Box.createVerticalStrut(10));
-			panel_charts.add(panel_chart4);
-
-			panel_chart4.add(label_chart41);
-			panel_chart4.add(label_chart42);
-
-			JPanel panel_chart5 = new JPanel();
-			panel_chart5
-					.setLayout(new BoxLayout(panel_chart5, BoxLayout.X_AXIS));
-			panel_charts.add(panel_chart5);
-
-			panel_chart5.add(label_chart51);
+//			JPanel panel_chart4 = new JPanel();
+//			panel_chart4
+//					.setLayout(new BoxLayout(panel_chart4, BoxLayout.X_AXIS));
+//			panel_charts.add(Box.createVerticalStrut(10));
+//			panel_charts.add(panel_chart4);
+//
+//			panel_chart4.add(label_chart41);
+//			panel_chart4.add(label_chart42);
+//
+//			JPanel panel_chart5 = new JPanel();
+//			panel_chart5
+//					.setLayout(new BoxLayout(panel_chart5, BoxLayout.X_AXIS));
+//			panel_charts.add(panel_chart5);
+//
+//			panel_chart5.add(label_chart51);
 
 			panel_resultList = new JPanel();
 			panel_allTab = new JPanel();
@@ -639,16 +641,17 @@ public class Window {
 			getTableResult(keyword, 0);// 0: gov..data
 
 			// 统计图表
-			label_chart11.setIcon(new ImageIcon(".\\output\\site.jpg"));
-			label_chart12.setIcon(new ImageIcon(".\\output\\year_gov.jpg"));
-			label_chart21.setIcon(new ImageIcon(".\\output\\journal.jpg"));
-			label_chart22.setIcon(new ImageIcon(".\\output\\year_paper.jpg"));
-			label_chart31.setIcon(new ImageIcon(".\\output\\news_source.jpg"));
-			label_chart32.setIcon(new ImageIcon(".\\output\\year_news.jpg"));
-			label_chart41.setIcon(new ImageIcon(
-					".\\output\\patent_applicant.jpg"));
-			label_chart42.setIcon(new ImageIcon(".\\output\\year_patent.jpg"));
-			label_chart51.setIcon(new ImageIcon(".\\output\\patent_type.jpg"));
+			//Image img = Toolkit.getDefaultToolkit().createImage(".\\output\\patent_type.jpg");
+			label_chart11.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().createImage(".\\output\\site.jpg")));
+			label_chart12.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().createImage(".\\output\\year_gov.jpg")));
+			label_chart21.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().createImage(".\\output\\motion.jpg")));
+			//label_chart22.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().createImage(".\\output\\year_paper.jpg")));
+			label_chart31.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().createImage(".\\output\\news_source.jpg")));
+			label_chart32.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().createImage(".\\output\\year_news.jpg")));
+			//label_chart41.setIcon(new ImageIcon(
+			//		Toolkit.getDefaultToolkit().createImage(".\\output\\patent_applicant.jpg")));
+			//label_chart42.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().createImage(".\\output\\year_patent.jpg")));
+			//label_chart51.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().createImage(".\\output\\patent_type.jpg")));
 			this.validate();
 			// 所有数据
 			tableModel = new DefaultTableModel(resultAllSize, 7) {

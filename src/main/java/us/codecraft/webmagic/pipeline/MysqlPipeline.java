@@ -4,6 +4,7 @@ import us.codecraft.webmagic.ResultItems;
 import us.codecraft.webmagic.Task;
 
 import java.sql.Date;
+import java.util.List;
 import java.util.Map;
 
 import database.SQLop;
@@ -28,20 +29,22 @@ public class MysqlPipeline implements Pipeline {
 		String author = "";
 		String type = null;
 		String other=null;
+		List<String> comments=null;
 		System.out.println("get page: " + resultItems.getRequest().getUrl());
 		for (Map.Entry<String, Object> entry : resultItems.getAll().entrySet()) {
-			String temp = entry.getValue().toString();
-			if (temp == null)
+			//String temp = entry.getValue().toString();
+			if (entry.getValue().toString() == null)
 				continue;
 			if (entry.getKey().equals("title")) {
-				title = temp;
+				title = entry.getValue().toString();
 			} else if (entry.getKey().equals("content")) {
-				content = temp.replaceAll("　", "\n").replaceAll(" ", "\n")
+				content = entry.getValue().toString().replaceAll("　", "\n").replaceAll(" ", "\n")
 						.replaceAll(" ", "\n");
 			} else if (entry.getKey().equals("time")) {
 				// author = temp.substring(temp.indexOf(" ") + 1,
 				// temp.length());
 				// author.trim();
+				String temp = entry.getValue().toString();
 				temp = temp.replace("年", "-");
 				temp = temp.replace("月", "-");
 				temp = temp.replace("：", "");
@@ -64,14 +67,21 @@ public class MysqlPipeline implements Pipeline {
 			} else if (entry.getKey().equals("baseURL")) {
 				url = entry.getValue().toString();
 			} else if (entry.getKey().equals("author")) {
-				author = temp;
+				author = entry.getValue().toString();
 			} else if (entry.getKey().equals("type")){
-				type = temp;
-			}else if (entry.getKey().equals("other"))
-				other = temp;
+				type = entry.getValue().toString();
+			}else if (entry.getKey().equals("other")){
+				other = entry.getValue().toString();
+			}else if(entry.getKey().equals("comment")){
+				comments=(List<String>) entry.getValue();				
+			}
 
 		}
-		if (content != null && !content.replaceAll("\n", "").equals(""))
+		if(comments !=null){
+			for(String comment:comments){
+				database.insert(url, comment, time, comment, author, "评论（百姓）",other);
+			}
+		}else if (content != null && !content.replaceAll("\n", "").equals(""))
 			database.insert(url, content, time, title, author, type,other);
 		database.close();
 	}

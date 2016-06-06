@@ -18,6 +18,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import motion.Motion;
+
 import org.jfree.data.*;
 import org.jfree.data.category.*;
 import org.jfree.data.general.DefaultPieDataset;
@@ -52,6 +54,7 @@ public class Chart {
 	static final int PATENT_type = 7;
 	static final int PATENT_applicant = 8;
 	static final int NEWS_SOURCE = 9;
+	static final int MOTION = 10;
 
 	static final int VERTICAL = 0;
 	static final int HORIZONTAL = 1;
@@ -63,36 +66,37 @@ public class Chart {
 		keyword = kw;
 		sqlop.initialize();
 		// System.out.println(sqlop.countAllResult(keyword));
-		barChart(SITE, "site.jpg",VERTICAL);
+		barChart(SITE, "site.jpg", VERTICAL);
 		lineChart(YEAR_gov, "year_gov.jpg");
-		lineChart(YEAR_paper, "year_paper.jpg");
-		lineChart(YEAR_patent, "year_patent.jpg");
+		//lineChart(YEAR_paper, "year_paper.jpg");
+		//lineChart(YEAR_patent, "year_patent.jpg");
 		lineChart(YEAR_news, "year_news.jpg");
-		barChart(NEWS_SOURCE, "news_source.jpg",HORIZONTAL);
-		barChart(JOURNAL, "journal.jpg",HORIZONTAL);
-		pieChart(PATENT_type, "patent_type.jpg");
-		barChart(PATENT_applicant, "patent_applicant.jpg",HORIZONTAL);
+		barChart(NEWS_SOURCE, "news_source.jpg", HORIZONTAL);
+		//barChart(JOURNAL, "journal.jpg", HORIZONTAL);
+		//pieChart(PATENT_type, "patent_type.jpg");
+		//barChart(PATENT_applicant, "patent_applicant.jpg", HORIZONTAL);
+		lineChart(MOTION, "motion.jpg");
 		sqlop.close();
 	}
 
-	public void barChart(int type,String fileName,int orient) {
+	public void barChart(int type, String fileName, int orient) {
 		CategoryDataset dataset = getSiteDataset(type);
-		String head="统计";
-		if(type==SITE)
-			head="来源站点"+head;
-		if(type==JOURNAL)
-			head="发表期刊"+head;
-		if(type==PATENT_applicant)
-			head="授权单位"+head;
-		if(type==NEWS_SOURCE)
-			head="报道网站"+head;
-		JFreeChart chart=null;
-		if(orient==VERTICAL)
-			chart = ChartFactory.createBarChart3D(head, "来源", "数量",
-				dataset, PlotOrientation.VERTICAL, false, true, false);
+		String head = "统计";
+		if (type == SITE)
+			head = "来源站点" + head;
+		if (type == JOURNAL)
+			head = "发表期刊" + head;
+		if (type == PATENT_applicant)
+			head = "授权单位" + head;
+		if (type == NEWS_SOURCE)
+			head = "报道网站" + head;
+		JFreeChart chart = null;
+		if (orient == VERTICAL)
+			chart = ChartFactory.createBarChart3D(head, "来源", "数量", dataset,
+					PlotOrientation.VERTICAL, false, true, false);
 		else
-			chart = ChartFactory.createBarChart3D(head, "来源", "数量",
-					dataset, PlotOrientation.HORIZONTAL, false, true, false);
+			chart = ChartFactory.createBarChart3D(head, "来源", "数量", dataset,
+					PlotOrientation.HORIZONTAL, false, true, false);
 		// 以下部分为柱状图的美化
 		TextTitle title = chart.getTitle();
 		title.setFont(Fonts.title);// 标题字体
@@ -124,7 +128,7 @@ public class Chart {
 
 		FileOutputStream pic_out = null;
 		try {
-			pic_out = new FileOutputStream(".\\output\\"+fileName);
+			pic_out = new FileOutputStream(".\\output\\" + fileName);
 			ChartUtilities.writeChartAsJPEG(pic_out, 1.0f, chart, PIC_WIDTH,
 					PIC_LENGTH, null);
 
@@ -151,6 +155,7 @@ public class Chart {
 
 	public void lineChart(int type, String fileName) {
 		DefaultCategoryDataset dataset = getYearDataset(type);
+		JFreeChart chart;
 		String head = "统计";
 		if (type == YEAR_patent)
 			head = "发布专利" + head;
@@ -160,9 +165,14 @@ public class Chart {
 			head = "发表论文" + head;
 		if (type == YEAR_news)
 			head = "新闻报道" + head;
-		JFreeChart chart = ChartFactory.createLineChart(head, "年份", "数量",
-				dataset, PlotOrientation.VERTICAL, false, true, false);
-
+		if (type == MOTION) {
+			head = "舆情分析" + head;
+			chart = ChartFactory.createLineChart(head, "态度", "数量", dataset,
+					PlotOrientation.VERTICAL, false, true, false);
+		} else {
+			chart = ChartFactory.createLineChart(head, "年份", "数量", dataset,
+					PlotOrientation.VERTICAL, false, true, false);
+		}
 		TextTitle title = chart.getTitle();
 		title.setFont(Fonts.title);// 标题字体
 		title.setPaint(Colors.a1);
@@ -213,7 +223,14 @@ public class Chart {
 	private DefaultCategoryDataset getYearDataset(int type) {
 		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 		HashMap<String, Integer> hashmap;
-		hashmap = sqlop.count(type, keyword);
+		if (type == MOTION) {
+			hashmap =new HashMap();
+			Motion t = new Motion(keyword);
+			for (int i=0;i<=10;i++)
+				hashmap.put("级别"+i, (Integer)t.get_count()[i]);
+		} else {
+			hashmap = sqlop.count(type, keyword);
+		}
 		List<Map.Entry<String, Integer>> entry = new ArrayList<Map.Entry<String, Integer>>(
 				hashmap.entrySet());
 		Collections.sort(entry, new Comparator<Map.Entry<String, Integer>>() {
@@ -232,8 +249,8 @@ public class Chart {
 
 	public void pieChart(int type, String fileName) {
 		PieDataset dataset = getJournalDataset(type);
-		JFreeChart chart = ChartFactory.createPieChart("", dataset, false, true,
-				false);
+		JFreeChart chart = ChartFactory.createPieChart("", dataset, false,
+				true, false);
 		String head = "统计";
 		if (type == JOURNAL)
 			head = "发表期刊" + head;
@@ -245,7 +262,7 @@ public class Chart {
 		title.setPaint(Colors.a1);
 		chart.setTitle(title);
 		chart.setBorderVisible(false);
-//		chart.getLegend().setItemFont(Fonts.axis_lable);// 下方图例说明
+		// chart.getLegend().setItemFont(Fonts.axis_lable);// 下方图例说明
 		PiePlot pieplot = (PiePlot) chart.getPlot();
 		pieplot.setBackgroundPaint(Colors.a5);
 		pieplot.setOutlinePaint(Color.BLACK);
