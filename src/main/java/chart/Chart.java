@@ -68,13 +68,13 @@ public class Chart {
 		// System.out.println(sqlop.countAllResult(keyword));
 		barChart(SITE, "site.jpg", VERTICAL);
 		lineChart(YEAR_gov, "year_gov.jpg");
-		lineChart(YEAR_paper, "year_paper.jpg");
-		lineChart(YEAR_patent, "year_patent.jpg");
+		//lineChart(YEAR_paper, "year_paper.jpg");
+		//lineChart(YEAR_patent, "year_patent.jpg");
 		lineChart(YEAR_news, "year_news.jpg");
 		barChart(NEWS_SOURCE, "news_source.jpg", HORIZONTAL);
-		barChart(JOURNAL, "journal.jpg", HORIZONTAL);
-		pieChart(PATENT_type, "patent_type.jpg");
-		barChart(PATENT_applicant, "patent_applicant.jpg", HORIZONTAL);
+		//barChart(JOURNAL, "journal.jpg", HORIZONTAL);
+		//pieChart(PATENT_type, "patent_type.jpg");
+		//barChart(PATENT_applicant, "patent_applicant.jpg", HORIZONTAL);
 		lineChart(MOTION, "motion.jpg");
 		sqlop.close();
 	}
