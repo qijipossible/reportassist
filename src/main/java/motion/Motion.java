@@ -22,7 +22,7 @@ public class Motion {
 	public static double get_aver(){
 		return aver;
 	}
-	Motion(String keyword){
+	public Motion(String keyword){
 		init(keyword);
 	}
 	public void init(String keyword) {
