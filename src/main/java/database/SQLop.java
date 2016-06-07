@@ -329,6 +329,7 @@ public class SQLop {
 		final int PATENT_type=7;
 		final int PATENT_applicant=8;
 		final int NEWS_source=9;
+		final int YEAR_comments=11;
 		Statement statemt = null;
 		ResultSet results = null;
 		HashMap<String, Integer> resultMap = new HashMap<String, Integer>();
@@ -423,6 +424,16 @@ public class SQLop {
 				break;
 			case NEWS_source:
 				sql = "SELECT author,COUNT(*) FROM tmp WHERE type='新闻' GROUP BY author ORDER BY COUNT(*)";
+				results = statemt.executeQuery(sql);
+				while (results.next()) {
+					if (results.getString(1) == null)
+						continue;
+					resultMap.put(results.getString(1),
+							new Integer(results.getInt(2)));
+				}
+				break;
+			case YEAR_comments:
+				sql = "SELECT year(savetime),COUNT(*) FROM tmp WHERE type='新闻' OR type = '评论' OR  type = '评论（百姓）'GROUP BY year(savetime) ORDER BY year(savetime)";
 				results = statemt.executeQuery(sql);
 				while (results.next()) {
 					if (results.getString(1) == null)

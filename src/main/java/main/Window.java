@@ -260,8 +260,8 @@ public class Window {
 		ck4 = new JCheckBox("评论", true);
 		panel_4.add(ck4);
 
-		ck5 = new JCheckBox("专利", true);
-		panel_4.add(ck5);
+		//ck5 = new JCheckBox("专利", true);
+		//panel_4.add(ck5);
 
 		ck6 = new JCheckBox("新闻", true);
 		panel_4.add(ck6);
@@ -521,7 +521,7 @@ public class Window {
 			panel_charts.add(panel_chart2);
 
 			panel_chart2.add(label_chart21);
-			//panel_chart2.add(label_chart22);
+			panel_chart2.add(label_chart22);
 
 			JPanel panel_chart3 = new JPanel();
 			panel_chart3
@@ -645,7 +645,7 @@ public class Window {
 			label_chart11.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().createImage(".\\output\\site.jpg")));
 			label_chart12.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().createImage(".\\output\\year_gov.jpg")));
 			label_chart21.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().createImage(".\\output\\motion.jpg")));
-			//label_chart22.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().createImage(".\\output\\year_paper.jpg")));
+			label_chart22.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().createImage(".\\output\\year_comments.jpg")));
 			label_chart31.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().createImage(".\\output\\news_source.jpg")));
 			label_chart32.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().createImage(".\\output\\year_news.jpg")));
 			//label_chart41.setIcon(new ImageIcon(
