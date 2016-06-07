@@ -44,6 +44,8 @@ public class tencentComment implements PageProcessor {
         	try{
         		List<String> ids=new JsonPathSelector("$.data.commentid[*].content").selectList(text);    	
         		page.putField("comment", ids);
+        		ids=new JsonPathSelector("$.data.commentid[*].timeDifference").selectList(text);    	
+        		page.putField("times", ids);
         		page.putField("other", keyword);
         		page.putField("baseURL", page.getUrl());
         	}catch(Exception e){
@@ -92,7 +94,7 @@ public class tencentComment implements PageProcessor {
 	public static void main(String[] args) {
 		Spider.create(new tencentComment("公车改革"))
 				//.addUrl("https://www.sogou.com/sogou?site=news.qq.com&query=%B9%AB%B3%B5%B8%C4%B8%EF&pid=sogou-wsse-b58ac8403eb9cf17-0004")
-				.addUrl("http://news.qq.com/a/20151112/039018.htm")
+				.addUrl("http://coral.qq.com/article/1245699381/comment?commentid=0&reqnum=50&tag=")
 				.addPipeline(new MysqlPipeline())
 				.addPipeline(new ConsolePipeline())
 				.run();

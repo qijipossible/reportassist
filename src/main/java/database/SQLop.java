@@ -74,6 +74,7 @@ public class SQLop {
 		final int GOV=0;
 		final int PA=1;
 		final int NEWS=2;
+		final int CONT=3;
 		List<Map<String, String>> result = new ArrayList<Map<String,String>>();
 		String sql = "SELECT * FROM webpage WHERE (content LIKE '%"
 				+ keyword + "%' OR title LIKE'%" + keyword + "%')";
@@ -83,6 +84,8 @@ public class SQLop {
 			sql=sql+" AND (type='论文' OR type='专利') order by savetime desc";
 		else if(searchType==NEWS)
 			sql=sql+"AND type='新闻' order by savetime desc";
+		else if(searchType==CONT)
+			sql=sql+"AND type='评论' order by savetime desc";
 		try {
 			statemt = conn.createStatement();
 			results = statemt.executeQuery(sql);
