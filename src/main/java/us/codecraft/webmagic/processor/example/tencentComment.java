@@ -59,19 +59,17 @@ public class tencentComment implements PageProcessor {
 			String content = "";
 			List<String> temps = page.getHtml()
 					.xpath("//div[@id='ArticleCnt']/p/allText()").all();
-			page.putField("time",
-					page.getHtml().xpath("//div[@id='ArticleFrom']/text()"));
 			if (temps.size() == 0) {
 				temps = page.getHtml()
 						.xpath("//div[@id='Cnt-Main-Article-QQ']/p/allText()")
 						.all();
-				page.putField("time", page.getHtml().xpath("//span[@class='article-time']/text()"));
 			}
 			for (String temp : temps) {
 				content = content + temp;
 			}
 			page.putField("title", page.getHtml().xpath("title/text()"));
-
+			String time=page.getUrl().toString();
+			page.putField("time", time.substring(time.indexOf("a/")+2, time.indexOf("/", time.indexOf("a/")+2)));
 			page.putField("content", content);
 
 			// temp = page.getHtml().xpath("body/tidyText()").toString();
@@ -104,8 +102,8 @@ public class tencentComment implements PageProcessor {
 
 	public static void main(String[] args) {
 		Spider.create(new tencentComment("公车改革"))
-				.addUrl("https://www.sogou.com/sogou?site=news.qq.com&query=%B9%AB%B3%B5%B8%C4%B8%EF&pid=sogou-wsse-b58ac8403eb9cf17-0004")
-				//.addUrl("http://news.qq.com/a/20151112/039018.htm")
+				//.addUrl("https://www.sogou.com/sogou?site=news.qq.com&query=%B9%AB%B3%B5%B8%C4%B8%EF&pid=sogou-wsse-b58ac8403eb9cf17-0004")
+				.addUrl("http://news.qq.com/a/20101205/000408.htm")
 				.addPipeline(new MysqlPipeline())
 				.addPipeline(new ConsolePipeline()).run();
 	}
