@@ -44,6 +44,7 @@ public class MysqlPipeline implements Pipeline {
 						.replaceAll(" ", "\n").replaceAll(" ", "\n");
 			} else if (entry.getKey().equals("time")) {
 				String temp = entry.getValue().toString();
+				temp=temp.trim().replace(" ", "").replace(" ", "").replace("　", "");
 				temp = temp.replace("年", "-");
 				temp = temp.replace("月", "-");
 				temp = temp.replace("：", "");
@@ -81,6 +82,7 @@ public class MysqlPipeline implements Pipeline {
 				List<String> temps = (List<String>) entry.getValue();
 				times=new ArrayList<Date>();
 				for (String temp : temps) {
+					temp=temp.trim().replace(" ", "").replace(" ", "");
 					temp = temp.replace("年", "-");
 					temp = temp.replace("月", "-");
 					temp = temp.replace("：", "");
