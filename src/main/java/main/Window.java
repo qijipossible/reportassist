@@ -465,7 +465,7 @@ public class Window {
 				options[1] = ck2.isSelected();
 				options[2] = ck3.isSelected();
 				options[3] = ck4.isSelected();
-				options[4] = ck5.isSelected();
+				//options[4] = ck5.isSelected();
 				options[5] = ck6.isSelected();
 				if (isRunning) {
 					crawler.stop();
