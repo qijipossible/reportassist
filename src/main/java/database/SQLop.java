@@ -36,6 +36,7 @@ public class SQLop {
 	 */
 	public void initialize() {
 
+		new initdatabase().initialize();
 		try {
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
 		} catch (Exception e) {
@@ -77,6 +78,7 @@ public class SQLop {
 		final int GOV=0;
 		final int PA=1;
 		final int NEWS=2;
+		final int CONT=3;
 		List<Map<String, String>> result = new ArrayList<Map<String,String>>();
 		String sql = "SELECT * FROM webpage WHERE (content LIKE '%"
 				+ keyword + "%' OR title LIKE'%" + keyword + "%')";
@@ -86,6 +88,8 @@ public class SQLop {
 			sql=sql+" AND (type='论文' OR type='专利') order by savetime desc";
 		else if(searchType==NEWS)
 			sql=sql+"AND type='新闻' order by savetime desc";
+		else if(searchType==CONT)
+			sql=sql+"AND type='评论' order by savetime desc";
 		try {
 			statemt = conn.createStatement();
 			results = statemt.executeQuery(sql);
@@ -329,6 +333,7 @@ public class SQLop {
 		final int PATENT_type=7;
 		final int PATENT_applicant=8;
 		final int NEWS_source=9;
+		final int YEAR_comments=11;
 		Statement statemt = null;
 		ResultSet results = null;
 		HashMap<String, Integer> resultMap = new HashMap<String, Integer>();
@@ -423,6 +428,16 @@ public class SQLop {
 				break;
 			case NEWS_source:
 				sql = "SELECT author,COUNT(*) FROM tmp WHERE type='新闻' GROUP BY author ORDER BY COUNT(*)";
+				results = statemt.executeQuery(sql);
+				while (results.next()) {
+					if (results.getString(1) == null)
+						continue;
+					resultMap.put(results.getString(1),
+							new Integer(results.getInt(2)));
+				}
+				break;
+			case YEAR_comments:
+				sql = "SELECT year(savetime),COUNT(*) FROM tmp WHERE type='新闻' OR type = '评论' OR  type = '评论（百姓）'GROUP BY year(savetime) ORDER BY year(savetime)";
 				results = statemt.executeQuery(sql);
 				while (results.next()) {
 					if (results.getString(1) == null)

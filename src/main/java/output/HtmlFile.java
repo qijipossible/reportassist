@@ -72,7 +72,7 @@ public class HtmlFile {
 			if (piece > infor.size())
 				piece = infor.size();
 			writer.write("</div><h1><font face=\"微软雅黑\"size=\"5\">二、政府公文摘要：</font></h1>");
-			writeSummery(summary, GOV);
+			//writeSummery(summary, GOV);
 			writer.write("<p><font face=\"微软雅黑\"size=\"3\">以下为近几年相关政策：</font></p>");
 			for (int i = 0; i < piece; i++) {
 				writer.write("<p>");

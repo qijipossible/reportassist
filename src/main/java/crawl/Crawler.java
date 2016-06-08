@@ -1,5 +1,8 @@
 package crawl;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.pipeline.ConsolePipeline;
 import us.codecraft.webmagic.pipeline.MysqlPipeline;
@@ -10,6 +13,7 @@ import us.codecraft.webmagic.processor.example.Patent;
 import us.codecraft.webmagic.processor.example.Wanfang;
 import us.codecraft.webmagic.processor.example.chinanews;
 import us.codecraft.webmagic.processor.example.sdpc;
+import us.codecraft.webmagic.processor.example.tencentComment;
 
 public class Crawler {
 	String key;
@@ -30,7 +34,7 @@ public class Crawler {
 	public Crawler(String key, boolean[] option) {
 		this.key = key;
 		this.option = option;
-		//start();
+		start();
 	}
 
 	public void start() {
@@ -71,28 +75,37 @@ public class Crawler {
 
 		}
 		if (option[3] == true) {
-			spider5 = Spider.create(new Wanfang());
-			spider5.addUrl("http://s.wanfangdata.com.cn/Paper.aspx?q=" + key)
-					.addPipeline(new ConsolePipeline())
+			//spider5 = Spider.create(new Wanfang());
+			//spider5.addUrl("http://s.wanfangdata.com.cn/Paper.aspx?q=" + key)
+			spider5 = Spider.create(new tencentComment(key));
+			spider5.addUrl("https://www.sogou.com/sogou?site=news.qq.com&query="+key+"&pid=sogou-wsse-b58ac8403eb9cf17-0004")
+			.addPipeline(new ConsolePipeline())
 					.addPipeline(new MysqlPipeline()).start();
 
 		}
 		if (option[4] == true) {
 			spider6 = Spider.create(new Patent("实用新型"));
+			String urlStr=null;
+			try {
+				urlStr = URLEncoder.encode(key, "UTF-8");
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			spider6.addUrl(
-					"http://www.soopat.com/Home/Result?SearchWord=" + key
+					"http://www2.soopat.com/Home/Result?SearchWord=" + urlStr
 							+ "&PatentIndex=0&Valid=2&SYXX=Y")
 					.addPipeline(new ConsolePipeline())
 					.addPipeline(new MysqlPipeline()).thread(1).start();
 			spider7 = Spider.create(new Patent("外观设计"));
 			spider7.addUrl(
-					"http://www.soopat.com/Home/Result?SearchWord=" + key
+					"http://www2.soopat.com/Home/Result?SearchWord=" + urlStr
 							+ "&PatentIndex=0&Valid=2&WGZL=Y")
 					.addPipeline(new ConsolePipeline())
 					.addPipeline(new MysqlPipeline()).thread(1).start();
 			spider8 = Spider.create(new Patent("发明"));
 			spider8.addUrl(
-					"http://www.soopat.com/Home/Result?SearchWord=" + key
+					"http://www2.soopat.com/Home/Result?SearchWord=" + urlStr
 							+ "&PatentIndex=01&Valid=2&FMZL=Y")
 					.addPipeline(new ConsolePipeline())
 					.addPipeline(new MysqlPipeline()).thread(1).start();

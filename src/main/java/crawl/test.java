@@ -2,6 +2,8 @@ package crawl;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 import javax.swing.*;
 
@@ -37,7 +39,15 @@ public class test extends JFrame implements ActionListener {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		new test();
+		//new test();
+		 String urlStr=null;
+			try {
+				urlStr = URLEncoder.encode("信息系统", "UTF-8");
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			 System.out.println(urlStr);
 
 	}
 
