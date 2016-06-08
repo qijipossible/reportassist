@@ -55,6 +55,7 @@ public class Chart {
 	static final int PATENT_applicant = 8;
 	static final int NEWS_SOURCE = 9;
 	static final int MOTION = 10;
+	static final int  YEAR_comments= 11;
 
 	static final int VERTICAL = 0;
 	static final int HORIZONTAL = 1;
@@ -76,6 +77,7 @@ public class Chart {
 		//pieChart(PATENT_type, "patent_type.jpg");
 		//barChart(PATENT_applicant, "patent_applicant.jpg", HORIZONTAL);
 		lineChart(MOTION, "motion.jpg");
+		lineChart(YEAR_comments, "year_comments.jpg");
 		sqlop.close();
 	}
 
@@ -165,6 +167,8 @@ public class Chart {
 			head = "发表论文" + head;
 		if (type == YEAR_news)
 			head = "新闻报道" + head;
+		if (type == YEAR_comments)
+			head = "关注热度" + head;
 		if (type == MOTION) {
 			head = "舆情分析" + head;
 			chart = ChartFactory.createLineChart(head, "态度", "数量", dataset,
