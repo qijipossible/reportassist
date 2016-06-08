@@ -74,10 +74,13 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 import javax.swing.text.StyledDocument;
 
+import org.omg.CORBA.PRIVATE_MEMBER;
+
 import output.MakeReport;
 import chart.Chart;
 import main.ResultPanel1.ResultTableFiller;
 import database.SQLop;
+import format.Fonts;
 
 public class Window {
 
@@ -121,9 +124,6 @@ public class Window {
 	private HistoricRecords history;
 	private AutoCompleteComponet auto;
 
-	/**
-	 * Launch the application.
-	 */ 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -137,9 +137,6 @@ public class Window {
 		});
 	}
 
-	/**
-	 * Create the application.
-	 */
 	public Window() {
 		initialize();
 		actionListner();
@@ -150,22 +147,184 @@ public class Window {
 	 */
 	private void initialize() {
 
+		//设置窗口大小
 		Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
 		int screenHeight = dimension.height;
 		int glueHeight = screenHeight / 2 - 100;
 
+		//主窗口
 		frame = new JFrame();
-		frame.setTitle("智能信息搜索管理系统");
-		frame.setBackground(Color.WHITE);
+		frame.setTitle("智能信息搜索管理系统");//窗口标题
+		frame.setBackground(Color.WHITE);//背景颜色
 		frame.setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);// 最大化窗口
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//退出按钮动作
 		frame.getContentPane().setLayout(
 				new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS));
 
+		//新架构总面板
+		JPanel panel_frame = new JPanel();
+		panel_frame.setLayout(new BorderLayout(0, 0));
+		frame.getContentPane().add(panel_frame);
+		
+		
+		//页面上部面板
+		JPanel panel_north = new JPanel();
+		panel_north.setLayout(new BoxLayout(panel_north, BoxLayout.Y_AXIS));
+		panel_frame.add(panel_north, BorderLayout.NORTH);
+		
+		//标题
+		JPanel panel_title = new JPanel();
+		panel_title.setLayout(new BorderLayout(0, 0));
+		panel_north.add(panel_title);		
+		JLabel label_title = new JLabel("智能信息搜索管理系统", JLabel.CENTER);
+		label_title.setFont(Fonts.title);
+		panel_title.add(label_title,BorderLayout.CENTER);
+		
+		//搜索栏
+		JPanel panel_search = new JPanel();
+		panel_search.setLayout(new BorderLayout(0, 0));
+		panel_north.add(panel_search);
+		
+		JPanel panel_searchbar = new JPanel();
+		panel_searchbar.setLayout(new BoxLayout(panel_searchbar, BoxLayout.X_AXIS));
+		panel_search.add(panel_searchbar,BorderLayout.EAST);
+		
+		final JTextField textField_searchBar = new JTextField();
+		textField_searchBar.setFont(Fonts.searchBar);
+		textField_searchBar.setToolTipText("请键入您想要搜索的关键词");
+		textField_searchBar.setColumns(30);
+		panel_searchbar.add(textField_searchBar);
+		
+		//TODO
+		JProgressBar progressBar = new JProgressBar();
+		progressBar.setStringPainted(true);
+		progressBar.setString("正在搜索...");
+		progressBar.setFont(new Font("宋体", Font.PLAIN, 15));
+		progressBar.setVisible(false);
+		progressBar.setIndeterminate(true);
+
+		/*TODO
+		AutoCompleteComponet autoComplete = new AutoCompleteComponet();
+		HistoricRecords historicRecords = new HistoricRecords();
+		autoComplete.updateHistory(this.getItems());
+		autoComplete.setupAutoComplete(textField_searchBar);
+		*/
+
+		final JButton button_search = new JButton("搜索");
+		button_search.setFont(Fonts.searchButton);
+		panel_searchbar.add(button_search);
+		JButton button_show = new JButton("显示结果");
+		button_show.setFont(Fonts.searchButton);
+		panel_searchbar.add(button_show);
+		button_search.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				keyword = textField.getText();
+				if (keyword.trim().equals("")) {
+					JOptionPane.showConfirmDialog(frame, "请在文本框中输入关键词", "提示",
+							JOptionPane.CLOSED_OPTION,
+							JOptionPane.INFORMATION_MESSAGE);
+					return;
+				}
+				boolean[] options = {false,false,false,true,false,false};
+				if (isRunning) {
+					crawler.stop();
+				} else {
+					crawler = new Crawler(keyword, options);
+				}
+				stateChange(button_search, textField_searchBar);
+			}
+		});
+		button_show.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				keyword = textField_searchBar.getText();
+				if (keyword.trim().equals("")) {
+					JOptionPane.showConfirmDialog(frame, "请在文本框中输入关键词", "提示",
+							JOptionPane.CLOSED_OPTION,
+							JOptionPane.INFORMATION_MESSAGE);
+					return;
+				}
+				resultPanel.getResult(keyword);
+				UIswitch_search();
+			}
+		});
+		
+		//页面中央面板
+		JPanel panel_center = new JPanel();
+		panel_center.setLayout(new BorderLayout(0, 0));
+		panel_frame.add(panel_center, BorderLayout.CENTER);
+		
+		JTabbedPane tabPanel = new JTabbedPane(JTabbedPane.TOP);
+		//TODO panel_center.add(tabPanel);
+		
+		//第一页
+		JPanel panel_tab1 = new JPanel();
+		panel_tab1.setLayout(new BorderLayout(0, 0));
+		tabPanel.addTab("舆情分析", null, panel_tab1, null);
+		
+		JPanel panel_chartsCenter = new JPanel();
+		panel_chartsCenter.setLayout(new BorderLayout(0, 0));
+		JScrollPane scroll_tab1 = new JScrollPane(panel_chartsCenter);
+		panel_tab1.add(scroll_tab1,BorderLayout.CENTER);
+		JPanel panel_charts = new JPanel();
+		panel_charts.setLayout(new BoxLayout(panel_charts, BoxLayout.Y_AXIS));
+		panel_chartsCenter.add(panel_charts,BorderLayout.CENTER);
+
+		JPanel panel_chart_row0 = new JPanel();
+		panel_chart_row0.setLayout(new BoxLayout(panel_chart_row0, BoxLayout.Y_AXIS));
+		panel_charts.add(panel_chart_row0);
+
+		JLabel label_chart00 = new JLabel("舆论评分");
+		label_chart00.setFont(Fonts.opinion_title);
+		JLabel label_chart01 = new JLabel(Double.toString(motion.Motion.get_aver()));
+		label_chart01.setFont(Fonts.opinion_index);
+		panel_chart_row0.add(label_chart00);
+		panel_chart_row0.add(label_chart01);
+		
+		JLabel label_chart11 = new JLabel();
+		JLabel label_chart12 = new JLabel();
+		JLabel label_chart21 = new JLabel();
+		JLabel label_chart22 = new JLabel();
+		JLabel label_chart31 = new JLabel();
+		JLabel label_chart32 = new JLabel();
+		JLabel label_chart41 = new JLabel();
+		JLabel label_chart42 = new JLabel();
+		JLabel label_chart51 = new JLabel();
+
+		
+		JPanel panel_chart1 = new JPanel();
+		panel_chart1
+				.setLayout(new BoxLayout(panel_chart1, BoxLayout.X_AXIS));
+		panel_charts.add(panel_chart1);
+
+		panel_chart1.add(label_chart11);
+		panel_chart1.add(label_chart12);
+
+		JPanel panel_chart2 = new JPanel();
+		panel_chart2
+				.setLayout(new BoxLayout(panel_chart2, BoxLayout.X_AXIS));
+		panel_charts.add(Box.createVerticalStrut(10));
+		panel_charts.add(panel_chart2);
+
+		panel_chart2.add(label_chart21);
+		//panel_chart2.add(label_chart22);
+
+		JPanel panel_chart3 = new JPanel();
+		panel_chart3
+				.setLayout(new BoxLayout(panel_chart3, BoxLayout.X_AXIS));
+		panel_charts.add(Box.createVerticalStrut(10));
+		panel_charts.add(panel_chart3);
+
+		panel_chart3.add(label_chart31);
+		panel_chart3.add(label_chart32);
+		
+		
+		
 		//搜索面板
 		searchPanel = new JPanel();
 		frame.getContentPane().add(searchPanel);
-		searchPanel.setVisible(true);
+		searchPanel.setVisible(false);
 		searchPanel.setLayout(new BoxLayout(searchPanel, BoxLayout.Y_AXIS));
 
 		verticalGlue = Box.createVerticalGlue();
@@ -189,7 +348,7 @@ public class Window {
 		lable_logo.setHorizontalAlignment(JLabel.CENTER);
 
 		label_1 = new JLabel("智能信息搜索管理系统", JLabel.CENTER);
-		label_1.setFont(new Font("微软雅黑", Font.PLAIN, 40));
+		label_1.setFont(Fonts.title);
 		panel_6.add(label_1, BorderLayout.SOUTH);
 		searchPanel.add(panel);
 
@@ -210,14 +369,6 @@ public class Window {
 		panel_5.add(textField);
 		textField.setToolTipText("请键入您想要搜索的关键词");
 		textField.setColumns(30);
-
-		progressBar = new JProgressBar();
-		panel_5.add(progressBar);
-		progressBar.setStringPainted(true);
-		progressBar.setString("正在搜索...");
-		progressBar.setFont(new Font("宋体", Font.PLAIN, 15));
-		progressBar.setVisible(false);
-		progressBar.setIndeterminate(true);
 
 		auto = new AutoCompleteComponet();
 		history = new HistoricRecords();
@@ -282,8 +433,8 @@ public class Window {
 		panelSign.add(lblNewLabel, BorderLayout.EAST);
 
 		resultPanel = new ResultPanel();
-		frame.getContentPane().add(resultPanel);
-		resultPanel.setVisible(false);
+		panel_center.add(resultPanel,BorderLayout.NORTH);
+		resultPanel.setVisible(true);
 	}
 
 	public ArrayList<String> getItems() {
@@ -321,7 +472,7 @@ public class Window {
 				} else {
 					crawler = new Crawler(keyword, options);
 				}
-				stateChange();
+				//TODO stateChange();
 			}
 		});
 
@@ -352,26 +503,26 @@ public class Window {
 		searchPanel.setVisible(true);
 	}
 
-	private void stateChange() {
+	private void stateChange(JButton button, JTextField textField) {
 
 		isRunning = !isRunning;
 		if (isRunning) {
 			button.setText("停止");
-			textField.setVisible(false);
-			progressBar.setString("正在搜索: " + keyword);
-			progressBar.setVisible(true);
+			//textField.setVisible(false);
+			//progressBar.setString("正在搜索: " + keyword);
+			//progressBar.setVisible(true);
 
 		} else {
 			button.setText("搜索");
-			progressBar.setVisible(false);
-			textField.setVisible(true);
+			//progressBar.setVisible(false);
+			//textField.setVisible(true);
 
 		}
 	}
 
 	public class ResultPanel extends JPanel implements ActionListener {
-		private JTable tableResult;
-		private JTable tableAll;
+		private JTable table_result;
+		private JTable table_all;
 		private StyledDocument styleModel;
 		private JTextPane textPane;
 		private JLabel text;
@@ -406,6 +557,7 @@ public class Window {
 
 		// SQLop database = new SQLop();
 
+		//初始化，加载界面
 		public ResultPanel() {
 
 			iniStyleModel();
@@ -416,7 +568,7 @@ public class Window {
 			panel_4.setLayout(new BorderLayout(0, 0));
 
 			JPanel panel_2 = new JPanel();
-			panel_4.add(panel_2, BorderLayout.NORTH);
+			//TODO panel_4.add(panel_2, BorderLayout.NORTH);
 			panel_2.setLayout(new BorderLayout(0, 0));
 
 			JPanel panel_2_1 = new JPanel();
@@ -509,14 +661,13 @@ public class Window {
 			label_chart51 = new JLabel();
 
 			JPanel panel_chart0 = new JPanel();
-			panel_chart0
-					.setLayout(new BoxLayout(panel_chart0, BoxLayout.Y_AXIS));
+			panel_chart0.setLayout(new BoxLayout(panel_chart0, BoxLayout.Y_AXIS));
 			panel_charts.add(panel_chart0);
 
 			JLabel label_chart00 = new JLabel("舆论评分");
-			label_chart00.setFont(new Font("微软雅黑", Font.PLAIN, 40));
+			label_chart00.setFont(new Font("微软雅黑", Font.PLAIN, 25));
 			JLabel label_chart01 = new JLabel(Double.toString(motion.Motion.get_aver()));
-			label_chart01.setFont(new Font("微软雅黑", Font.PLAIN, 100));
+			label_chart01.setFont(new Font("微软雅黑", Font.PLAIN, 60));
 
 			panel_chart0.add(label_chart00);
 			panel_chart0.add(label_chart12);
@@ -559,22 +710,24 @@ public class Window {
 			button_pa.addActionListener(this);
 		}
 
+		//调整表格行高
 		private void updateRowHeights() {
-			for (int row = 0; row < tableResult.getRowCount(); row++) {
-				int rowHeight = tableResult.getRowHeight();
+			for (int row = 0; row < table_result.getRowCount(); row++) {
+				int rowHeight = table_result.getRowHeight();
 
-				for (int column = 0; column < tableResult.getColumnCount(); column++) {
-					Component comp = tableResult.prepareRenderer(
-							tableResult.getCellRenderer(row, column), row,
+				for (int column = 0; column < table_result.getColumnCount(); column++) {
+					Component comp = table_result.prepareRenderer(
+							table_result.getCellRenderer(row, column), row,
 							column);
 					rowHeight = Math.max(rowHeight,
 							comp.getPreferredSize().height);
 				}
 
-				tableResult.setRowHeight(row, rowHeight);
+				table_result.setRowHeight(row, rowHeight);
 			}
 		}
 
+		//建立表格，设置属性，并添加进面板，但在这里并不填充内容
 		private void getTableResult(String keyword, int type) {
 			sqlop = new SQLop();
 			sqlop.initialize();
@@ -582,22 +735,22 @@ public class Window {
 			sqlop.close();
 
 			resultSize = result.size();
-			tableResult = new JTable(new DefaultTableModel(resultSize, 1) {
+			table_result = new JTable(new DefaultTableModel(resultSize, 1) {
 				@Override
 				public boolean isCellEditable(int arg0, int arg1) {
 					return false;
 				}
 			});
-			tableResult.getTableHeader().setVisible(false);
-			tableResult.setDefaultRenderer(Object.class,
+			table_result.getTableHeader().setVisible(false);
+			table_result.setDefaultRenderer(Object.class,
 					new ResultTableFiller());
 
 			this.updateRowHeights();
-			tableResult.addMouseListener(new MouseAdapter() {
+			table_result.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(java.awt.event.MouseEvent evt) {
-					int row = tableResult.rowAtPoint(evt.getPoint());
-					int col = tableResult.columnAtPoint(evt.getPoint());
+					int row = table_result.rowAtPoint(evt.getPoint());
+					int col = table_result.columnAtPoint(evt.getPoint());
 					if (row >= 0 && col >= 0) {
 						String url = result.get(row).get("url");
 						// new DetailFrame(NLP.stringsummary(article), article)
@@ -622,10 +775,11 @@ public class Window {
 			});
 
 			panel_resultList.setLayout(new BorderLayout(0, 0));
-			JScrollPane scrollPane = new JScrollPane(tableResult);
+			JScrollPane scrollPane = new JScrollPane(table_result);
 			panel_resultList.add(scrollPane, BorderLayout.CENTER);
 		}
 
+		//加载关键词相关信息（主要）
 		public void getResult(String keyword) {
 			new Chart(keyword);
 			this.keyword = keyword;
@@ -699,8 +853,8 @@ public class Window {
 				}
 			}
 
-			tableAll = new JTable(tableModel);
-			tableAll.getColumnModel().getColumn(0).setPreferredWidth(3);
+			table_all = new JTable(tableModel);
+			table_all.getColumnModel().getColumn(0).setPreferredWidth(3);
 			// tableAll.getColumnModel().getColumn(1).setPreferredWidth(30);
 			// tableAll.getColumnModel().getColumn(2).setPreferredWidth(20);
 			// tableAll.getColumnModel().getColumn(3).setPreferredWidth(20);
@@ -721,17 +875,17 @@ public class Window {
 							JOptionPane.INFORMATION_MESSAGE);
 					if (result == JOptionPane.YES_OPTION) {
 						String deleteTitle = tableModel.getValueAt(
-								tableAll.getSelectedRow(), 1).toString();
+								table_all.getSelectedRow(), 1).toString();
 						sqlop = new SQLop();
 						sqlop.initialize();
 						sqlop.removeRecord(deleteTitle);
 						sqlop.close();
-						tableModel.removeRow(tableAll.getSelectedRow());
+						tableModel.removeRow(table_all.getSelectedRow());
 					}
 				}
 			});
 
-			tableAll.addMouseListener(new MouseAdapter() {
+			table_all.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					if (e.getButton() == MouseEvent.BUTTON1) {
@@ -747,11 +901,12 @@ public class Window {
 					}
 				}
 			});
-			JScrollPane scrollPane_all = new JScrollPane(tableAll);
+			JScrollPane scrollPane_all = new JScrollPane(table_all);
 			panel_allTab.add(scrollPane_all, BorderLayout.CENTER);
 
 		}
 
+		//填充表格内容
 		class ResultTableFiller implements TableCellRenderer {
 
 			@Override
@@ -781,11 +936,13 @@ public class Window {
 
 		}
 
+		//表格格式
 		public StyledDocument getNewStyledDocument() {
 
 			return new DefaultStyledDocument();
 		}
 
+		//用于填充表格时添加字段
 		public StyledDocument insertDoc(StyledDocument styledDoc,
 				String content, String currentStyle) {
 			if (content == null)
@@ -800,6 +957,7 @@ public class Window {
 			return styledDoc;
 		}
 
+		//用于编辑表格字段的格式
 		private void iniStyleModel() {
 			styleModel = new DefaultStyledDocument();
 			createStyle("STYLE_url", styleModel, 16, false, false, true,
@@ -816,6 +974,7 @@ public class Window {
 					Color.BLACK, Color.WHITE, "宋体");
 		}
 
+		//用于创建表格字段的格式
 		public void createStyle(String style, StyledDocument doc, int size,
 				boolean bold, boolean italic, boolean underline, Color color,
 				Color bcolor, String fontName) {
@@ -836,6 +995,7 @@ public class Window {
 			StyleConstants.setBackground(s, bcolor);// 背景颜色
 		}
 
+		//筛选按钮的响应
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == button_gov) {
