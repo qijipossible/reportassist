@@ -433,7 +433,7 @@ public class SQLop {
 				}
 				break;
 			case YEAR_comments:
-				sql = "SELECT year(savetime),COUNT(*) FROM tmp WHERE type='新闻' OR type = '评论' OR  type = '评论（百姓）'GROUP BY year(savetime) ORDER BY year(savetime)";
+				sql = "SELECT year(savetime),COUNT(*) FROM webpage WHERE type='新闻' OR type = '评论' OR  type = '评论（百姓）'GROUP BY year(savetime) ORDER BY year(savetime)";
 				results = statemt.executeQuery(sql);
 				while (results.next()) {
 					if (results.getString(1) == null)
