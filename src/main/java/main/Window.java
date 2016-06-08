@@ -162,6 +162,7 @@ public class Window {
 		frame.getContentPane().setLayout(
 				new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS));
 
+		//搜索面板
 		searchPanel = new JPanel();
 		frame.getContentPane().add(searchPanel);
 		searchPanel.setVisible(true);
@@ -244,13 +245,13 @@ public class Window {
 		panel_3 = new JPanel();
 		panel_2.add(panel_3);
 
-		ck1 = new JCheckBox("科技部", true);
+		ck1 = new JCheckBox("科技部", false);
 		panel_3.add(ck1);
 
-		ck2 = new JCheckBox("工信部", true);
+		ck2 = new JCheckBox("工信部", false);
 		panel_3.add(ck2);
 
-		ck3 = new JCheckBox("发改委", true);
+		ck3 = new JCheckBox("发改委", false);
 		panel_3.add(ck3);
 
 		panel_4 = new JPanel();
@@ -260,10 +261,10 @@ public class Window {
 		ck4 = new JCheckBox("评论", true);
 		panel_4.add(ck4);
 
-		ck5 = new JCheckBox("专利", true);
+		ck5 = new JCheckBox("专利", false);
 		panel_4.add(ck5);
 
-		ck6 = new JCheckBox("新闻", true);
+		ck6 = new JCheckBox("新闻", false);
 		panel_4.add(ck6);
 
 		verticalGlue_5 = Box.createVerticalGlue();
@@ -469,8 +470,9 @@ public class Window {
 			tabbedPane.addTab("搜索结果", null, panel_resultTab, null);
 			panel_resultTab.setLayout(new BorderLayout(0, 0));
 
+			//筛选选项
 			JPanel panel_up = new JPanel();
-			panel_up.setVisible(true);
+			panel_up.setVisible(false);//筛选部分不显示
 			panel_resultTab.add(panel_up, BorderLayout.NORTH);
 			panel_up.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 
@@ -506,6 +508,19 @@ public class Window {
 			label_chart42 = new JLabel();
 			label_chart51 = new JLabel();
 
+			JPanel panel_chart0 = new JPanel();
+			panel_chart0
+					.setLayout(new BoxLayout(panel_chart0, BoxLayout.Y_AXIS));
+			panel_charts.add(panel_chart0);
+
+			JLabel label_chart00 = new JLabel("舆论评分");
+			label_chart00.setFont(new Font("微软雅黑", Font.PLAIN, 40));
+			JLabel label_chart01 = new JLabel(Double.toString(motion.Motion.get_aver()));
+			label_chart01.setFont(new Font("微软雅黑", Font.PLAIN, 100));
+
+			panel_chart0.add(label_chart00);
+			panel_chart0.add(label_chart12);
+			
 			JPanel panel_chart1 = new JPanel();
 			panel_chart1
 					.setLayout(new BoxLayout(panel_chart1, BoxLayout.X_AXIS));
@@ -531,22 +546,6 @@ public class Window {
 
 			panel_chart3.add(label_chart31);
 			panel_chart3.add(label_chart32);
-
-//			JPanel panel_chart4 = new JPanel();
-//			panel_chart4
-//					.setLayout(new BoxLayout(panel_chart4, BoxLayout.X_AXIS));
-//			panel_charts.add(Box.createVerticalStrut(10));
-//			panel_charts.add(panel_chart4);
-//
-//			panel_chart4.add(label_chart41);
-//			panel_chart4.add(label_chart42);
-//
-//			JPanel panel_chart5 = new JPanel();
-//			panel_chart5
-//					.setLayout(new BoxLayout(panel_chart5, BoxLayout.X_AXIS));
-//			panel_charts.add(panel_chart5);
-//
-//			panel_chart5.add(label_chart51);
 
 			panel_resultList = new JPanel();
 			panel_allTab = new JPanel();
@@ -653,6 +652,7 @@ public class Window {
 			//label_chart42.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().createImage(".\\output\\year_patent.jpg")));
 			//label_chart51.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().createImage(".\\output\\patent_type.jpg")));
 			this.validate();
+			
 			// 所有数据
 			tableModel = new DefaultTableModel(resultAllSize, 7) {
 				@Override
@@ -759,20 +759,20 @@ public class Window {
 					Object arg1, boolean arg2, boolean arg3, int row, int column) {
 				textPane = new JTextPane();
 				StyledDocument sd = getNewStyledDocument();
-				insertDoc(sd, result.get(row).get("type"), "STYLE_type");
+				insertDoc(sd, result.get(row).get("author"), "STYLE_type");
 				insertDoc(sd, "  " + result.get(row).get("title").toString()
 						+ "\n", "STYLE_title");
 				if (result.get(row).get("time") != null)
 					insertDoc(sd,
 							result.get(row).get("time").toString() + "\t",
 							"STYLE_author");
-				insertDoc(sd, result.get(row).get("author").toString() + "\n",
-						"STYLE_author");
+				//insertDoc(sd, result.get(row).get("author").toString() + "\n", "STYLE_author");
 				insertDoc(sd, result.get(row).get("url").toString() + "\n",
 						"STYLE_url");
+				new NLP();
 				insertDoc(
 						sd,
-						new NLP().stringsummary(result.get(row).get("content")
+						NLP.stringsummary(result.get(row).get("content")
 								.toString())
 								+ "\n", "STYLE_text");
 				textPane.setStyledDocument(sd);
