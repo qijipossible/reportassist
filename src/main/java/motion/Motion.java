@@ -11,29 +11,29 @@ import database.SQLop;
 public class Motion {
 	private static int[] count = new int[11];
 	private static double aver;
-	private static double sum = 0;
+	private static double sum = 0.0;
 	private static int n = 0;
 	private SQLop sqlop;
 	private List<Map<String, String>> result;
 	private int resultSize;
-	public static int[] get_count(){
+	public int[] get_count(){
 		return count;
 	}
-	public static double get_aver(){
+	public double get_aver(){
 		return aver;
 	}
 	public Motion(String keyword){
 		init(keyword);
 	}
 	public void init(String keyword) {
-		Dict opt_motion = new Dict("/dict/opt_motion.txt");
-		Dict content1 = new Dict("/dict/content1.txt");
-		Dict content2 = new Dict("/dict/content2.txt");
-		Dict content3 = new Dict("/dict/content3.txt");
-		Dict content4 = new Dict("/dict/content4.txt");
-		Dict content5 = new Dict("/dict/content5.txt");
-		Dict neg_motion = new Dict("/dict/neg_motion.txt");
-		Dict deny_words = new Dict("/dict/deny_words.txt");
+		Dict opt_motion = new Dict(".\\dict\\opt_motion.txt");
+		Dict content1 = new Dict(".\\dict\\content1.txt");
+		Dict content2 = new Dict(".\\dict\\content2.txt");
+		Dict content3 = new Dict(".\\dict\\content3.txt");
+		Dict content4 = new Dict(".\\dict\\content4.txt");
+		Dict content5 = new Dict(".\\dict\\content5.txt");
+		Dict neg_motion = new Dict(".\\dict\\neg_motion.txt");
+		Dict deny_words = new Dict(".\\dict\\deny_words.txt");
 		//Dict reviews = new Dict("reviews.txt"); 
 
 
@@ -43,7 +43,7 @@ public class Motion {
 		sqlop.close();
 		resultSize = result.size();
 		
-//		System.out.println("hello");
+		System.out.println("resultsize:"+Integer.toString(resultSize));
 //		String regEx = "[\\u4e00-\\u9fa5]";
 //		String str = "Internet 网络 is 真好 very  good ^_^!";
 //		Pattern p = Pattern.compile(regEx);
@@ -287,7 +287,7 @@ public class Motion {
 			n++;
 		}
 		aver = sum/n;
-		//System.out.println(get_aver());
+		System.out.println("inner ave:"+Double.toString(aver));
 		//int out[] = get_count();
 		//for (int i=0;i<11;i++)
 		//	System.out.println(out[i]);

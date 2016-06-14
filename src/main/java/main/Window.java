@@ -79,6 +79,7 @@ import org.omg.CORBA.PRIVATE_MEMBER;
 import output.MakeReport;
 import chart.Chart;
 import main.ResultPanel1.ResultTableFiller;
+import motion.Motion;
 import database.SQLop;
 import format.Fonts;
 
@@ -219,7 +220,7 @@ public class Window {
 		button_search.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				keyword = textField.getText();
+				keyword = textField_searchBar.getText();
 				if (keyword.trim().equals("")) {
 					JOptionPane.showConfirmDialog(frame, "请在文本框中输入关键词", "提示",
 							JOptionPane.CLOSED_OPTION,
@@ -277,7 +278,7 @@ public class Window {
 
 		JLabel label_chart00 = new JLabel("舆论评分");
 		label_chart00.setFont(Fonts.opinion_title);
-		JLabel label_chart01 = new JLabel(Double.toString(motion.Motion.get_aver()));
+		JLabel label_chart01 = new JLabel();
 		label_chart01.setFont(Fonts.opinion_index);
 		panel_chart_row0.add(label_chart00);
 		panel_chart_row0.add(label_chart01);
@@ -529,6 +530,7 @@ public class Window {
 		private SQLop sqlop;
 		private JPanel panel_resultList;
 		private JPanel panel_allTab;
+		JLabel label_chart01;
 		JLabel label_chart11;
 		JLabel label_chart12;
 		JLabel label_chart21;
@@ -617,29 +619,6 @@ public class Window {
 
 			JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 			panel_4.add(tabbedPane);
-
-			JPanel panel_resultTab = new JPanel();
-			tabbedPane.addTab("搜索结果", null, panel_resultTab, null);
-			panel_resultTab.setLayout(new BorderLayout(0, 0));
-
-			//筛选选项
-			JPanel panel_up = new JPanel();
-			panel_up.setVisible(false);//筛选部分不显示
-			panel_resultTab.add(panel_up, BorderLayout.NORTH);
-			panel_up.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-
-			JLabel label = new JLabel("筛选：");
-			panel_up.add(label);
-
-			button_gov = new JButton("政府公文");
-			panel_up.add(button_gov);
-
-			button_pa = new JButton("论文专利");
-			panel_up.add(button_pa);
-
-			button_news = new JButton("新闻报道");
-			panel_up.add(button_news);
-
 			JPanel panel_charts = new JPanel();
 
 			JPanel panel_chartsTab = new JPanel();
@@ -664,13 +643,13 @@ public class Window {
 			panel_chart0.setLayout(new BoxLayout(panel_chart0, BoxLayout.Y_AXIS));
 			panel_charts.add(panel_chart0);
 
-			JLabel label_chart00 = new JLabel("舆论评分");
+			JLabel label_chart00 = new JLabel("舆论指数", JLabel.CENTER);
 			label_chart00.setFont(new Font("微软雅黑", Font.PLAIN, 25));
-			JLabel label_chart01 = new JLabel(Double.toString(motion.Motion.get_aver()));
+			label_chart01 = new JLabel();
 			label_chart01.setFont(new Font("微软雅黑", Font.PLAIN, 60));
 
 			panel_chart0.add(label_chart00);
-			panel_chart0.add(label_chart12);
+			panel_chart0.add(label_chart01);
 			
 			JPanel panel_chart1 = new JPanel();
 			panel_chart1
@@ -683,8 +662,8 @@ public class Window {
 			JPanel panel_chart2 = new JPanel();
 			panel_chart2
 					.setLayout(new BoxLayout(panel_chart2, BoxLayout.X_AXIS));
-			panel_charts.add(Box.createVerticalStrut(10));
-			panel_charts.add(panel_chart2);
+			//panel_charts.add(Box.createVerticalStrut(10));
+			//panel_charts.add(panel_chart2);
 
 			panel_chart2.add(label_chart21);
 			panel_chart2.add(label_chart22);
@@ -692,11 +671,36 @@ public class Window {
 			JPanel panel_chart3 = new JPanel();
 			panel_chart3
 					.setLayout(new BoxLayout(panel_chart3, BoxLayout.X_AXIS));
-			panel_charts.add(Box.createVerticalStrut(10));
-			panel_charts.add(panel_chart3);
+			//panel_charts.add(Box.createVerticalStrut(10));
+			//panel_charts.add(panel_chart3);
 
 			panel_chart3.add(label_chart31);
 			panel_chart3.add(label_chart32);
+			
+
+
+			JPanel panel_resultTab = new JPanel();
+			tabbedPane.addTab("搜索结果", null, panel_resultTab, null);
+			panel_resultTab.setLayout(new BorderLayout(0, 0));
+
+			//筛选选项
+			JPanel panel_up = new JPanel();
+			panel_up.setVisible(false);//筛选部分不显示
+			panel_resultTab.add(panel_up, BorderLayout.NORTH);
+			panel_up.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+
+			JLabel label = new JLabel("筛选：");
+			panel_up.add(label);
+
+			button_gov = new JButton("政府公文");
+			panel_up.add(button_gov);
+
+			button_pa = new JButton("论文专利");
+			panel_up.add(button_pa);
+
+			button_news = new JButton("新闻报道");
+			panel_up.add(button_news);
+
 
 			panel_resultList = new JPanel();
 			panel_allTab = new JPanel();
@@ -789,16 +793,22 @@ public class Window {
 			sqlop.close();
 
 			resultAllSize = resultAll.size();
+			
+			Motion motion = new Motion(keyword);
+			label_chart01.setText(Double.toString(motion.get_aver()));
+			label_chart01.invalidate();
+			label_chart01.repaint();
+			
 
 			// 搜索结果表格
-			getTableResult(keyword, 0);// 0: gov..data
+			getTableResult(keyword, 3);// 0: gov..data
 
 			// 统计图表
 			//Image img = Toolkit.getDefaultToolkit().createImage(".\\output\\patent_type.jpg");
-			label_chart11.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().createImage(".\\output\\site.jpg")));
-			label_chart12.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().createImage(".\\output\\year_gov.jpg")));
-			label_chart21.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().createImage(".\\output\\motion.jpg")));
-			label_chart22.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().createImage(".\\output\\year_comments.jpg")));
+			label_chart11.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().createImage(".\\output\\motion.jpg")));
+			label_chart12.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().createImage(".\\output\\year_comments.jpg")));
+			label_chart21.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().createImage(".\\output\\site.jpg")));
+			label_chart22.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().createImage(".\\output\\year_gov.jpg")));
 			label_chart31.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().createImage(".\\output\\news_source.jpg")));
 			label_chart32.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().createImage(".\\output\\year_news.jpg")));
 			//label_chart41.setIcon(new ImageIcon(
