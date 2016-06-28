@@ -4,20 +4,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Information {  
-    private String motion_jpg = null;//����̬�ȷֲ�
-    private String source_jpg = null;//��ע������������������ý�壬��ṫ�ڣ���״ͼ��
-    private String year_comments_jpg = null;//��ע����ʱ��ı仯����״ͼ��
+    private String motion_jpg = null;//舆论态度分布
+    private String source_jpg = null;//关注的主体政府官网，新闻媒体，社会公众（饼状图）
+    private String year_comments_jpg = null;//关注量随时间的变化（柱状图）
     
-    private List<String> source_theme = null;//��ͬ����(������ý�塢����)��ע������
-    private List<String> year_theme = null;//���Է�ֵ��ȵ�����
+    private List<String> source_theme = null;//不同主体(政府、媒体、公众)关注的主题
+    private List<String> year_theme = null;//明显峰值年度的主题
    
-    private String global_attitude = null;//ȫ�����������ָ��
-    private String gov_attitude = null;// ��������̬��ָ��
-    private String media_attitude = null;// ý��������
-    private String public_attitude = null;// ���ڵ������
+    private String global_attitude = null;//全网整体的舆论指数
+    private String gov_attitude = null;// 政府官网态度指数
+    private String media_attitude = null;// 媒体的满意度
+    private String public_attitude = null;// 公众的满意度
     
-    private List<String> hot_theme = null;//�ȵ�����,�����ȵ�����⣬�ȵ����£��ȵ�ý�壬�ȵ�����
-    private List<String> other = null;//���жȽϸߵĸ���۵㣬���жȽϸߵ�����۵�
+    private List<String> hot_theme = null;//热点主题,总体热点的主题，热点文章，热点媒体，热点人物
+    private List<String> other = null;//集中度较高的负面观点，集中度较高的正面观点
     
     private Information() {
     	

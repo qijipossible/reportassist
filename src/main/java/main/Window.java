@@ -616,8 +616,8 @@ public class Window {
 			button_report.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent arg0) {
-					new MakeReport(keyword, new NLP().summary(keyword),
-							".\\output\\report.html", new NLP().report(keyword));
+					new MakeReport(keyword, 
+							".\\output\\report.html");
 					JOptionPane.showConfirmDialog(frame,
 							"操作完成！\n存储在.\\output\\report.html文件中", "完成",
 							JOptionPane.CLOSED_OPTION,
