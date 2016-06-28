@@ -83,6 +83,7 @@ import javax.swing.text.StyledDocument;
 
 import org.omg.CORBA.PRIVATE_MEMBER;
 
+import output.Information;
 import output.MakeReport;
 import chart.Chart;
 import main.ResultPanel1.ResultTableFiller;
@@ -898,23 +899,36 @@ public class Window {
 			String hottest_year = sqlop.hottestYear(keyword);
 			sqlop.close();
 			
+			output.Information info = Information.getInstance();
 			
 			resultAllSize = resultAll.size();
 			
 			java.text.DecimalFormat df =new java.text.DecimalFormat("0.00");
 			String tmp = df.format(motion.get_aver_media());
 			label_chart021.setText(tmp);
+			info.setMedia_attitude(tmp);
 			tmp = df.format(motion.get_aver_public());
 			label_chart023.setText(tmp);
+			info.setPublic_attitude(tmp);
 			tmp = df.format(motion.get_aver_gov());
 			label_chart025.setText(tmp);
+			info.setGov_attitude(tmp);
 			tmp = df.format(motion.get_aver_total());
 			label_chart027.setText(tmp);
+			info.setGlobal_attitude(tmp);
 			
-			label_chart031.setText(List2Str(getKeyword(result_media)));
-			label_chart033.setText(List2Str(getKeyword(result_public)));
-			label_chart035.setText(List2Str(getKeyword(result_gov)));
-			label_chart037.setText(hottest_year + ":" + List2Str(getKeyword(result_hottest_year)));
+			List<String> list = getKeyword(result_media);
+			label_chart031.setText(List2Str(list));
+			info.setMedia_theme(list);
+			list = getKeyword(result_public);
+			label_chart033.setText(List2Str(list));
+			info.setPublic_theme(list);
+			list = getKeyword(result_gov);
+			label_chart035.setText(List2Str(list));
+			info.setGov_theme(list);
+			list = getKeyword(result_hottest_year);
+			label_chart037.setText(hottest_year + ":" + List2Str(list));
+			info.setYear_theme(list);
 			
 
 			label_chart021.invalidate();
@@ -933,8 +947,11 @@ public class Window {
 			// 统计图表
 			//Image img = Toolkit.getDefaultToolkit().createImage(".\\output\\patent_type.jpg");
 			label_chart11.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().createImage(".\\output\\motion.jpg")));
+			info.setMotion_jpg(".\\output\\motion.jpg");
 			label_chart12.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().createImage(".\\output\\source.jpg")));
+			info.setSource_jpg(".\\output\\source.jpg");
 			label_chart21.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().createImage(".\\output\\year_comments.jpg")));
+			info.setYear_comments_jpg(".\\output\\year_comments.jpg");
 			//label_chart22.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().createImage(".\\output\\year_gov.jpg")));
 			//label_chart31.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().createImage(".\\output\\news_source.jpg")));
 			//label_chart32.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().createImage(".\\output\\year_news.jpg")));
