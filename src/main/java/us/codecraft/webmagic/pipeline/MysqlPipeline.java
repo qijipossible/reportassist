@@ -117,7 +117,7 @@ public class MysqlPipeline implements Pipeline {
 			for (String comment : comments) {
 				for (Date atime : times)
 					database.insert(url, comment, atime, comment, author,
-							"评论（百姓）", other);
+							"公众", other);
 			}
 		} else if (content != null && !content.replaceAll("\n", "").equals(""))
 			database.insert(url, content, time, title, author, type, other);
