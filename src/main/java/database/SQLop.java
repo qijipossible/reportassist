@@ -337,6 +337,8 @@ public class SQLop {
 		final int PATENT_applicant=8;
 		final int NEWS_source=9;
 		final int YEAR_comments=11;
+		final int SOURCE=12;
+		
 		Statement statemt = null;
 		ResultSet results = null;
 		HashMap<String, Integer> resultMap = new HashMap<String, Integer>();
@@ -352,7 +354,7 @@ public class SQLop {
 
 			switch (countType) {
 			case SITE:
-				sql = "SELECT type,COUNT(*) FROM tmp WHERE type = '科技部' OR  type = '发改委' OR  type = '工信部' GROUP BY type";
+				sql = "SELECT type,COUNT(*) FROM tmp WHERE type = '政府' GROUP BY type";
 				results = statemt.executeQuery(sql);
 				while (results.next()) {
 					resultMap.put(results.getString(1),
@@ -360,7 +362,7 @@ public class SQLop {
 				}
 				break;
 			case YEAR_gov:
-				sql = "SELECT year(savetime),COUNT(*) FROM tmp WHERE type = '科技部' OR  type = '发改委' OR  type = '工信部' GROUP BY year(savetime) ORDER BY year(savetime)";
+				sql = "SELECT year(savetime),COUNT(*) FROM tmp WHERE type = '政府' GROUP BY year(savetime) ORDER BY year(savetime)";
 				results = statemt.executeQuery(sql);
 				while (results.next()) {
 					if (results.getString(1) == null)
@@ -440,7 +442,17 @@ public class SQLop {
 				}
 				break;
 			case YEAR_comments:
-				sql = "SELECT year(savetime),COUNT(*) FROM webpage WHERE type='新闻' OR type = '评论' OR  type = '评论（百姓）'GROUP BY year(savetime) ORDER BY year(savetime)";
+				sql = "SELECT year(savetime),COUNT(*) FROM webpage WHERE type='新闻' OR type = '评论' OR  type = '评论（百姓）' OR type = '政府' GROUP BY year(savetime) ORDER BY year(savetime)";
+				results = statemt.executeQuery(sql);
+				while (results.next()) {
+					if (results.getString(1) == null)
+						continue;
+					resultMap.put(results.getString(1),
+							new Integer(results.getInt(2)));
+				}
+				break;
+			case SOURCE:
+				sql = "SELECT type,COUNT(*) FROM tmp WHERE type = '政府' OR  type = '评论（百姓）' OR  type = '评论' GROUP BY type";
 				results = statemt.executeQuery(sql);
 				while (results.next()) {
 					if (results.getString(1) == null)
