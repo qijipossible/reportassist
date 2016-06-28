@@ -12,15 +12,5 @@
 hs_err_pid*
 
 /target
-*.jpg
-*.jpg
-*.jpg
-*.jpg
-*.jpg
-*.history
-*.jpg
-*.html
-*.history
-*.jpg
-*.jpg
-*.jpg
+/output/
+.gitignore
