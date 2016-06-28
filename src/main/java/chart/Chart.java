@@ -231,7 +231,7 @@ public class Chart {
 			hashmap =new HashMap();
 			Motion t = new Motion(keyword);
 			for (int i=0;i<=10;i++)
-				hashmap.put("级别"+i, (Integer)t.get_count()[i]);
+				hashmap.put(Integer.toString(i-5), (Integer)t.get_count()[i]);
 		} else {
 			hashmap = sqlop.count(type, keyword);
 		}

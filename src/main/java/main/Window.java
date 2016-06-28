@@ -55,16 +55,23 @@ import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.EventObject;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import javax.swing.JProgressBar;
+import javax.swing.event.CellEditorListener;
 import javax.swing.plaf.IconUIResource;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 import javax.swing.text.BadLocationException;
@@ -84,6 +91,7 @@ import database.SQLop;
 import format.Fonts;
 
 public class Window {
+	
 
 	private JFrame frame;
 	private JTextField textField;
@@ -139,6 +147,18 @@ public class Window {
 	}
 
 	public Window() {
+
+		//控制台信息输出到out.txt
+	    /*File f=new File("out.txt");
+	    try {
+			f.createNewFile();
+			FileOutputStream fileOutputStream = new FileOutputStream(f);
+			PrintStream printStream = new PrintStream(fileOutputStream);
+			System.setOut(printStream);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}*/
+	    
 		initialize();
 		actionListner();
 	}
@@ -155,7 +175,7 @@ public class Window {
 
 		//主窗口
 		frame = new JFrame();
-		frame.setTitle("智能信息搜索管理系统");//窗口标题
+		frame.setTitle("舆论监测系统");//窗口标题
 		frame.setBackground(Color.WHITE);//背景颜色
 		frame.setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);// 最大化窗口
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//退出按钮动作
@@ -177,7 +197,7 @@ public class Window {
 		JPanel panel_title = new JPanel();
 		panel_title.setLayout(new BorderLayout(0, 0));
 		panel_north.add(panel_title);		
-		JLabel label_title = new JLabel("智能信息搜索管理系统", JLabel.CENTER);
+		JLabel label_title = new JLabel("舆论监测系统", JLabel.CENTER);
 		label_title.setFont(Fonts.title);
 		panel_title.add(label_title,BorderLayout.CENTER);
 		
@@ -190,7 +210,7 @@ public class Window {
 		panel_searchbar.setLayout(new BoxLayout(panel_searchbar, BoxLayout.X_AXIS));
 		panel_search.add(panel_searchbar,BorderLayout.EAST);
 		
-		final JTextField textField_searchBar = new JTextField();
+		final JTextField textField_searchBar = new JTextField("公车改革");
 		textField_searchBar.setFont(Fonts.searchBar);
 		textField_searchBar.setToolTipText("请键入您想要搜索的关键词");
 		textField_searchBar.setColumns(30);
@@ -203,13 +223,6 @@ public class Window {
 		progressBar.setFont(new Font("宋体", Font.PLAIN, 15));
 		progressBar.setVisible(false);
 		progressBar.setIndeterminate(true);
-
-		/*TODO
-		AutoCompleteComponet autoComplete = new AutoCompleteComponet();
-		HistoricRecords historicRecords = new HistoricRecords();
-		autoComplete.updateHistory(this.getItems());
-		autoComplete.setupAutoComplete(textField_searchBar);
-		*/
 
 		final JButton button_search = new JButton("搜索");
 		button_search.setFont(Fonts.searchButton);
@@ -227,7 +240,7 @@ public class Window {
 							JOptionPane.INFORMATION_MESSAGE);
 					return;
 				}
-				boolean[] options = {false,false,false,true,false,false};
+				boolean[] options = {true,true,true,true,false,false};
 				if (isRunning) {
 					crawler.stop();
 				} else {
@@ -434,10 +447,11 @@ public class Window {
 		panelSign.add(lblNewLabel, BorderLayout.EAST);
 
 		resultPanel = new ResultPanel();
-		panel_center.add(resultPanel,BorderLayout.NORTH);
+		panel_center.add(resultPanel,BorderLayout.CENTER);
 		resultPanel.setVisible(true);
 	}
 
+	//for auto complete
 	public ArrayList<String> getItems() {
 		ArrayList<String> items = new ArrayList<String>();
 		Map map = auto.getStationMap(history.getHistory());
@@ -530,6 +544,7 @@ public class Window {
 		private SQLop sqlop;
 		private JPanel panel_resultList;
 		private JPanel panel_allTab;
+		JLabel label_chart00;
 		JLabel label_chart01;
 		JLabel label_chart11;
 		JLabel label_chart12;
@@ -565,11 +580,11 @@ public class Window {
 			iniStyleModel();
 			setLayout(new BorderLayout(0, 0));
 
-			JPanel panel_4 = new JPanel();
-			add(panel_4, BorderLayout.CENTER);
-			panel_4.setLayout(new BorderLayout(0, 0));
+			JPanel panel_overall = new JPanel();
+			add(panel_overall, BorderLayout.CENTER);
+			panel_overall.setLayout(new BorderLayout(0, 0));
 
-			JPanel panel_2 = new JPanel();
+			/*JPanel panel_2 = new JPanel();
 			//TODO panel_4.add(panel_2, BorderLayout.NORTH);
 			panel_2.setLayout(new BorderLayout(0, 0));
 
@@ -616,18 +631,27 @@ public class Window {
 			JPanel panel_2_2 = new JPanel();
 			panel_2_2.add(button_back);
 			panel_2.add(panel_2_2, BorderLayout.WEST);
+			*/
 
 			JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-			panel_4.add(tabbedPane);
-			JPanel panel_charts = new JPanel();
+			panel_overall.add(tabbedPane,BorderLayout.CENTER);
 
+			JPanel panel_resultTab = new JPanel();
+			tabbedPane.addTab("搜索结果", null, panel_resultTab, null);
+			panel_resultTab.setLayout(new BorderLayout(0, 0));
+			panel_resultList = new JPanel();
+			panel_resultTab.add(panel_resultList);
+			
 			JPanel panel_chartsTab = new JPanel();
 			panel_chartsTab.setLayout(new BorderLayout(0, 0));
-			JScrollPane scroll_charts = new JScrollPane(panel_charts);
-			panel_chartsTab.add(scroll_charts);
 			tabbedPane.addTab("结果统计", null, panel_chartsTab, null);
-			panel_charts
-					.setLayout(new BoxLayout(panel_charts, BoxLayout.Y_AXIS));
+			JPanel panel_charts = new JPanel();
+			panel_charts.setLayout(new BoxLayout(panel_charts, BoxLayout.Y_AXIS));
+			JPanel panel_charts_out = new JPanel();
+			panel_charts_out.setLayout(new BorderLayout(0,0));
+			panel_charts_out.add(panel_charts,BorderLayout.CENTER);
+			JScrollPane scroll_charts = new JScrollPane(panel_charts_out);
+			panel_chartsTab.add(scroll_charts, BorderLayout.CENTER);
 
 			label_chart11 = new JLabel();
 			label_chart12 = new JLabel();
@@ -640,16 +664,22 @@ public class Window {
 			label_chart51 = new JLabel();
 
 			JPanel panel_chart0 = new JPanel();
-			panel_chart0.setLayout(new BoxLayout(panel_chart0, BoxLayout.Y_AXIS));
+			panel_chart0.setLayout(new BorderLayout(0,0));
 			panel_charts.add(panel_chart0);
+			JPanel panel_chart0_center = new JPanel();
+			panel_chart0_center.setLayout(new BoxLayout(panel_chart0_center, BoxLayout.Y_AXIS));
+			panel_chart0.add(panel_chart0_center, BorderLayout.CENTER);
 
-			JLabel label_chart00 = new JLabel("舆论指数", JLabel.CENTER);
+			label_chart00 = new JLabel("舆论指数", JLabel.CENTER);
 			label_chart00.setFont(new Font("微软雅黑", Font.PLAIN, 25));
+			JLabel label_chart000 = new JLabel("舆论指数范围为-5到5，-5表示极差，5表示极好，0表示中立");
+			label_chart000.setFont(Fonts.normal);
 			label_chart01 = new JLabel();
 			label_chart01.setFont(new Font("微软雅黑", Font.PLAIN, 60));
 
-			panel_chart0.add(label_chart00);
-			panel_chart0.add(label_chart01);
+			panel_chart0_center.add(label_chart00);
+			panel_chart0_center.add(label_chart000);
+			panel_chart0_center.add(label_chart01);
 			
 			JPanel panel_chart1 = new JPanel();
 			panel_chart1
@@ -679,35 +709,26 @@ public class Window {
 			
 
 
-			JPanel panel_resultTab = new JPanel();
-			tabbedPane.addTab("搜索结果", null, panel_resultTab, null);
-			panel_resultTab.setLayout(new BorderLayout(0, 0));
 
 			//筛选选项
 			JPanel panel_up = new JPanel();
 			panel_up.setVisible(false);//筛选部分不显示
 			panel_resultTab.add(panel_up, BorderLayout.NORTH);
 			panel_up.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-
 			JLabel label = new JLabel("筛选：");
 			panel_up.add(label);
-
 			button_gov = new JButton("政府公文");
 			panel_up.add(button_gov);
-
 			button_pa = new JButton("论文专利");
 			panel_up.add(button_pa);
-
 			button_news = new JButton("新闻报道");
 			panel_up.add(button_news);
 
 
-			panel_resultList = new JPanel();
 			panel_allTab = new JPanel();
 			panel_allTab.setLayout(new BorderLayout(0, 0));
 			tabbedPane.addTab("全体数据", null, panel_allTab, null);
 
-			panel_resultTab.add(panel_resultList);
 
 			button_gov.addActionListener(this);
 			button_news.addActionListener(this);
@@ -731,6 +752,17 @@ public class Window {
 			}
 		}
 
+		
+		class MyTableModel extends DefaultTableModel{
+			public MyTableModel(int row, int column){
+				super(row, column);
+			}
+
+			public boolean isCellEditable(int row, int column){
+				return true;
+			}
+		}
+		
 		//建立表格，设置属性，并添加进面板，但在这里并不填充内容
 		private void getTableResult(String keyword, int type) {
 			sqlop = new SQLop();
@@ -739,18 +771,15 @@ public class Window {
 			sqlop.close();
 
 			resultSize = result.size();
-			table_result = new JTable(new DefaultTableModel(resultSize, 1) {
-				@Override
-				public boolean isCellEditable(int arg0, int arg1) {
-					return false;
-				}
-			});
+			table_result = new JTable();
+			MyTableModel model = new MyTableModel(resultSize,1);
+			table_result.setModel(model);
+			table_result.setEnabled(true);
 			table_result.getTableHeader().setVisible(false);
-			table_result.setDefaultRenderer(Object.class,
-					new ResultTableFiller());
+			table_result.setDefaultRenderer(Object.class,new ResultTableFiller());
 
 			this.updateRowHeights();
-			table_result.addMouseListener(new MouseAdapter() {
+			/*table_result.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(java.awt.event.MouseEvent evt) {
 					int row = table_result.rowAtPoint(evt.getPoint());
@@ -776,7 +805,7 @@ public class Window {
 						}
 					}
 				}
-			});
+			});*/
 
 			panel_resultList.setLayout(new BorderLayout(0, 0));
 			JScrollPane scrollPane = new JScrollPane(table_result);
@@ -794,23 +823,26 @@ public class Window {
 
 			resultAllSize = resultAll.size();
 			
-			Motion motion = new Motion(keyword);
-			label_chart01.setText(Double.toString(motion.get_aver()));
+			//Motion motion = new Motion(keyword);
+			java.text.DecimalFormat df =new java.text.DecimalFormat("0.00");
+			//TODO String tmp = df.format(motion.get_aver());
+			//label_chart01.setText(tmp);
+
 			label_chart01.invalidate();
 			label_chart01.repaint();
 			
 
 			// 搜索结果表格
-			getTableResult(keyword, 3);// 0: gov..data
+			getTableResult(keyword, 3);// 3 for news and comments
 
 			// 统计图表
 			//Image img = Toolkit.getDefaultToolkit().createImage(".\\output\\patent_type.jpg");
 			label_chart11.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().createImage(".\\output\\motion.jpg")));
-			label_chart12.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().createImage(".\\output\\year_comments.jpg")));
-			label_chart21.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().createImage(".\\output\\site.jpg")));
-			label_chart22.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().createImage(".\\output\\year_gov.jpg")));
-			label_chart31.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().createImage(".\\output\\news_source.jpg")));
-			label_chart32.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().createImage(".\\output\\year_news.jpg")));
+			label_chart12.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().createImage(".\\output\\source.jpg")));
+			label_chart21.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().createImage(".\\output\\year_comments.jpg")));
+			//label_chart22.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().createImage(".\\output\\year_gov.jpg")));
+			//label_chart31.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().createImage(".\\output\\news_source.jpg")));
+			//label_chart32.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().createImage(".\\output\\year_news.jpg")));
 			//label_chart41.setIcon(new ImageIcon(
 			//		Toolkit.getDefaultToolkit().createImage(".\\output\\patent_applicant.jpg")));
 			//label_chart42.setIcon(new ImageIcon(Toolkit.getDefaultToolkit().createImage(".\\output\\year_patent.jpg")));
@@ -871,7 +903,8 @@ public class Window {
 			// tableAll.getColumnModel().getColumn(4).setPreferredWidth(20);
 			// tableAll.getColumnModel().getColumn(5).setPreferredWidth(200);
 			// tableAll.getColumnModel().getColumn(6).setPreferredWidth(30);
-			// tableAll.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+			table_all.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+			table_all.setFont(Fonts.normal);
 
 			menu = new JPopupMenu();
 			item = new JMenuItem("删除该行");
@@ -945,6 +978,7 @@ public class Window {
 			}
 
 		}
+		
 
 		//表格格式
 		public StyledDocument getNewStyledDocument() {
@@ -1023,5 +1057,8 @@ public class Window {
 			}
 		}
 
+	
 	}
+	
+	
 }
