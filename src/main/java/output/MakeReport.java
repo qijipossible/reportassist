@@ -28,37 +28,37 @@ public class MakeReport {
 
 		HtmlFile file = new HtmlFile(filePath, keyword);
 
-		file.writeStatistics("1������ͳ��", WORDS);
+		file.writeStatistics("1、舆论统计", WORDS);
 		file.writeStatistics(t.getSource_jpg(), ICON);
 		file.writeStatistics(t.getMotion_jpg(), ICON);
 		file.writeStatistics(t.getYear_comments_jpg(), ICON);
 
-		file.writeStatistics("2���������", WORDS);
-		file.writeinfor("��ͬ�����ע������:");
-		String[] str={"����:","ý��:","����:"};
+		file.writeStatistics("2、主题分析", WORDS);
+		file.writeinfor("不同主体关注的主题:");
+		String[] str={"政府:","媒体:","公众:"};
 		if (t.getSource_theme() != null) {
 			for (int i = 0; i < t.getSource_theme().size(); i++) {
 				file.writeinfor(str[i]+t.getSource_theme().get(i));
 			}
 		}
-		file.writeinfor("���Է�ֵ��ȵ�����:");
+		file.writeinfor("明显峰值年度的主题:");
 		if (t.getYear_theme() != null) {
 			for (int i = 0; i < t.getYear_theme().size(); i++)
 				file.writeinfor(t.getYear_theme().get(i));
 		}
-		file.writeStatistics("3��̬�ȷ���", WORDS);
-		file.writeinfor("ȫ�����������ָ��:" + t.getGlobal_attitude());
-		file.writeinfor("��������̬��ָ��:" + t.getGov_attitude());
-		file.writeinfor("ý��������:" + t.getMedia_attitude());
-		file.writeinfor("���ڵ������:" + t.getPublic_attitude());
+		file.writeStatistics("3、态度分析", WORDS);
+		file.writeinfor("全网整体的舆论指数:" + t.getGlobal_attitude());
+		file.writeinfor("政府官网态度指数:" + t.getGov_attitude());
+		file.writeinfor("媒体的满意度:" + t.getMedia_attitude());
+		file.writeinfor("公众的满意度:" + t.getPublic_attitude());
 
-		file.writeStatistics("4���ȵ����", WORDS);
-		file.writeinfor("�ȵ�����:");
+		file.writeStatistics("4、热点分析", WORDS);
+		file.writeinfor("热点主题:");
 		if (t.getHot_theme() != null) {
 			for (int i = 0; i < t.getHot_theme().size(); i++)
 				file.writeinfor(t.getHot_theme().get(i));
 		}
-		file.writeinfor("��Ҫ�۵�:");
+		file.writeinfor("主要观点:");
 		if (t.getOther() != null) {
 			for (int i = 0; i < t.getOther().size(); i++)
 				file.writeinfor(t.getOther().get(i));
@@ -77,11 +77,11 @@ public class MakeReport {
 	// List<Map<String, String>> result=new ArrayList<Map<String, String>>();
 	// for (Map map : info) {
 	// if (type == SELECT_news) {
-	// if (map.get("type").toString().equals("����"))
+	// if (map.get("type").toString().equals("新闻"))
 	// result.add(map);
 	// } else if (type==SELECT_gov){
-	// if(map.get("type").toString().equals("�Ƽ���")||map.get("type").toString().equals("����ί")||
-	// map.get("type").toString().equals("���Ų�"))
+	// if(map.get("type").toString().equals("科技部")||map.get("type").toString().equals("发改委")||
+	// map.get("type").toString().equals("工信部"))
 	// result.add(map);
 	// }
 	//
