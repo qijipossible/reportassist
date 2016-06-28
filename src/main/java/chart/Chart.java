@@ -56,6 +56,7 @@ public class Chart {
 	static final int NEWS_SOURCE = 9;
 	static final int MOTION = 10;
 	static final int  YEAR_comments= 11;
+	static final int  SOURCE= 12;
 
 	static final int VERTICAL = 0;
 	static final int HORIZONTAL = 1;
@@ -67,14 +68,15 @@ public class Chart {
 		keyword = kw;
 		sqlop.initialize();
 		// System.out.println(sqlop.countAllResult(keyword));
-		barChart(SITE, "site.jpg", VERTICAL);
-		lineChart(YEAR_gov, "year_gov.jpg");
+		//barChart(SITE, "site.jpg", VERTICAL);
+		//lineChart(YEAR_gov, "year_gov.jpg");
 		//lineChart(YEAR_paper, "year_paper.jpg");
 		//lineChart(YEAR_patent, "year_patent.jpg");
-		lineChart(YEAR_news, "year_news.jpg");
-		barChart(NEWS_SOURCE, "news_source.jpg", HORIZONTAL);
+		//lineChart(YEAR_news, "year_news.jpg");
+		//barChart(NEWS_SOURCE, "news_source.jpg", HORIZONTAL);
 		//barChart(JOURNAL, "journal.jpg", HORIZONTAL);
 		//pieChart(PATENT_type, "patent_type.jpg");
+		pieChart(SOURCE, "source.jpg");
 		//barChart(PATENT_applicant, "patent_applicant.jpg", HORIZONTAL);
 		lineChart(MOTION, "motion.jpg");
 		lineChart(YEAR_comments, "year_comments.jpg");
@@ -262,6 +264,8 @@ public class Chart {
 			head = "专利类型" + head;
 		if (type == PATENT_applicant)
 			head = "申请单位" + head;
+		if (type == SOURCE)
+			head = "关注主体" + head;
 		TextTitle title = new TextTitle(head, Fonts.title);
 		title.setPaint(Colors.a1);
 		chart.setTitle(title);
