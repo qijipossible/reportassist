@@ -35,12 +35,22 @@ public class MakeReport {
 
 		file.writeStatistics("2、主题分析", WORDS);
 		file.writeinfor("不同主体关注的主题:");
-		String[] str={"政府:","媒体:","公众:"};
-		if (t.getSource_theme() != null) {
-			for (int i = 0; i < t.getSource_theme().size(); i++) {
-				file.writeinfor(str[i]+t.getSource_theme().get(i));
+		if (t.getMedia_theme() != null) {
+			for (int i = 0; i < t.getMedia_theme().size(); i++) {
+				file.writeinfor("政府："+t.getMedia_theme().get(i));
+			}
+		}	
+		if (t.getMedia_theme() != null) {
+			for (int i = 0; i < t.getMedia_theme().size(); i++) {
+				file.writeinfor("媒体："+t.getMedia_theme().get(i));
+			}
+		}	
+		if (t.getMedia_theme() != null) {
+			for (int i = 0; i < t.getMedia_theme().size(); i++) {
+				file.writeinfor("公众："+t.getMedia_theme().get(i));
 			}
 		}
+		
 		file.writeinfor("明显峰值年度的主题:");
 		if (t.getYear_theme() != null) {
 			for (int i = 0; i < t.getYear_theme().size(); i++)
