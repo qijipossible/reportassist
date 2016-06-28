@@ -35,27 +35,36 @@ public class MakeReport {
 
 		file.writeStatistics("2、主题分析", WORDS);
 		file.writeinfor("不同主体关注的主题:");
-		if (t.getMedia_theme() != null) {
-			for (int i = 0; i < t.getMedia_theme().size(); i++) {
-				file.writeinfor("政府："+t.getMedia_theme().get(i));
+		String str="";
+		if (t.getGov_theme() != null) {
+			for (int i = 0; i < t.getGov_theme().size(); i++) {
+				str=str+t.getGov_theme().get(i)+" ";
 			}
+			file.writeinfor("政府："+str);
 		}	
+		str="";
 		if (t.getMedia_theme() != null) {
 			for (int i = 0; i < t.getMedia_theme().size(); i++) {
-				file.writeinfor("媒体："+t.getMedia_theme().get(i));
+				str=str+t.getMedia_theme().get(i)+" ";
 			}
+			file.writeinfor("媒体："+str);
 		}	
-		if (t.getMedia_theme() != null) {
-			for (int i = 0; i < t.getMedia_theme().size(); i++) {
-				file.writeinfor("公众："+t.getMedia_theme().get(i));
+		str="";
+		if (t.getPublic_theme() != null) {
+			for (int i = 0; i < t.getPublic_theme().size(); i++) {
+				str=str+t.getPublic_theme().get(i)+" ";
 			}
+			file.writeinfor("公众："+str);
 		}
 		
-		file.writeinfor("明显峰值年度的主题:");
+		file.writeinfor("明显峰值年度以及主题:");
+		str="";
 		if (t.getYear_theme() != null) {
 			for (int i = 0; i < t.getYear_theme().size(); i++)
-				file.writeinfor(t.getYear_theme().get(i));
+				str=str+t.getYear_theme().get(i)+" ";
+			file.writeinfor(str);
 		}
+		
 		file.writeStatistics("3、态度分析", WORDS);
 		file.writeinfor("全网整体的舆论指数:" + t.getGlobal_attitude());
 		file.writeinfor("政府官网态度指数:" + t.getGov_attitude());
@@ -68,6 +77,7 @@ public class MakeReport {
 			for (int i = 0; i < t.getHot_theme().size(); i++)
 				file.writeinfor(t.getHot_theme().get(i));
 		}
+		
 		file.writeinfor("主要观点:");
 		if (t.getOther() != null) {
 			for (int i = 0; i < t.getOther().size(); i++)
