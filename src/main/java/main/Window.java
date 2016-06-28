@@ -545,7 +545,14 @@ public class Window {
 		private JPanel panel_resultList;
 		private JPanel panel_allTab;
 		JLabel label_chart00;
-		JLabel label_chart01;
+		JLabel label_chart021;
+		JLabel label_chart023;
+		JLabel label_chart025;
+		JLabel label_chart027;
+		JLabel label_chart031;
+		JLabel label_chart033;
+		JLabel label_chart035;
+		JLabel label_chart037;
 		JLabel label_chart11;
 		JLabel label_chart12;
 		JLabel label_chart21;
@@ -671,15 +678,79 @@ public class Window {
 			panel_chart0.add(panel_chart0_center, BorderLayout.CENTER);
 
 			label_chart00 = new JLabel("舆论指数", JLabel.CENTER);
-			label_chart00.setFont(new Font("微软雅黑", Font.PLAIN, 25));
-			JLabel label_chart000 = new JLabel("舆论指数范围为-5到5，-5表示极差，5表示极好，0表示中立");
-			label_chart000.setFont(Fonts.normal);
-			label_chart01 = new JLabel();
-			label_chart01.setFont(new Font("微软雅黑", Font.PLAIN, 60));
-
+			label_chart00.setFont(Fonts.opinion_title);
+			JLabel label_chart01 = new JLabel("舆论指数范围为-5到5，-5表示极差，5表示极好，0表示中立",JLabel.CENTER);
+			label_chart01.setFont(Fonts.normal);
+			JPanel panel_chart02 = new JPanel();
+			panel_chart02.setLayout(new BoxLayout(panel_chart02, BoxLayout.X_AXIS));
+			JLabel label_chart020 = new JLabel("    媒体：");
+			label_chart020.setFont(Fonts.normal);
+			label_chart021 = new JLabel();
+			label_chart021.setFont(Fonts.opinion_index);
+			JLabel label_chart022 = new JLabel("    公众：");
+			label_chart022.setFont(Fonts.normal);
+			label_chart023 = new JLabel();
+			label_chart023.setFont(Fonts.opinion_index);
+			JLabel label_chart024 = new JLabel("    政府：");
+			label_chart024.setFont(Fonts.normal);
+			label_chart025 = new JLabel();
+			label_chart025.setFont(Fonts.opinion_index);
+			JLabel label_chart026 = new JLabel("全网：");
+			label_chart026.setFont(Fonts.normal);
+			label_chart027 = new JLabel();
+			label_chart027.setFont(Fonts.opinion_index);
+			panel_chart02.add(label_chart026);
+			panel_chart02.add(label_chart027);
+			panel_chart02.add(label_chart020);
+			panel_chart02.add(label_chart021);
+			panel_chart02.add(label_chart022);
+			panel_chart02.add(label_chart023);
+			panel_chart02.add(label_chart024);
+			panel_chart02.add(label_chart025);
+			
+			JPanel panel_chart03 = new JPanel();
+			panel_chart03.setLayout(new BoxLayout(panel_chart03, BoxLayout.X_AXIS));
+			JLabel label_chart030 = new JLabel("媒体：");
+			label_chart030.setFont(Fonts.normal);
+			label_chart031 = new JLabel();
+			label_chart031.setFont(Fonts.keyword);
+			JLabel label_chart032 = new JLabel("公众：");
+			label_chart032.setFont(Fonts.normal);
+			label_chart033 = new JLabel();
+			label_chart033.setFont(Fonts.keyword);
+			JLabel label_chart034 = new JLabel("政府：");
+			label_chart034.setFont(Fonts.normal);
+			label_chart035 = new JLabel();
+			label_chart035.setFont(Fonts.keyword);
+			JLabel label_chart036 = new JLabel("峰值年度");
+			label_chart036.setFont(Fonts.normal);
+			label_chart037 = new JLabel();
+			label_chart037.setFont(Fonts.keyword);
+			/*panel_chart03.add(label_chart030);
+			panel_chart03.add(label_chart031);
+			panel_chart03.add(label_chart032);
+			panel_chart03.add(label_chart033);
+			panel_chart03.add(label_chart034);
+			panel_chart03.add(label_chart035);
+			panel_chart03.add(label_chart036);
+			panel_chart03.add(label_chart037);*/
+			
+			JLabel label_chart04 = new JLabel("关键词", JLabel.CENTER);
+			label_chart04.setFont(Fonts.opinion_title);
+			
 			panel_chart0_center.add(label_chart00);
-			panel_chart0_center.add(label_chart000);
 			panel_chart0_center.add(label_chart01);
+			panel_chart0_center.add(panel_chart02);
+			panel_chart0_center.add(label_chart04);
+			//panel_chart0_center.add(panel_chart03);
+			panel_chart0_center.add(label_chart030);
+			panel_chart0_center.add(label_chart031);
+			panel_chart0_center.add(label_chart032);
+			panel_chart0_center.add(label_chart033);
+			panel_chart0_center.add(label_chart034);
+			panel_chart0_center.add(label_chart035);
+			panel_chart0_center.add(label_chart036);
+			panel_chart0_center.add(label_chart037);
 			
 			JPanel panel_chart1 = new JPanel();
 			panel_chart1
@@ -693,7 +764,7 @@ public class Window {
 			panel_chart2
 					.setLayout(new BoxLayout(panel_chart2, BoxLayout.X_AXIS));
 			//panel_charts.add(Box.createVerticalStrut(10));
-			//panel_charts.add(panel_chart2);
+			panel_charts.add(panel_chart2);
 
 			panel_chart2.add(label_chart21);
 			panel_chart2.add(label_chart22);
@@ -759,7 +830,7 @@ public class Window {
 			}
 
 			public boolean isCellEditable(int row, int column){
-				return true;
+				return false;
 			}
 		}
 		
@@ -779,7 +850,7 @@ public class Window {
 			table_result.setDefaultRenderer(Object.class,new ResultTableFiller());
 
 			this.updateRowHeights();
-			/*table_result.addMouseListener(new MouseAdapter() {
+			table_result.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(java.awt.event.MouseEvent evt) {
 					int row = table_result.rowAtPoint(evt.getPoint());
@@ -805,7 +876,7 @@ public class Window {
 						}
 					}
 				}
-			});*/
+			});
 
 			panel_resultList.setLayout(new BorderLayout(0, 0));
 			JScrollPane scrollPane = new JScrollPane(table_result);
@@ -814,26 +885,50 @@ public class Window {
 
 		//加载关键词相关信息（主要）
 		public void getResult(String keyword) {
-			new Chart(keyword);
+			Motion motion = new Motion(keyword);
+			new Chart(keyword, motion);
 			this.keyword = keyword;
 			sqlop = new SQLop();
 			sqlop.initialize();
 			resultAll = sqlop.getAll();
+			List<Map<String, String>> result_media = sqlop.search(keyword, 3);
+			List<Map<String, String>> result_public = sqlop.search(keyword, 4);
+			List<Map<String, String>> result_gov = sqlop.search(keyword, 0);
+			List<Map<String, String>> result_hottest_year = sqlop.search(keyword, 6);
+			String hottest_year = sqlop.hottestYear(keyword);
 			sqlop.close();
-
+			
+			
 			resultAllSize = resultAll.size();
 			
-			//Motion motion = new Motion(keyword);
 			java.text.DecimalFormat df =new java.text.DecimalFormat("0.00");
-			//TODO String tmp = df.format(motion.get_aver());
-			//label_chart01.setText(tmp);
+			String tmp = df.format(motion.get_aver_media());
+			label_chart021.setText(tmp);
+			tmp = df.format(motion.get_aver_public());
+			label_chart023.setText(tmp);
+			tmp = df.format(motion.get_aver_gov());
+			label_chart025.setText(tmp);
+			tmp = df.format(motion.get_aver_total());
+			label_chart027.setText(tmp);
+			
+			label_chart031.setText(List2Str(getKeyword(result_media)));
+			label_chart033.setText(List2Str(getKeyword(result_public)));
+			label_chart035.setText(List2Str(getKeyword(result_gov)));
+			label_chart037.setText(hottest_year + ":" + List2Str(getKeyword(result_hottest_year)));
+			
 
-			label_chart01.invalidate();
-			label_chart01.repaint();
+			label_chart021.invalidate();
+			label_chart021.repaint();
+			label_chart023.invalidate();
+			label_chart023.repaint();
+			label_chart025.invalidate();
+			label_chart025.repaint();
+			label_chart027.invalidate();
+			label_chart027.repaint();
 			
 
 			// 搜索结果表格
-			getTableResult(keyword, 3);// 3 for news and comments
+			getTableResult(keyword, 5);// 5 for gov and media
 
 			// 统计图表
 			//Image img = Toolkit.getDefaultToolkit().createImage(".\\output\\patent_type.jpg");
@@ -949,6 +1044,26 @@ public class Window {
 
 		}
 
+		//获取关键词
+		private List<String> getKeyword(List<Map<String,String>> result){
+			StringBuffer sb = new StringBuffer();
+			for(int i = 0;i<result.size();i++){
+				sb.append(result.get(i).get("content"));
+			}
+			String keyword_media = sb.toString();
+			List<String> keywords = NLP.getKeyword(keyword_media,10);
+			for(int i = 0;i<keywords.size();i++){
+				if(keywords.get(i).contains("公车")
+						||keywords.get(i).contains("改革")
+						||keywords.get(i).contains("车改")){
+					keywords.remove(i);
+					i--;
+				}
+			}
+			System.out.print("keyword:" + keywords);
+			return keywords;
+		}
+		
 		//填充表格内容
 		class ResultTableFiller implements TableCellRenderer {
 
@@ -957,7 +1072,7 @@ public class Window {
 					Object arg1, boolean arg2, boolean arg3, int row, int column) {
 				textPane = new JTextPane();
 				StyledDocument sd = getNewStyledDocument();
-				insertDoc(sd, result.get(row).get("author"), "STYLE_type");
+				insertDoc(sd, result.get(row).get("type"), "STYLE_type");
 				insertDoc(sd, "  " + result.get(row).get("title").toString()
 						+ "\n", "STYLE_title");
 				if (result.get(row).get("time") != null)
@@ -1057,6 +1172,15 @@ public class Window {
 			}
 		}
 
+		//用于把List<String>转为String
+		private String List2Str(List<String> list){
+			StringBuffer sb = new StringBuffer();
+			for(int i = 0;i<list.size();i++){
+				sb.append(list.get(i));
+				sb.append(" ");
+			}
+			return sb.toString();
+		}
 	
 	}
 	
